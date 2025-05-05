@@ -1,0 +1,27 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.jumbotron {
+    background-color: #e9ecef;
+    border-radius: 0.3rem;
+    padding: 2rem;
+}
+
+.card {
+    transition: transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+footer {
+    margin-top: 3rem;
+} 

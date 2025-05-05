@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent a Costume - Costume Rental System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Costume Rental System</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="costumes.html">Costumes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="rent.html">Rent Costume</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="imports.html">Import Costumes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="statistics.html">Statistics</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>Rent a Costume</h1>
+        <p class="lead">Fill out the form below to rent a costume.</p>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Rental Form</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="rentalForm">
+                            <div class="mb-3">
+                                <label for="costumeSelect" class="form-label">Select Costume</label>
+                                <select class="form-select" id="costumeSelect" required>
+                                    <option value="" selected disabled>Choose a costume</option>
+                                    <option value="1">Superhero Costume - $50.00</option>
+                                    <option value="2">Princess Costume - $65.00</option>
+                                    <option value="3">Pirate Costume - $45.00</option>
+                                    <option value="4">Zombie Costume - $55.00</option>
+                                    <option value="5">Wizard Costume - $60.00</option>
+                                    <option value="6">Vampire Costume - $50.00</option>
+                                    <option value="7">Cowboy Costume - $55.00</option>
+                                    <option value="8">Astronaut Costume - $70.00</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="rentalDate" class="form-label">Rental Date</label>
+                                <input type="date" class="form-control" id="rentalDate" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="returnDate" class="form-label">Return Date</label>
+                                <input type="date" class="form-control" id="returnDate" required>
+                            </div>
+                            
+                            <h5 class="mt-4">Customer Information</h5>
+                            
+                            <div class="mb-3">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phone" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <textarea class="form-control" id="address" rows="3" required></textarea>
+                            </div>
+                            
+                            <h5 class="mt-4">Payment Information</h5>
+                            
+                            <div class="mb-3">
+                                <label for="paymentMethod" class="form-label">Payment Method</label>
+                                <select class="form-select" id="paymentMethod" required>
+                                    <option value="" selected disabled>Choose payment method</option>
+                                    <option value="credit">Credit Card</option>
+                                    <option value="debit">Debit Card</option>
+                                    <option value="paypal">PayPal</option>
+                                </select>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Submit Rental</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Rental Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="summaryContent">
+                            <p>Please select a costume and fill out the form to see your rental summary.</p>
+                        </div>
+                        <div id="summaryDetails" style="display: none;">
+                            <div class="mb-3">
+                                <h6>Selected Costume:</h6>
+                                <p id="summaryItem">Not selected</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6>Rental Period:</h6>
+                                <p id="summaryPeriod">Not specified</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6>Rental Duration:</h6>
+                                <p id="summaryDuration">0 days</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6>Base Price:</h6>
+                                <p id="summaryBasePrice">$0.00</p>
+                            </div>
+                            <div class="mb-3">
+                                <h6>Total Cost:</h6>
+                                <p id="summaryTotalCost">$0.00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white mt-5 py-3">
+        <div class="container text-center">
+            <p>&copy; 2023 Costume Rental System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const costumeId = urlParams.get('id');
+        
+        // Set selected costume if ID is in URL
+        if (costumeId) {
+            document.getElementById('costumeSelect').value = costumeId;
+            updateSummary();
+        }
+        
+        // Update summary when costume selection or dates change
+        document.getElementById('costumeSelect').addEventListener('change', updateSummary);
+        document.getElementById('rentalDate').addEventListener('change', updateSummary);
+        document.getElementById('returnDate').addEventListener('change', updateSummary);
+        
+        // Form submission handler
+        document.getElementById('rentalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Your rental request has been submitted! A confirmation will be sent to your email.');
+        });
+        
+        // Update summary based on form selections
+        function updateSummary() {
+            const costumeSelect = document.getElementById('costumeSelect');
+            const rentalDate = document.getElementById('rentalDate').value;
+            const returnDate = document.getElementById('returnDate').value;
+            
+            if (costumeSelect.value) {
+                const selectedOption = costumeSelect.options[costumeSelect.selectedIndex];
+                const costumeName = selectedOption.text.split(' - ')[0];
+                const priceText = selectedOption.text.split(' - ')[1];
+                const price = parseFloat(priceText.replace('$', ''));
+                
+                document.getElementById('summaryContent').style.display = 'none';
+                document.getElementById('summaryDetails').style.display = 'block';
+                document.getElementById('summaryItem').textContent = costumeName;
+                document.getElementById('summaryBasePrice').textContent = priceText;
+                
+                if (rentalDate && returnDate) {
+                    const start = new Date(rentalDate);
+                    const end = new Date(returnDate);
+                    const diffTime = Math.abs(end - start);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    document.getElementById('summaryPeriod').textContent = `${rentalDate} to ${returnDate}`;
+                    document.getElementById('summaryDuration').textContent = `${diffDays} days`;
+                    
+                    // Calculate total cost (base price * days)
+                    const totalCost = (price * diffDays).toFixed(2);
+                    document.getElementById('summaryTotalCost').textContent = `$${totalCost}`;
+                }
+            }
+        }
+    </script>
+</body>
+</html> 
