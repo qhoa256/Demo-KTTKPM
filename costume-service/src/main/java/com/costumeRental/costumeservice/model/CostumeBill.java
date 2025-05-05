@@ -13,11 +13,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CostumeBill {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
+public class CostumeBill extends Costume {
     @ManyToOne
     @JoinColumn(name = "CostumeId")
     @JsonBackReference(value = "costume-bill")
@@ -25,4 +21,9 @@ public class CostumeBill {
     
     private BigDecimal rentPrice;
     private String billId;
+    
+    private int quantity;
+    private String name;
+    private String color;
+    private String size;
 } 

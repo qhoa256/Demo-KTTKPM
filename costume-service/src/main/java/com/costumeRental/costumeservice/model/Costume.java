@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -14,13 +13,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Costume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     private String category;
-    private BigDecimal price;
     
     @OneToMany(mappedBy = "costume", cascade = CascadeType.ALL)
     @JsonManagedReference(value = "costume-bill")

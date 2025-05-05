@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "tblBill")
@@ -19,8 +19,8 @@ public class Bill {
     private Long id;
     
     private Long customerId;
-    private LocalDateTime bookingTime;
-    
+    private LocalDate rentDate;
+    private LocalDate returnDate;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PaymentId")
     @JsonManagedReference
