@@ -1,5 +1,6 @@
 package com.costumeRental.costumeservice.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class CostumeBill {
     
     @ManyToOne
     @JoinColumn(name = "CostumeId")
+    @JsonBackReference(value = "costume-bill")
     private Costume costume;
     
     private BigDecimal rentPrice;
