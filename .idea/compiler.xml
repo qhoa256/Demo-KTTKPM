@@ -8,15 +8,17 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="supplier-service" />
-        <module name="config-server" />
-        <module name="discovery-server" />
         <module name="bill-costume-service" />
-        <module name="api-gateway" />
         <module name="import-bill-service" />
         <module name="costume-service" />
         <module name="user-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="api-gateway" target="17" />
+      <module name="config-server" target="17" />
+      <module name="discovery-server" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
