@@ -2,7 +2,7 @@ package com.costumeRental.billcostumeservice.controller;
 
 import com.costumeRental.billcostumeservice.model.Bill;
 import com.costumeRental.billcostumeservice.service.BillService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +11,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/bills")
-@RequiredArgsConstructor
 public class BillController {
     private final BillService billService;
+    
+    @Autowired
+    public BillController(BillService billService) {
+        this.billService = billService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Bill>> getAllBills() {

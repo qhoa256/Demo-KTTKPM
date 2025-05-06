@@ -1,32 +1,36 @@
 package com.costumeRental.billcostumeservice.service;
 
+import com.costumeRental.billcostumeservice.exception.ResourceNotFoundException;
 import com.costumeRental.billcostumeservice.model.Bill;
-import com.costumeRental.billcostumeservice.repository.BillRepository;
-import lombok.RequiredArgsConstructor;
+import com.costumeRental.billcostumeservice.dao.BillDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class BillServiceImpl implements BillService {
-    private final BillRepository billRepository;
+    private final BillDao billDao;
+
+    @Autowired
+    public BillServiceImpl(BillDao billDao) {
+        this.billDao = billDao;
+    }
 
     @Override
     public List<Bill> getAllBills() {
-        return billRepository.findAll();
+        return billDao.findAll();
     }
 
     @Override
     public Bill getBillById(Long id) {
-        return billRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Bill not found with id: " + id));
+        return billDao.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Bill not found with id: " + id));
     }
 
     @Override
     public Bill createBill(Bill bill) {
-        return billRepository.save(bill);
+        return billDao.save(bill);
     }
 
     @Override
@@ -38,12 +42,12 @@ public class BillServiceImpl implements BillService {
         existingBill.setReturnDate(bill.getReturnDate());
         existingBill.setPayment(bill.getPayment());
         
-        return billRepository.save(existingBill);
+        return billDao.save(existingBill);
     }
 
     @Override
     public void deleteBill(Long id) {
-        Bill bill = getBillById(id);
-        billRepository.delete(bill);
+        getBillById(id); // Check if exists
+        billDao.deleteById(id);
     }
 } 
