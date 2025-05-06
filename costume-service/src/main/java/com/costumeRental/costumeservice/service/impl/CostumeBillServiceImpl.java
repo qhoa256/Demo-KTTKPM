@@ -1,7 +1,7 @@
 package com.costumeRental.costumeservice.service.impl;
 
+import com.costumeRental.costumeservice.dao.CostumeBillDao;
 import com.costumeRental.costumeservice.model.CostumeBill;
-import com.costumeRental.costumeservice.repository.CostumeBillRepository;
 import com.costumeRental.costumeservice.service.CostumeBillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,51 +13,55 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CostumeBillServiceImpl implements CostumeBillService {
 
-    private final CostumeBillRepository costumeBillRepository;
+    private final CostumeBillDao costumeBillDao;
 
     @Override
     public CostumeBill createCostumeBill(CostumeBill costumeBill) {
-        return costumeBillRepository.save(costumeBill);
+        return costumeBillDao.save(costumeBill);
     }
 
     @Override
     public CostumeBill getCostumeBillById(Long id) {
-        return costumeBillRepository.findById(id)
+        return costumeBillDao.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("CostumeBill not found with id: " + id));
     }
 
     @Override
     public List<CostumeBill> getAllCostumeBills() {
-        return costumeBillRepository.findAll();
+        return costumeBillDao.findAll();
     }
 
     @Override
     public List<CostumeBill> getCostumeBillsByBillId(String billId) {
-        return costumeBillRepository.findByBillId(billId);
+        return costumeBillDao.findByBillId(billId);
     }
 
     @Override
     public List<CostumeBill> getCostumeBillsByCostumeId(Long costumeId) {
-        return costumeBillRepository.findByCostumeId(costumeId);
+        return costumeBillDao.findByCostumeId(costumeId);
     }
 
     @Override
     public CostumeBill updateCostumeBill(Long id, CostumeBill costumeBillDetails) {
-        CostumeBill existingCostumeBill = costumeBillRepository.findById(id)
+        CostumeBill existingCostumeBill = costumeBillDao.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("CostumeBill not found with id: " + id));
 
         existingCostumeBill.setCostume(costumeBillDetails.getCostume());
         existingCostumeBill.setRentPrice(costumeBillDetails.getRentPrice());
         existingCostumeBill.setBillId(costumeBillDetails.getBillId());
+        existingCostumeBill.setQuantity(costumeBillDetails.getQuantity());
+        existingCostumeBill.setName(costumeBillDetails.getName());
+        existingCostumeBill.setColor(costumeBillDetails.getColor());
+        existingCostumeBill.setSize(costumeBillDetails.getSize());
         
-        return costumeBillRepository.save(existingCostumeBill);
+        return costumeBillDao.save(existingCostumeBill);
     }
 
     @Override
     public void deleteCostumeBill(Long id) {
-        if (!costumeBillRepository.existsById(id)) {
+        if (!costumeBillDao.findById(id).isPresent()) {
             throw new EntityNotFoundException("CostumeBill not found with id: " + id);
         }
-        costumeBillRepository.deleteById(id);
+        costumeBillDao.deleteById(id);
     }
 } 

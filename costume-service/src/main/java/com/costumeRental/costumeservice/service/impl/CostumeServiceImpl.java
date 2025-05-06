@@ -1,7 +1,7 @@
 package com.costumeRental.costumeservice.service.impl;
 
+import com.costumeRental.costumeservice.dao.CostumeDao;
 import com.costumeRental.costumeservice.model.Costume;
-import com.costumeRental.costumeservice.repository.CostumeRepository;
 import com.costumeRental.costumeservice.service.CostumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,44 +13,44 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CostumeServiceImpl implements CostumeService {
 
-    private final CostumeRepository costumeRepository;
+    private final CostumeDao costumeDao;
 
     @Override
     public Costume createCostume(Costume costume) {
-        return costumeRepository.save(costume);
+        return costumeDao.save(costume);
     }
 
     @Override
     public Costume getCostumeById(Long id) {
-        return costumeRepository.findById(id)
+        return costumeDao.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Costume not found with id: " + id));
     }
 
     @Override
     public List<Costume> getAllCostumes() {
-        return costumeRepository.findAll();
+        return costumeDao.findAll();
     }
 
     @Override
     public List<Costume> getCostumesByCategory(String category) {
-        return costumeRepository.findByCategory(category);
+        return costumeDao.findByCategory(category);
     }
 
     @Override
     public Costume updateCostume(Long id, Costume costumeDetails) {
-        Costume existingCostume = costumeRepository.findById(id)
+        Costume existingCostume = costumeDao.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Costume not found with id: " + id));
 
         existingCostume.setCategory(costumeDetails.getCategory());
         
-        return costumeRepository.save(existingCostume);
+        return costumeDao.save(existingCostume);
     }
 
     @Override
     public void deleteCostume(Long id) {
-        if (!costumeRepository.existsById(id)) {
+        if (!costumeDao.findById(id).isPresent()) {
             throw new EntityNotFoundException("Costume not found with id: " + id);
         }
-        costumeRepository.deleteById(id);
+        costumeDao.deleteById(id);
     }
 } 

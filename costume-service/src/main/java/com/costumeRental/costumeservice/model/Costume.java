@@ -1,31 +1,17 @@
 package com.costumeRental.costumeservice.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "tblCostume")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Costume {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
     private String category;
-    
-    @OneToMany(mappedBy = "costume", cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "costume-bill")
     private List<CostumeBill> costumeBills;
-    
-    @OneToMany(mappedBy = "costume", cascade = CascadeType.ALL)
-    @JsonManagedReference(value = "costume-importing-bill")
     private List<CostumeImportingBill> costumeImportingBills;
 } 
