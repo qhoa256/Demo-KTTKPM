@@ -1,7 +1,7 @@
 package com.costumeRental.importbillservice.service;
 
+import com.costumeRental.importbillservice.dao.ImportingBillDao;
 import com.costumeRental.importbillservice.model.ImportingBill;
-import com.costumeRental.importbillservice.repository.ImportingBillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,22 +11,22 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ImportingBillServiceImpl implements ImportingBillService {
-    private final ImportingBillRepository importingBillRepository;
+    private final ImportingBillDao importingBillDao;
 
     @Override
     public List<ImportingBill> getAllImportingBills() {
-        return importingBillRepository.findAll();
+        return importingBillDao.findAll();
     }
 
     @Override
     public ImportingBill getImportingBillById(Long id) {
-        return importingBillRepository.findById(id)
+        return importingBillDao.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Importing bill not found with id: " + id));
     }
 
     @Override
     public ImportingBill createImportingBill(ImportingBill importingBill) {
-        return importingBillRepository.save(importingBill);
+        return importingBillDao.save(importingBill);
     }
 
     @Override
@@ -37,12 +37,12 @@ public class ImportingBillServiceImpl implements ImportingBillService {
         existingImportingBill.setSupplierId(importingBill.getSupplierId());
         existingImportingBill.setImportDate(importingBill.getImportDate());
         
-        return importingBillRepository.save(existingImportingBill);
+        return importingBillDao.save(existingImportingBill);
     }
 
     @Override
     public void deleteImportingBill(Long id) {
         ImportingBill importingBill = getImportingBillById(id);
-        importingBillRepository.delete(importingBill);
+        importingBillDao.delete(importingBill);
     }
 } 
