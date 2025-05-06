@@ -3,24 +3,14 @@ package com.costumeRental.userservice.model;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
-
-@Entity
-@Table(name = "tblStaff")
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue("Staff")
-@JsonTypeName("Staff")
+@JsonTypeName("staff")
 public class Staff extends User {
-    @Column(name = "UserId", insertable = false, updatable = false)
-    private Long userId;
-    
-    private BigDecimal salary;
     private String position;
-    private String managerCode;
-    private String title;
 } 

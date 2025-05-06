@@ -3,21 +3,14 @@ package com.costumeRental.userservice.model;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "tblCustomer")
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue("Customer")
-@JsonTypeName("Customer")
+@JsonTypeName("customer")
 public class Customer extends User {
-    @Column(name = "UserId", insertable = false, updatable = false)
-    private Long userId;
-    
-    private Integer rewardPoint;
-    private String customerRanking;
+    private int loyaltyPoints;
 } 

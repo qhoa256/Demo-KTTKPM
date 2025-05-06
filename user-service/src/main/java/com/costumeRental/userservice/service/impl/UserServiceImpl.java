@@ -1,36 +1,38 @@
 package com.costumeRental.userservice.service.impl;
 
+import com.costumeRental.userservice.dao.UserDao;
 import com.costumeRental.userservice.model.Address;
 import com.costumeRental.userservice.model.FullName;
 import com.costumeRental.userservice.model.User;
-import com.costumeRental.userservice.repository.UserRepository;
 import com.costumeRental.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
+@Primary
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    private final UserDao userDao;
 
     @Override
     public User createUser(User user) {
-        return userRepository.save(user);
+        return userDao.save(user);
     }
 
     @Override
     public User getUserById(Long id) {
-        return userRepository.findById(id)
+        return userDao.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
     }
 
     @Override
     public User getUserByUsername(String username) {
-        User user = userRepository.findByUsername(username);
+        User user = userDao.findByUsername(username);
         if (user == null) {
             throw new EntityNotFoundException("User not found with username: " + username);
         }
@@ -39,12 +41,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userDao.findAll();
     }
 
     @Override
     public User updateUser(Long id, User userDetails) {
-        User existingUser = userRepository.findById(id)
+        User existingUser = userDao.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
         
         existingUser.setUsername(userDetails.getUsername());
@@ -72,14 +74,28 @@ public class UserServiceImpl implements UserService {
             fullName.setLastName(userDetails.getFullName().getLastName());
         }
         
-        return userRepository.save(existingUser);
+        return userDao.save(existingUser);
     }
 
     @Override
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
+        if (!userDao.existsById(id)) {
             throw new EntityNotFoundException("User not found with id: " + id);
         }
-        userRepository.deleteById(id);
+        userDao.deleteById(id);
+    }
+    
+    @Override
+    public User login(String username, String password) {
+        User user = userDao.findByUsername(username);
+        if (user == null) {
+            throw new EntityNotFoundException("User not found with username: " + username);
+        }
+        
+        if (!user.getPassword().equals(password)) {
+            throw new IllegalArgumentException("Invalid password");
+        }
+        
+        return user;
     }
 } 

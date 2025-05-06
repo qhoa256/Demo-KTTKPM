@@ -34,7 +34,8 @@ public class BillServiceImpl implements BillService {
         Bill existingBill = getBillById(id);
         
         existingBill.setCustomerId(bill.getCustomerId());
-        existingBill.setBookingTime(bill.getBookingTime());
+        existingBill.setRentDate(bill.getRentDate());
+        existingBill.setReturnDate(bill.getReturnDate());
         existingBill.setPayment(bill.getPayment());
         
         return billRepository.save(existingBill);

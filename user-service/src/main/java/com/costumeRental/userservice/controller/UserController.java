@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -16,6 +17,8 @@ public class UserController {
 
     private final UserService userService;
 
+    // Endpoint này sẽ xử lý tất cả các loại user (User, Customer, Staff)
+    // @JsonTypeInfo trong class User đảm bảo rằng subclasses được deserialized đúng
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
@@ -45,5 +48,18 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody Map<String, String> credentials) {
+        String username = credentials.get("username");
+        String password = credentials.get("password");
+        
+        if (username == null || password == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        
+        User user = userService.login(username, password);
+        return ResponseEntity.ok(user);
     }
 } 

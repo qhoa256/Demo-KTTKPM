@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS tblSupplier (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255),
+    contact VARCHAR(255)
+); 
