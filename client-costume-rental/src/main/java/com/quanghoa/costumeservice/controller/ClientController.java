@@ -2,6 +2,7 @@ package com.quanghoa.costumeservice.controller;
 
 import com.quanghoa.costumeservice.model.LoginRequest;
 import com.quanghoa.costumeservice.model.UserResponse;
+import com.quanghoa.costumeservice.service.CostumeService;
 import com.quanghoa.costumeservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,15 +13,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ClientController {
 
     private final UserService userService;
+    private final CostumeService costumeService;
 
     @Autowired
-    public ClientController(UserService userService) {
+    public ClientController(UserService userService, CostumeService costumeService) {
         this.userService = userService;
+        this.costumeService = costumeService;
     }
 
     @GetMapping("/")
@@ -70,5 +75,17 @@ public class ClientController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/login";
+    }
+    
+    @GetMapping("/costumes")
+    public String getCostumeViewPage(Model model) {
+        // Call API to get costume data
+        List<Map<String, Object>> costumes = costumeService.getAllCostumes();
+        
+        // Add data to model
+        model.addAttribute("costumes", costumes);
+        model.addAttribute("costumeCount", costumes.size());
+        
+        return "costume_view";
     }
 } 
