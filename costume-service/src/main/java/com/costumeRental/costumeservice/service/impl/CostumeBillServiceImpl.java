@@ -51,8 +51,7 @@ public class CostumeBillServiceImpl implements CostumeBillService {
         existingCostumeBill.setBillId(costumeBillDetails.getBillId());
         existingCostumeBill.setQuantity(costumeBillDetails.getQuantity());
         existingCostumeBill.setName(costumeBillDetails.getName());
-        existingCostumeBill.setColor(costumeBillDetails.getColor());
-        existingCostumeBill.setSize(costumeBillDetails.getSize());
+        existingCostumeBill.setDescription(costumeBillDetails.getDescription());
         
         return costumeBillDao.save(existingCostumeBill);
     }

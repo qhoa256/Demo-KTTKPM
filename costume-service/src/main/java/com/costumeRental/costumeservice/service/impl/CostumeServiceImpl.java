@@ -42,6 +42,9 @@ public class CostumeServiceImpl implements CostumeService {
                 .orElseThrow(() -> new EntityNotFoundException("Costume not found with id: " + id));
 
         existingCostume.setCategory(costumeDetails.getCategory());
+        existingCostume.setName(costumeDetails.getName());
+        existingCostume.setDescription(costumeDetails.getDescription());
+        existingCostume.setPrice(costumeDetails.getPrice());
         
         return costumeDao.save(existingCostume);
     }

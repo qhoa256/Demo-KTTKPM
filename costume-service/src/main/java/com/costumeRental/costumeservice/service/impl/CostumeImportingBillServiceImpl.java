@@ -32,11 +32,6 @@ public class CostumeImportingBillServiceImpl implements CostumeImportingBillServ
     }
 
     @Override
-    public List<CostumeImportingBill> getCostumeImportingBillsByImportingBillId(String importingBillId) {
-        return costumeImportingBillDao.findByImportingBillId(importingBillId);
-    }
-
-    @Override
     public List<CostumeImportingBill> getCostumeImportingBillsByCostumeId(Long costumeId) {
         return costumeImportingBillDao.findByCostumeId(costumeId);
     }
@@ -48,12 +43,9 @@ public class CostumeImportingBillServiceImpl implements CostumeImportingBillServ
 
         existingCostumeImportingBill.setCostume(costumeImportingBillDetails.getCostume());
         existingCostumeImportingBill.setImportPrice(costumeImportingBillDetails.getImportPrice());
-        existingCostumeImportingBill.setNote(costumeImportingBillDetails.getNote());
-        existingCostumeImportingBill.setImportingBillId(costumeImportingBillDetails.getImportingBillId());
         existingCostumeImportingBill.setQuantity(costumeImportingBillDetails.getQuantity());
         existingCostumeImportingBill.setName(costumeImportingBillDetails.getName());
-        existingCostumeImportingBill.setColor(costumeImportingBillDetails.getColor());
-        existingCostumeImportingBill.setSize(costumeImportingBillDetails.getSize());
+        existingCostumeImportingBill.setDescription(costumeImportingBillDetails.getDescription());
         
         return costumeImportingBillDao.save(existingCostumeImportingBill);
     }

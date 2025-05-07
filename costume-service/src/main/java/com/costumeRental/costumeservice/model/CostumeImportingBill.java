@@ -13,10 +13,7 @@ public class CostumeImportingBill {
     private Long id;
     private Costume costume;
     private BigDecimal importPrice;
-    private String note;
-    private String importingBillId;
     private int quantity;
     private String name;
-    private String color;
-    private String size;
+    private String description;
 } 

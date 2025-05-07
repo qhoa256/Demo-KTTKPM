@@ -8,7 +8,6 @@ public interface CostumeImportingBillService {
     CostumeImportingBill createCostumeImportingBill(CostumeImportingBill costumeImportingBill);
     CostumeImportingBill getCostumeImportingBillById(Long id);
     List<CostumeImportingBill> getAllCostumeImportingBills();
-    List<CostumeImportingBill> getCostumeImportingBillsByImportingBillId(String importingBillId);
     List<CostumeImportingBill> getCostumeImportingBillsByCostumeId(Long costumeId);
     CostumeImportingBill updateCostumeImportingBill(Long id, CostumeImportingBill costumeImportingBill);
     void deleteCostumeImportingBill(Long id);

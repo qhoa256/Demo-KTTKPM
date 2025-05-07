@@ -1,7 +1,15 @@
+-- Drop tables if they exist (in reverse order due to foreign key constraints)
+DROP TABLE IF EXISTS tblCostumeImportingBill;
+DROP TABLE IF EXISTS tblCostumeBill;
+DROP TABLE IF EXISTS tblCostume;
+
 -- Create tables
 CREATE TABLE IF NOT EXISTS tblCostume (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    category VARCHAR(255)
+    category VARCHAR(255),
+    name VARCHAR(255),
+    description VARCHAR(255),
+    price DECIMAL(19,2)
 );
 
 CREATE TABLE IF NOT EXISTS tblCostumeBill (
@@ -11,8 +19,7 @@ CREATE TABLE IF NOT EXISTS tblCostumeBill (
     bill_id VARCHAR(255),
     quantity INT,
     name VARCHAR(255),
-    color VARCHAR(255),
-    size VARCHAR(255),
+    description VARCHAR(255),
     FOREIGN KEY (costume_id) REFERENCES tblCostume(id)
 );
 
@@ -20,11 +27,8 @@ CREATE TABLE IF NOT EXISTS tblCostumeImportingBill (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     costume_id BIGINT,
     import_price DECIMAL(19,2),
-    note VARCHAR(255),
-    importing_bill_id VARCHAR(255),
     quantity INT,
     name VARCHAR(255),
-    color VARCHAR(255),
-    size VARCHAR(255),
+    description VARCHAR(255),
     FOREIGN KEY (costume_id) REFERENCES tblCostume(id)
 ); 

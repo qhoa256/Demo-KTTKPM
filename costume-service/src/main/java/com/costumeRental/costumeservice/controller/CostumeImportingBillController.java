@@ -31,11 +31,6 @@ public class CostumeImportingBillController {
         return ResponseEntity.ok(costumeImportingBillService.getAllCostumeImportingBills());
     }
 
-    @GetMapping("/importing-bill/{importingBillId}")
-    public ResponseEntity<List<CostumeImportingBill>> getCostumeImportingBillsByImportingBillId(@PathVariable String importingBillId) {
-        return ResponseEntity.ok(costumeImportingBillService.getCostumeImportingBillsByImportingBillId(importingBillId));
-    }
-
     @GetMapping("/costume/{costumeId}")
     public ResponseEntity<List<CostumeImportingBill>> getCostumeImportingBillsByCostumeId(@PathVariable Long costumeId) {
         return ResponseEntity.ok(costumeImportingBillService.getCostumeImportingBillsByCostumeId(costumeId));

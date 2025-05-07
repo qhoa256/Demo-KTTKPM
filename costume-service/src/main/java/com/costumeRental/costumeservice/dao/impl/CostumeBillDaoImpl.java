@@ -42,8 +42,7 @@ public class CostumeBillDaoImpl implements CostumeBillDao {
             costumeBill.setBillId(rs.getString("bill_id"));
             costumeBill.setQuantity(rs.getInt("quantity"));
             costumeBill.setName(rs.getString("name"));
-            costumeBill.setColor(rs.getString("color"));
-            costumeBill.setSize(rs.getString("size"));
+            costumeBill.setDescription(rs.getString("description"));
             return costumeBill;
         };
     }
@@ -89,8 +88,8 @@ public class CostumeBillDaoImpl implements CostumeBillDao {
     }
 
     private CostumeBill insertCostumeBill(CostumeBill costumeBill) {
-        String sql = "INSERT INTO tblCostumeBill (costume_id, rent_price, bill_id, quantity, name, color, size) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tblCostumeBill (costume_id, rent_price, bill_id, quantity, name, description) " +
+                     "VALUES (?, ?, ?, ?, ?, ?)";
                      
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -101,8 +100,7 @@ public class CostumeBillDaoImpl implements CostumeBillDao {
             ps.setString(3, costumeBill.getBillId());
             ps.setInt(4, costumeBill.getQuantity());
             ps.setString(5, costumeBill.getName());
-            ps.setString(6, costumeBill.getColor());
-            ps.setString(7, costumeBill.getSize());
+            ps.setString(6, costumeBill.getDescription());
             return ps;
         }, keyHolder);
 
@@ -113,7 +111,7 @@ public class CostumeBillDaoImpl implements CostumeBillDao {
 
     private CostumeBill updateCostumeBill(CostumeBill costumeBill) {
         String sql = "UPDATE tblCostumeBill SET costume_id = ?, rent_price = ?, bill_id = ?, " +
-                     "quantity = ?, name = ?, color = ?, size = ? WHERE id = ?";
+                     "quantity = ?, name = ?, description = ? WHERE id = ?";
                      
         jdbcTemplate.update(sql, 
             costumeBill.getCostume() != null ? costumeBill.getCostume().getId() : null,
@@ -121,8 +119,7 @@ public class CostumeBillDaoImpl implements CostumeBillDao {
             costumeBill.getBillId(),
             costumeBill.getQuantity(),
             costumeBill.getName(),
-            costumeBill.getColor(),
-            costumeBill.getSize(),
+            costumeBill.getDescription(),
             costumeBill.getId()
         );
         

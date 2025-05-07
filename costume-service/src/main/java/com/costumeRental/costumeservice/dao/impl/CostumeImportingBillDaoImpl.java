@@ -2,7 +2,6 @@ package com.costumeRental.costumeservice.dao.impl;
 
 import com.costumeRental.costumeservice.dao.CostumeDao;
 import com.costumeRental.costumeservice.dao.CostumeImportingBillDao;
-import com.costumeRental.costumeservice.model.Costume;
 import com.costumeRental.costumeservice.model.CostumeImportingBill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -39,12 +38,9 @@ public class CostumeImportingBillDaoImpl implements CostumeImportingBillDao {
             }
             
             costumeImportingBill.setImportPrice(rs.getBigDecimal("import_price"));
-            costumeImportingBill.setNote(rs.getString("note"));
-            costumeImportingBill.setImportingBillId(rs.getString("importing_bill_id"));
             costumeImportingBill.setQuantity(rs.getInt("quantity"));
             costumeImportingBill.setName(rs.getString("name"));
-            costumeImportingBill.setColor(rs.getString("color"));
-            costumeImportingBill.setSize(rs.getString("size"));
+            costumeImportingBill.setDescription(rs.getString("description"));
             return costumeImportingBill;
         };
     }
@@ -67,12 +63,6 @@ public class CostumeImportingBillDaoImpl implements CostumeImportingBillDao {
     }
 
     @Override
-    public List<CostumeImportingBill> findByImportingBillId(String importingBillId) {
-        String sql = "SELECT * FROM tblCostumeImportingBill WHERE importing_bill_id = ?";
-        return jdbcTemplate.query(sql, costumeImportingBillRowMapper, importingBillId);
-    }
-
-    @Override
     public List<CostumeImportingBill> findByCostumeId(Long costumeId) {
         String sql = "SELECT * FROM tblCostumeImportingBill WHERE costume_id = ?";
         return jdbcTemplate.query(sql, costumeImportingBillRowMapper, costumeId);
@@ -90,8 +80,8 @@ public class CostumeImportingBillDaoImpl implements CostumeImportingBillDao {
     }
 
     private CostumeImportingBill insertCostumeImportingBill(CostumeImportingBill costumeImportingBill) {
-        String sql = "INSERT INTO tblCostumeImportingBill (costume_id, import_price, note, importing_bill_id, quantity, name, color, size) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tblCostumeImportingBill (costume_id, import_price, quantity, name, description) " +
+                     "VALUES (?, ?, ?, ?, ?)";
                      
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -99,12 +89,9 @@ public class CostumeImportingBillDaoImpl implements CostumeImportingBillDao {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setLong(1, costumeImportingBill.getCostume() != null ? costumeImportingBill.getCostume().getId() : null);
             ps.setBigDecimal(2, costumeImportingBill.getImportPrice());
-            ps.setString(3, costumeImportingBill.getNote());
-            ps.setString(4, costumeImportingBill.getImportingBillId());
-            ps.setInt(5, costumeImportingBill.getQuantity());
-            ps.setString(6, costumeImportingBill.getName());
-            ps.setString(7, costumeImportingBill.getColor());
-            ps.setString(8, costumeImportingBill.getSize());
+            ps.setInt(3, costumeImportingBill.getQuantity());
+            ps.setString(4, costumeImportingBill.getName());
+            ps.setString(5, costumeImportingBill.getDescription());
             return ps;
         }, keyHolder);
 
@@ -114,18 +101,15 @@ public class CostumeImportingBillDaoImpl implements CostumeImportingBillDao {
     }
 
     private CostumeImportingBill updateCostumeImportingBill(CostumeImportingBill costumeImportingBill) {
-        String sql = "UPDATE tblCostumeImportingBill SET costume_id = ?, import_price = ?, note = ?, importing_bill_id = ?, " +
-                     "quantity = ?, name = ?, color = ?, size = ? WHERE id = ?";
+        String sql = "UPDATE tblCostumeImportingBill SET costume_id = ?, import_price = ?, " +
+                     "quantity = ?, name = ?, description = ? WHERE id = ?";
                      
         jdbcTemplate.update(sql, 
             costumeImportingBill.getCostume() != null ? costumeImportingBill.getCostume().getId() : null,
             costumeImportingBill.getImportPrice(),
-            costumeImportingBill.getNote(),
-            costumeImportingBill.getImportingBillId(),
             costumeImportingBill.getQuantity(),
             costumeImportingBill.getName(),
-            costumeImportingBill.getColor(),
-            costumeImportingBill.getSize(),
+            costumeImportingBill.getDescription(),
             costumeImportingBill.getId()
         );
         

@@ -16,6 +16,5 @@ public class CostumeBill {
     private String billId;
     private int quantity;
     private String name;
-    private String color;
-    private String size;
+    private String description;
 } 

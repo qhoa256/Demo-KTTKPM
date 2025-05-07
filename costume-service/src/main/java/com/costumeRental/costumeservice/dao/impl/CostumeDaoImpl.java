@@ -25,6 +25,9 @@ public class CostumeDaoImpl implements CostumeDao {
         Costume costume = new Costume();
         costume.setId(rs.getLong("id"));
         costume.setCategory(rs.getString("category"));
+        costume.setName(rs.getString("name"));
+        costume.setDescription(rs.getString("description"));
+        costume.setPrice(rs.getBigDecimal("price"));
         return costume;
     };
 
@@ -68,12 +71,15 @@ public class CostumeDaoImpl implements CostumeDao {
     }
 
     private Costume insertCostume(Costume costume) {
-        String sql = "INSERT INTO tblCostume (category) VALUES (?)";
+        String sql = "INSERT INTO tblCostume (category, name, description, price) VALUES (?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, costume.getCategory());
+            ps.setString(2, costume.getName());
+            ps.setString(3, costume.getDescription());
+            ps.setBigDecimal(4, costume.getPrice());
             return ps;
         }, keyHolder);
 
@@ -83,8 +89,14 @@ public class CostumeDaoImpl implements CostumeDao {
     }
 
     private Costume updateCostume(Costume costume) {
-        String sql = "UPDATE tblCostume SET category = ? WHERE id = ?";
-        jdbcTemplate.update(sql, costume.getCategory(), costume.getId());
+        String sql = "UPDATE tblCostume SET category = ?, name = ?, description = ?, price = ? WHERE id = ?";
+        jdbcTemplate.update(sql, 
+            costume.getCategory(), 
+            costume.getName(),
+            costume.getDescription(),
+            costume.getPrice(),
+            costume.getId()
+        );
         return costume;
     }
 
