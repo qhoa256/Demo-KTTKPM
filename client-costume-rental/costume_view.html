@@ -376,6 +376,24 @@
             }
         });
 
+        // Initialize cart from localStorage
+        function initializeCart() {
+            const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const cartCount = document.getElementById('cartCount');
+            let totalCount = 0;
+            
+            cartItems.forEach(item => {
+                totalCount += item.quantity;
+            });
+            
+            cartCount.textContent = totalCount;
+        }
+        
+        // Load cart on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            initializeCart();
+        });
+
         // Quantity controls
         document.querySelectorAll('.quantity-control').forEach(control => {
             const minusBtn = control.querySelector('.minus');
@@ -410,16 +428,42 @@
         const rentButtons = document.querySelectorAll('.rent-btn');
         rentButtons.forEach(button => {
             button.addEventListener('click', function() {
-                const costumeName = this.closest('.card-hover').querySelector('h3').textContent;
-                const quantity = this.closest('.flex').querySelector('.quantity-input').value;
+                const costumeCard = this.closest('.card-hover');
+                const costumeName = costumeCard.querySelector('h3').textContent;
+                const costumeDesc = costumeCard.querySelector('p').textContent;
+                const costumePrice = costumeCard.querySelector('.font-bold.text-indigo-600').textContent;
+                const quantity = parseInt(this.closest('.flex').querySelector('.quantity-input').value);
                 const costumeId = this.getAttribute('data-id');
+                
+                // Get current cart from localStorage
+                let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+                
+                // Check if item already exists in cart
+                const existingItemIndex = cartItems.findIndex(item => item.id === costumeId);
+                
+                if (existingItemIndex > -1) {
+                    // Update quantity if item exists
+                    cartItems[existingItemIndex].quantity += quantity;
+                } else {
+                    // Add new item to cart
+                    cartItems.push({
+                        id: costumeId,
+                        name: costumeName,
+                        description: costumeDesc,
+                        price: costumePrice,
+                        quantity: quantity
+                    });
+                }
+                
+                // Save updated cart to localStorage
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
                 
                 alert(`Bạn đã chọn thuê ${quantity} "${costumeName}" (ID: ${costumeId})`);
                 
                 // Tăng số lượng trong giỏ hàng
                 const cartCount = document.getElementById('cartCount');
                 let currentCount = parseInt(cartCount.textContent);
-                cartCount.textContent = currentCount + parseInt(quantity);
+                cartCount.textContent = currentCount + quantity;
                 
                 // Hiệu ứng cho nút giỏ hàng
                 const cartBtn = document.getElementById('cartBtn');
@@ -432,8 +476,7 @@
 
         // Cart button click
         document.getElementById('cartBtn').addEventListener('click', function() {
-            alert('Bạn đang xem giỏ hàng của mình');
-            // Trong ứng dụng thực tế, bạn sẽ chuyển hướng đến trang giỏ hàng hoặc hiển thị modal
+            window.location.href = 'payment_booking.html';
         });
     </script>
 </body>

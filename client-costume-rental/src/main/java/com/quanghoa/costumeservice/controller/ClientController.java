@@ -88,4 +88,17 @@ public class ClientController {
         
         return "costume_view";
     }
+    
+    @GetMapping("/payment_booking")
+    public String getPaymentBookingPage(Model model, HttpSession session) {
+        // Kiểm tra nếu người dùng đã đăng nhập
+        if (session.getAttribute("username") == null) {
+            return "redirect:/login";
+        }
+        
+        // Có thể thêm logic để lấy thông tin đơn hàng, thông tin người dùng, v.v.
+        // và đưa vào model nếu cần
+        
+        return "payment_booking";
+    }
 } 
