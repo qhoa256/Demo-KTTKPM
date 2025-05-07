@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tìm kiếm trang phục - Quang Hòa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .header-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            transition: all 0.3s ease;
+            background: linear-gradient(to right, #4f46e5, #7c3aed);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(79, 70, 229, 0.3);
+        }
+        
+        .search-box {
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.15);
+        }
+        
+        .filter-btn.active {
+            background-color: #4f46e5;
+            color: white;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        .quantity-btn {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #d1d5db;
+        }
+        
+        .quantity-input {
+            width: 36px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            margin: 0 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header-gradient shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fas fa-tshirt text-white text-2xl mr-3"></i>
+                <h1 class="text-white text-xl font-bold">Cửa hàng cho thuê trang phục Quang Hòa</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-white flex items-center">
+                    <i class="fas fa-user-circle text-xl mr-2"></i>
+                    <span>Xin chào, Khách hàng!</span>
+                </div>
+                <!-- Thêm nút giỏ hàng ở đây -->
+                <div class="relative">
+                    <button id="cartBtn" class="text-white px-3 py-2 rounded-md hover:bg-indigo-700 transition">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <div id="cartCount" class="cart-badge">3</div>
+                    </button>
+                </div>
+                <button class="bg-white text-indigo-600 px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Search Section -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <i class="fas fa-search text-indigo-500 mr-3"></i>
+                <span>Tìm kiếm trang phục</span>
+            </h2>
+            
+            <div class="bg-white rounded-xl search-box p-6 mb-6">
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="flex-1 relative">
+                        <input type="text" id="searchInput" placeholder="Nhập tên trang phục bạn muốn tìm..." 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <button id="searchBtn" class="absolute right-2 top-2 text-gray-400 hover:text-indigo-600">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <button id="filterBtn" class="btn-primary text-white px-6 py-3 rounded-lg font-bold">
+                        <i class="fas fa-filter mr-2"></i>Bộ lọc
+                    </button>
+                </div>
+                
+                <!-- Filter Options (hidden by default) -->
+                <div id="filterOptions" class="mt-4 hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Loại trang phục</label>
+                            <select class="w-full border border-gray-300 rounded-md px-3 py-2">
+                                <option>Tất cả</option>
+                                <option>Váy dạ hội</option>
+                                <option>Vest nam</option>
+                                <option>Áo dài</option>
+                                <option>Trang phục Halloween</option>
+                                <option>Trang phục cosplay</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Kích cỡ</label>
+                            <select class="w-full border border-gray-300 rounded-md px-3 py-2">
+                                <option>Tất cả</option>
+                                <option>XS</option>
+                                <option>S</option>
+                                <option>M</option>
+                                <option>L</option>
+                                <option>XL</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Giá thuê</label>
+                            <select class="w-full border border-gray-300 rounded-md px-3 py-2">
+                                <option>Tất cả</option>
+                                <option>Dưới 100k</option>
+                                <option>100k - 200k</option>
+                                <option>200k - 300k</option>
+                                <option>Trên 300k</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Màu sắc</label>
+                            <select class="w-full border border-gray-300 rounded-md px-3 py-2">
+                                <option>Tất cả</option>
+                                <option>Đen</option>
+                                <option>Trắng</option>
+                                <option>Đỏ</option>
+                                <option>Xanh dương</option>
+                                <option>Hồng</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md mr-2 hover:bg-gray-300">
+                            Đặt lại
+                        </button>
+                        <button class="btn-primary text-white px-6 py-2 rounded-md">
+                            Áp dụng
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Filter Buttons -->
+            <div class="flex flex-wrap gap-2 mb-4">
+                <button class="filter-btn px-4 py-2 rounded-full border border-gray-300 hover:bg-indigo-50 active">
+                    Tất cả
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full border border-gray-300 hover:bg-indigo-50">
+                    <i class="fas fa-female mr-1"></i>Nữ
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full border border-gray-300 hover:bg-indigo-50">
+                    <i class="fas fa-male mr-1"></i>Nam
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full border border-gray-300 hover:bg-indigo-50">
+                    <i class="fas fa-ghost mr-1"></i>Halloween
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full border border-gray-300 hover:bg-indigo-50">
+                    <i class="fas fa-mask mr-1"></i>Cosplay
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full border border-gray-300 hover:bg-indigo-50">
+                    <i class="fas fa-star mr-1"></i>Nổi bật
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full border border-gray-300 hover:bg-indigo-50">
+                    <i class="fas fa-fire mr-1"></i>Xu hướng
+                </button>
+            </div>
+        </div>
+        
+        <!-- Search Results -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold flex items-center">
+                    <i class="fas fa-list-ul text-indigo-500 mr-3"></i>
+                    <span>Kết quả tìm kiếm (24 trang phục)</span>
+                </h3>
+                <div class="flex items-center">
+                    <span class="text-sm text-gray-600 mr-2">Sắp xếp:</span>
+                    <select class="border border-gray-300 rounded-md px-3 py-1 text-sm">
+                        <option>Phổ biến</option>
+                        <option>Giá thấp đến cao</option>
+                        <option>Giá cao đến thấp</option>
+                        <option>Đánh giá cao</option>
+                        <option>Mới nhất</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Costume Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Costume 1 -->
+                <div class="card-hover bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative">
+                        <div class="h-48 bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-tshirt text-6xl text-gray-400"></i>
+                        </div>
+                        <div class="absolute top-2 right-2 bg-indigo-600 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-star mr-1"></i>4.9
+                        </div>
+                        <div class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-fire mr-1"></i>Hot
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Váy dạ hội sang trọng</h3>
+                        <p class="text-gray-600 text-sm mb-2">Màu đen, size M-L</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-indigo-600">200k</span>
+                                <span class="text-gray-400 text-sm line-through ml-1">250k</span>
+                                <span class="text-xs text-green-600 ml-1">-20%</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="quantity-control flex items-center mr-2">
+                                    <div class="quantity-btn minus">-</div>
+                                    <input type="number" class="quantity-input" value="1" min="1" max="10">
+                                    <div class="quantity-btn plus">+</div>
+                                </div>
+                                <button class="rent-btn text-sm bg-indigo-100 text-indigo-600 px-3 py-1 rounded hover:bg-indigo-200">
+                                    <i class="fas fa-cart-plus mr-1"></i>Thuê
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Costume 2 -->
+                <div class="card-hover bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative">
+                        <div class="h-48 bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-tshirt text-6xl text-gray-400"></i>
+                        </div>
+                        <div class="absolute top-2 right-2 bg-indigo-600 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-star mr-1"></i>4.7
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Vest nam cao cấp</h3>
+                        <p class="text-gray-600 text-sm mb-2">Màu xanh navy, size 28-32</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-indigo-600">300k</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="quantity-control flex items-center mr-2">
+                                    <div class="quantity-btn minus">-</div>
+                                    <input type="number" class="quantity-input" value="1" min="1" max="10">
+                                    <div class="quantity-btn plus">+</div>
+                                </div>
+                                <button class="rent-btn text-sm bg-indigo-100 text-indigo-600 px-3 py-1 rounded hover:bg-indigo-200">
+                                    <i class="fas fa-cart-plus mr-1"></i>Thuê
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Costume 3 -->
+                <div class="card-hover bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative">
+                        <div class="h-48 bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-tshirt text-6xl text-gray-400"></i>
+                        </div>
+                        <div class="absolute top-2 right-2 bg-indigo-600 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-star mr-1"></i>4.8
+                        </div>
+                        <div class="absolute top-2 left-2 bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-bolt mr-1"></i>Mới
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Trang phục Witch Halloween</h3>
+                        <p class="text-gray-600 text-sm mb-2">Đen, size S-L</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-indigo-600">180k</span>
+                                <span class="text-gray-400 text-sm line-through ml-1">200k</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="quantity-control flex items-center mr-2">
+                                    <div class="quantity-btn minus">-</div>
+                                    <input type="number" class="quantity-input" value="1" min="1" max="10">
+                                    <div class="quantity-btn plus">+</div>
+                                </div>
+                                <button class="rent-btn text-sm bg-indigo-100 text-indigo-600 px-3 py-1 rounded hover:bg-indigo-200">
+                                    <i class="fas fa-cart-plus mr-1"></i>Thuê
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Costume 4 -->
+                <div class="card-hover bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative">
+                        <div class="h-48 bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-tshirt text-6xl text-gray-400"></i>
+                        </div>
+                        <div class="absolute top-2 right-2 bg-indigo-600 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-star mr-1"></i>4.9
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Áo dài cách tân</h3>
+                        <p class="text-gray-600 text-sm mb-2">Hoa văn, size S-XL</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-indigo-600">250k</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="quantity-control flex items-center mr-2">
+                                    <div class="quantity-btn minus">-</div>
+                                    <input type="number" class="quantity-input" value="1" min="1" max="10">
+                                    <div class="quantity-btn plus">+</div>
+                                </div>
+                                <button class="rent-btn text-sm bg-indigo-100 text-indigo-600 px-3 py-1 rounded hover:bg-indigo-200">
+                                    <i class="fas fa-cart-plus mr-1"></i>Thuê
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Costume 5 -->
+                <div class="card-hover bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative">
+                        <div class="h-48 bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-tshirt text-6xl text-gray-400"></i>
+                        </div>
+                        <div class="absolute top-2 right-2 bg-indigo-600 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-star mr-1"></i>4.6
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Trang phục Spider-Man</h3>
+                        <p class="text-gray-600 text-sm mb-2">Cosplay, size M</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-indigo-600">350k</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="quantity-control flex items-center mr-2">
+                                    <div class="quantity-btn minus">-</div>
+                                    <input type="number" class="quantity-input" value="1" min="1" max="10">
+                                    <div class="quantity-btn plus">+</div>
+                                </div>
+                                <button class="rent-btn text-sm bg-indigo-100 text-indigo-600 px-3 py-1 rounded hover:bg-indigo-200">
+                                    <i class="fas fa-cart-plus mr-1"></i>Thuê
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Costume 6 -->
+                <div class="card-hover bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative">
+                        <div class="h-48 bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-tshirt text-6xl text-gray-400"></i>
+                        </div>
+                        <div class="absolute top-2 right-2 bg-indigo-600 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-star mr-1"></i>4.5
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Vest nữ công sở</h3>
+                        <p class="text-gray-600 text-sm mb-2">Màu be, size S-M</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-indigo-600">220k</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="quantity-control flex items-center mr-2">
+                                    <div class="quantity-btn minus">-</div>
+                                    <input type="number" class="quantity-input" value="1" min="1" max="10">
+                                    <div class="quantity-btn plus">+</div>
+                                </div>
+                                <button class="rent-btn text-sm bg-indigo-100 text-indigo-600 px-3 py-1 rounded hover:bg-indigo-200">
+                                    <i class="fas fa-cart-plus mr-1"></i>Thuê
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Costume 7 -->
+                <div class="card-hover bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative">
+                        <div class="h-48 bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-tshirt text-6xl text-gray-400"></i>
+                        </div>
+                        <div class="absolute top-2 right-2 bg-indigo-600 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-star mr-1"></i>4.8
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Trang phục hoàng tử</h3>
+                        <p class="text-gray-600 text-sm mb-2">Màu xanh, size L</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-indigo-600">280k</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="quantity-control flex items-center mr-2">
+                                    <div class="quantity-btn minus">-</div>
+                                    <input type="number" class="quantity-input" value="1" min="1" max="10">
+                                    <div class="quantity-btn plus">+</div>
+                                </div>
+                                <button class="rent-btn text-sm bg-indigo-100 text-indigo-600 px-3 py-1 rounded hover:bg-indigo-200">
+                                    <i class="fas fa-cart-plus mr-1"></i>Thuê
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Costume 8 -->
+                <div class="card-hover bg-white rounded-xl overflow-hidden shadow-md">
+                    <div class="relative">
+                        <div class="h-48 bg-gray-200 flex items-center justify-center">
+                            <i class="fas fa-tshirt text-6xl text-gray-400"></i>
+                        </div>
+                        <div class="absolute top-2 right-2 bg-indigo-600 text-white text-xs px-2 py-1 rounded-full">
+                            <i class="fas fa-star mr-1"></i>4.7
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-1">Vá� tiệc hồng</h3>
+                        <p class="text-gray-600 text-sm mb-2">Dáng xòe, size S-M</p>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-indigo-600">240k</span>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="quantity-control flex items-center mr-2">
+                                    <div class="quantity-btn minus">-</div>
+                                    <input type="number" class="quantity-input" value="1" min="1" max="10">
+                                    <div class="quantity-btn plus">+</div>
+                                </div>
+                                <button class="rent-btn text-sm bg-indigo-100 text-indigo-600 px-3 py-1 rounded hover:bg-indigo-200">
+                                    <i class="fas fa-cart-plus mr-1"></i>Thuê
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="flex justify-center mt-8">
+                <nav class="inline-flex rounded-md shadow">
+                    <a href="#" class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                    <a href="#" class="px-4 py-2 border-t border-b border-gray-300 bg-white text-indigo-600 font-medium">1</a>
+                    <a href="#" class="px-4 py-2 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">2</a>
+                    <a href="#" class="px-4 py-2 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">3</a>
+                    <a href="#" class="px-4 py-2 border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 rounded-r-md">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-tshirt mr-2"></i> Quang Hòa
+                    </h3>
+                    <p class="text-gray-300">Chuyên cho thuê trang phục với chất lượng tốt nhất và giá cả hợp lý.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Liên hệ</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-2 text-indigo-300"></i>
+                            <span>123 Đường ABC, Quận 1, TP.HCM</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-indigo-300"></i>
+                            <span>0901.234.567</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2 text-indigo-300"></i>
+                            <span>info@quanghoa.vn</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Giờ mở cửa</h4>
+                    <ul class="space-y-2">
+                        <li>Thứ 2 - Thứ 6: 8h - 20h</li>
+                        <li>Thứ 7 - CN: 8h - 22h</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Theo dõi chúng tôi</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-indigo-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-indigo-700">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-pink-600 w-10 h-10 rounded-full flex items-center justify-center hover:bg-pink-700">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="bg-blue-400 w-10 h-10 rounded-full flex items-center justify-center hover:bg-blue-500">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>© 2023 Cửa hàng cho thuê trang phục Quang Hòa. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle filter options
+        document.getElementById('filterBtn').addEventListener('click', function() {
+            const filterOptions = document.getElementById('filterOptions');
+            filterOptions.classList.toggle('hidden');
+        });
+
+        // Quick filter buttons
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Search functionality
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (searchTerm.trim() !== '') {
+                alert(`Đang tìm kiếm: "${searchTerm}"`);
+                // In a real app, you would make an API call or filter results here
+            }
+        });
+
+        // Quantity controls
+        document.querySelectorAll('.quantity-control').forEach(control => {
+            const minusBtn = control.querySelector('.minus');
+            const plusBtn = control.querySelector('.plus');
+            const input = control.querySelector('.quantity-input');
+            
+            minusBtn.addEventListener('click', () => {
+                let value = parseInt(input.value);
+                if (value > 1) {
+                    input.value = value - 1;
+                }
+            });
+            
+            plusBtn.addEventListener('click', () => {
+                let value = parseInt(input.value);
+                if (value < 10) {
+                    input.value = value + 1;
+                }
+            });
+            
+            input.addEventListener('change', () => {
+                let value = parseInt(input.value);
+                if (isNaN(value) || value < 1) {
+                    input.value = 1;
+                } else if (value > 10) {
+                    input.value = 10;
+                }
+            });
+        });
+
+        // Rent buttons
+        const rentButtons = document.querySelectorAll('.rent-btn');
+        rentButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const costumeName = this.closest('.card-hover').querySelector('h3').textContent;
+                const quantity = this.closest('.flex').querySelector('.quantity-input').value;
+                alert(`Bạn đã chọn thuê ${quantity} "${costumeName}"`);
+                
+                // Tăng số lượng trong giỏ hàng
+                const cartCount = document.getElementById('cartCount');
+                let currentCount = parseInt(cartCount.textContent);
+                cartCount.textContent = currentCount + parseInt(quantity);
+                
+                // Hiệu ứng cho nút giỏ hàng
+                const cartBtn = document.getElementById('cartBtn');
+                cartBtn.classList.add('animate-bounce');
+                setTimeout(() => {
+                    cartBtn.classList.remove('animate-bounce');
+                }, 1000);
+            });
+        });
+
+        // Cart button click
+        document.getElementById('cartBtn').addEventListener('click', function() {
+            alert('Bạn đang xem giỏ hàng của mình');
+            // Trong ứng dụng thực tế, bạn sẽ chuyển hướng đến trang giỏ hàng hoặc hiển thị modal
+        });
+    </script>
+</body>
+</html>

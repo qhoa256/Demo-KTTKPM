@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Quản Trị - Quang Hòa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .admin-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        
+        .btn-admin-primary {
+            transition: all 0.3s ease;
+            background: linear-gradient(to right, #4f46e5, #7c3aed);
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+        }
+        
+        .btn-admin-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(79, 70, 229, 0.3);
+        }
+        
+        .btn-admin-secondary {
+            transition: all 0.3s ease;
+            background: linear-gradient(to right, #10b981, #34d399);
+            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+        }
+        
+        .btn-admin-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(16, 185, 129, 0.3);
+        }
+        
+        .sidebar {
+            transition: all 0.3s ease;
+            width: 250px;
+        }
+        
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        
+        .sidebar-item {
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .content-area {
+            transition: all 0.3s ease;
+            margin-left: 250px;
+        }
+        
+        .content-collapsed {
+            margin-left: 80px;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Admin Header -->
+    <header class="admin-gradient shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fas fa-tshirt text-white text-2xl mr-3"></i>
+                <h1 class="text-white text-xl font-bold">Quản trị cửa hàng Quang Hòa</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-white flex items-center">
+                    <i class="fas fa-user-circle text-xl mr-2"></i>
+                    <span>Xin chào, <span th:text="${session.fullName}">Admin</span>!</span>
+                </div>
+                <a th:href="@{/logout}" class="bg-white text-indigo-600 px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Layout -->
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="sidebar bg-gray-800 text-white h-screen fixed top-0 left-0 pt-20 overflow-y-auto">
+            <nav class="p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="sidebar-item active flex items-center p-3 rounded-lg">
+                            <i class="fas fa-tachometer-alt mr-3 text-lg"></i>
+                            <span class="font-medium">Bảng điều khiển</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-users mr-3 text-lg"></i>
+                            <span class="font-medium">Quản lý khách hàng</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-tshirt mr-3 text-lg"></i>
+                            <span class="font-medium">Quản lý trang phục</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-truck mr-3 text-lg"></i>
+                            <span class="font-medium">Nhà cung cấp</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-file-invoice-dollar mr-3 text-lg"></i>
+                            <span class="font-medium">Hóa đơn</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-chart-line mr-3 text-lg"></i>
+                            <span class="font-medium">Báo cáo</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-cog mr-3 text-lg"></i>
+                            <span class="font-medium">Cài đặt</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content-area flex-1 p-8 pt-24">
+            <div class="container mx-auto">
+                <!-- Page Header -->
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800">Bảng điều khiển</h2>
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <input type="text" placeholder="Tìm kiếm..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                        <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center">
+                            <i class="fas fa-plus mr-2"></i> Thêm mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500">Tổng trang phục</p>
+                                <h3 class="text-2xl font-bold mt-2">1,248</h3>
+                            </div>
+                            <div class="bg-indigo-100 p-3 rounded-full">
+                                <i class="fas fa-tshirt text-indigo-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <p class="text-green-500 text-sm mt-4">
+                            <i class="fas fa-arrow-up mr-1"></i> 12% so với tháng trước
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500">Đơn hàng hôm nay</p>
+                                <h3 class="text-2xl font-bold mt-2">24</h3>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <i class="fas fa-receipt text-green-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <p class="text-green-500 text-sm mt-4">
+                            <i class="fas fa-arrow-up mr-1"></i> 5% so với hôm qua
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500">Doanh thu tháng</p>
+                                <h3 class="text-2xl font-bold mt-2">48.2M đ</h3>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-full">
+                                <i class="fas fa-money-bill-wave text-purple-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <p class="text-red-500 text-sm mt-4">
+                            <i class="fas fa-arrow-down mr-1"></i> 3% so với tháng trước
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500">Nhà cung cấp</p>
+                                <h3 class="text-2xl font-bold mt-2">15</h3>
+                            </div>
+                            <div class="bg-yellow-100 p-3 rounded-full">
+                                <i class="fas fa-truck text-yellow-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <p class="text-green-500 text-sm mt-4">
+                            <i class="fas fa-arrow-up mr-1"></i> 2 mới tháng này
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Main Action Buttons -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <!-- Nhập trang phục từ nhà cung cấp -->
+                    <div class="bg-white p-8 rounded-xl shadow-sm card-hover">
+                        <div class="text-center">
+                            <div class="bg-indigo-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fas fa-truck-loading text-indigo-600 text-3xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Nhập trang phục từ nhà cung cấp</h3>
+                            <p class="text-gray-600 mb-6">Thêm trang phục mới vào kho từ các nhà cung cấp đối tác của cửa hàng.</p>
+                            <button class="btn-admin-primary text-white px-6 py-3 rounded-lg w-full flex items-center justify-center">
+                                <i class="fas fa-plus-circle mr-2 text-lg"></i> Nhập hàng
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Xem báo cáo thống kê -->
+                    <div class="bg-white p-8 rounded-xl shadow-sm card-hover">
+                        <div class="text-center">
+                            <div class="bg-green-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <i class="fas fa-chart-pie text-green-600 text-3xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Xem báo cáo thống kê</h3>
+                            <p class="text-gray-600 mb-6">Xem các báo cáo chi tiết về doanh thu, tồn kho và hiệu quả kinh doanh.</p>
+                            <button class="btn-admin-secondary text-white px-6 py-3 rounded-lg w-full flex items-center justify-center">
+                                <i class="fas fa-chart-line mr-2 text-lg"></i> Xem báo cáo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold">Hoạt động gần đây</h3>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800">Xem tất cả</a>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start p-3 hover:bg-gray-50 rounded-lg transition">
+                            <div class="bg-indigo-100 p-2 rounded-full mr-4">
+                                <i class="fas fa-tshirt text-indigo-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium">Đã thêm 5 váy dạ hội mới</p>
+                                <p class="text-sm text-gray-500">Bởi Nguyễn Văn A - 10 phút trước</p>
+                            </div>
+                            <span class="text-sm text-gray-500">2:45 PM</span>
+                        </div>
+                        
+                        <div class="flex items-start p-3 hover:bg-gray-50 rounded-lg transition">
+                            <div class="bg-green-100 p-2 rounded-full mr-4">
+                                <i class="fas fa-receipt text-green-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium">Đơn hàng #1245 đã thanh toán</p>
+                                <p class="text-sm text-gray-500">Khách hàng Trần Thị B - 1 giờ trước</p>
+                            </div>
+                            <span class="text-sm text-gray-500">1:30 PM</span>
+                        </div>
+                        
+                        <div class="flex items-start p-3 hover:bg-gray-50 rounded-lg transition">
+                            <div class="bg-yellow-100 p-2 rounded-full mr-4">
+                                <i class="fas fa-truck text-yellow-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium">Nhập hàng từ nhà cung cấp ABC</p>
+                                <p class="text-sm text-gray-500">15 trang phục mới - 3 giờ trước</p>
+                            </div>
+                            <span class="text-sm text-gray-500">11:15 AM</span>
+                        </div>
+                        
+                        <div class="flex items-start p-3 hover:bg-gray-50 rounded-lg transition">
+                            <div class="bg-purple-100 p-2 rounded-full mr-4">
+                                <i class="fas fa-user-plus text-purple-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-medium">Thêm nhà cung cấp mới XYZ Fashion</p>
+                                <p class="text-sm text-gray-500">Bởi Nguyễn Văn A - 5 giờ trước</p>
+                            </div>
+                            <span class="text-sm text-gray-500">9:00 AM</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 py-6 border-t border-gray-200">
+        <div class="container mx-auto px-4 text-center text-gray-600">
+            <p>© 2023 Hệ thống quản trị cửa hàng Quang Hòa. Phiên bản 1.0.0</p>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle sidebar collapse
+        document.addEventListener('DOMContentLoaded', function() {
+            // You can add JavaScript functionality here if needed
+            // For example, handling the sidebar collapse/expand
+            
+            // Example: Click handler for the main action buttons
+            document.querySelector('.btn-admin-primary').addEventListener('click', function() {
+                alert('Chức năng "Nhập trang phục từ nhà cung cấp" đang được mở!');
+                // Here you would typically redirect to the import page or show a modal
+            });
+            
+            document.querySelector('.btn-admin-secondary').addEventListener('click', function() {
+                alert('Chức năng "Xem báo cáo thống kê" đang được mở!');
+                // Here you would typically redirect to the reports page
+            });
+        });
+    </script>
+</body>
+</html> 

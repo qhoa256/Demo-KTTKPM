@@ -8,10 +8,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="supplier-service" />
-        <module name="bill-costume-service" />
         <module name="import-bill-service" />
         <module name="costume-service" />
+        <module name="bill-costume-service" />
         <module name="user-service" />
+        <module name="client-costume-rental" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -24,6 +25,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
       <module name="bill-costume-service" options="-parameters" />
+      <module name="client-costume-rental" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="costume-service" options="-parameters" />
       <module name="discovery-server" options="-parameters" />
