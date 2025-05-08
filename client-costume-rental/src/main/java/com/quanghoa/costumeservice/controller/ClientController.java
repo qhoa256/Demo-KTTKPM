@@ -7,6 +7,7 @@ import com.quanghoa.costumeservice.model.PaymentInfo;
 import com.quanghoa.costumeservice.service.CostumeService;
 import com.quanghoa.costumeservice.service.UserService;
 import com.quanghoa.costumeservice.service.BillService;
+import com.quanghoa.costumeservice.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -27,12 +30,14 @@ public class ClientController {
     private final UserService userService;
     private final CostumeService costumeService;
     private final BillService billService;
+    private final SupplierService supplierService;
 
     @Autowired
-    public ClientController(UserService userService, CostumeService costumeService, BillService billService) {
+    public ClientController(UserService userService, CostumeService costumeService, BillService billService, SupplierService supplierService) {
         this.userService = userService;
         this.costumeService = costumeService;
         this.billService = billService;
+        this.supplierService = supplierService;
     }
 
     @GetMapping("/")
@@ -120,5 +125,29 @@ public class ClientController {
         // Call the bill service to create a new bill
         Map<String, Object> response = billService.createBill(billRequest);
         return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/import-costume")
+    public String getImportingPage(Model model, HttpSession session) {
+        // Check if user is logged in and is admin
+        if (session.getAttribute("username") == null || 
+            !"admin".equalsIgnoreCase((String) session.getAttribute("username"))) {
+            return "redirect:/login";
+        }
+        
+        // Get suppliers from supplier service
+        List<Map<String, Object>> suppliers = supplierService.getAllSuppliers();
+        
+        // Add suppliers to model
+        model.addAttribute("suppliers", suppliers);
+        
+        return "importing_costume";
+    }
+    
+    @GetMapping("/get-costume-suppliers/{supplierId}")
+    @ResponseBody
+    public List<Map<String, Object>> getCostumeSuppliers(@PathVariable String supplierId) {
+        // Call the external API to get costumes for this supplier
+        return costumeService.getCostumesBySupplierId(supplierId);
     }
 } 

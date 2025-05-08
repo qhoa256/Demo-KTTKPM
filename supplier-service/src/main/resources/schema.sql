@@ -1,5 +1,9 @@
+DROP TABLE IF EXISTS tblSupplier;
+
 CREATE TABLE IF NOT EXISTS tblSupplier (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
     email VARCHAR(255),
-    contact VARCHAR(255)
+    contact VARCHAR(255),
+    address VARCHAR(255)
 ); 

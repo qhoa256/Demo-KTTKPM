@@ -7,19 +7,19 @@ INSERT INTO tblCostume (category, name, description, price) VALUES ('Trang phụ
 
 -- Thêm dữ liệu mẫu cho bảng tblCostumeBill
 INSERT INTO tblCostumeBill (costume_id, rent_price, bill_id, quantity, name, description) 
-VALUES (1, 150000, 'BILL-001', 2, 'Áo dài truyền thống', 'Áo dài màu đỏ truyền thống');
+VALUES (1, 150000, '1', 2, 'Áo dài truyền thống', 'Áo dài màu đỏ truyền thống');
 
 INSERT INTO tblCostumeBill (costume_id, rent_price, bill_id, quantity, name, description) 
-VALUES (2, 200000, 'BILL-001', 1, 'Vest công sở', 'Vest đen công sở nam');
+VALUES (2, 200000, '2', 1, 'Vest công sở', 'Vest đen công sở nam');
 
 INSERT INTO tblCostumeBill (costume_id, rent_price, bill_id, quantity, name, description) 
-VALUES (3, 300000, 'BILL-002', 1, 'Trang phục hoàng gia', 'Trang phục hoàng gia cổ điển');
+VALUES (3, 300000, '3', 1, 'Trang phục hoàng gia', 'Trang phục hoàng gia cổ điển');
 
 INSERT INTO tblCostumeBill (costume_id, rent_price, bill_id, quantity, name, description) 
-VALUES (4, 100000, 'BILL-003', 3, 'Đồng phục thể thao', 'Bộ đồng phục thể thao đội tuyển');
+VALUES (4, 100000, '3', 3, 'Đồng phục thể thao', 'Bộ đồng phục thể thao đội tuyển');
 
 INSERT INTO tblCostumeBill (costume_id, rent_price, bill_id, quantity, name, description) 
-VALUES (5, 500000, 'BILL-004', 1, 'Đầm dạ hội', 'Đầm dự tiệc màu bạc sang trọng');
+VALUES (5, 500000, '4', 1, 'Đầm dạ hội', 'Đầm dự tiệc màu bạc sang trọng');
 
 -- Thêm dữ liệu mẫu cho bảng tblCostumeImportingBill
 INSERT INTO tblCostumeImportingBill (costume_id, import_price, quantity, name, description) 
@@ -35,4 +35,20 @@ INSERT INTO tblCostumeImportingBill (costume_id, import_price, quantity, name, d
 VALUES (4, 80000, 15, 'Đồng phục thể thao', 'Nhập từ xưởng may cho mùa giải mới');
 
 INSERT INTO tblCostumeImportingBill (costume_id, import_price, quantity, name, description) 
-VALUES (5, 400000, 2, 'Đầm dạ hội', 'Nhập theo đơn đặt hàng dự tiệc'); 
+VALUES (5, 400000, 2, 'Đầm dạ hội', 'Nhập theo đơn đặt hàng dự tiệc');
+
+-- Thêm dữ liệu mẫu cho bảng tblCostumeSupplier
+INSERT INTO tblCostumeSupplier (costume_id, supplier_id) 
+VALUES (1, '1');
+
+INSERT INTO tblCostumeSupplier (costume_id, supplier_id) 
+VALUES (2, '2');
+
+INSERT INTO tblCostumeSupplier (costume_id, supplier_id) 
+VALUES (3, '1');
+
+INSERT INTO tblCostumeSupplier (costume_id, supplier_id) 
+VALUES (4, '3');
+
+INSERT INTO tblCostumeSupplier (costume_id, supplier_id) 
+VALUES (5, '2'); 

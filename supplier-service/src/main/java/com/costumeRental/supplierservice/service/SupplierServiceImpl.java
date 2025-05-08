@@ -33,8 +33,10 @@ public class SupplierServiceImpl implements SupplierService {
     public Supplier updateSupplier(Long id, Supplier supplier) {
         Supplier existingSupplier = getSupplierById(id);
         
+        existingSupplier.setName(supplier.getName());
         existingSupplier.setEmail(supplier.getEmail());
         existingSupplier.setContact(supplier.getContact());
+        existingSupplier.setAddress(supplier.getAddress());
         
         return supplierDao.save(existingSupplier);
     }

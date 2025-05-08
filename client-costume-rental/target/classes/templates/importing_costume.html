@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhập trang phục - Quang Hòa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .admin-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        
+        .btn-admin-primary {
+            transition: all 0.3s ease;
+            background: linear-gradient(to right, #4f46e5, #7c3aed);
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+        }
+        
+        .btn-admin-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(79, 70, 229, 0.3);
+        }
+        
+        .sidebar {
+            transition: all 0.3s ease;
+            width: 250px;
+        }
+        
+        .sidebar-item {
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .content-area {
+            transition: all 0.3s ease;
+            margin-left: 250px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Admin Header -->
+    <header class="admin-gradient shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fas fa-tshirt text-white text-2xl mr-3"></i>
+                <h1 class="text-white text-xl font-bold">Quản trị cửa hàng Quang Hòa</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-white flex items-center">
+                    <i class="fas fa-user-circle text-xl mr-2"></i>
+                    <span>Xin chào, <span th:text="${session.fullName}">Admin</span>!</span>
+                </div>
+                <a th:href="@{/logout}" class="bg-white text-indigo-600 px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Layout -->
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="sidebar bg-gray-800 text-white h-screen fixed top-0 left-0 pt-20 overflow-y-auto">
+            <nav class="p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a th:href="@{/admin}" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-tachometer-alt mr-3 text-lg"></i>
+                            <span class="font-medium">Bảng điều khiển</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-users mr-3 text-lg"></i>
+                            <span class="font-medium">Quản lý khách hàng</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-tshirt mr-3 text-lg"></i>
+                            <span class="font-medium">Quản lý trang phục</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item active flex items-center p-3 rounded-lg">
+                            <i class="fas fa-truck mr-3 text-lg"></i>
+                            <span class="font-medium">Nhà cung cấp</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-file-invoice-dollar mr-3 text-lg"></i>
+                            <span class="font-medium">Hóa đơn</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-chart-line mr-3 text-lg"></i>
+                            <span class="font-medium">Báo cáo</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-cog mr-3 text-lg"></i>
+                            <span class="font-medium">Cài đặt</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content-area flex-1 p-8 pt-24">
+            <div class="container mx-auto">
+                <!-- Page Header -->
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800">Nhập trang phục từ nhà cung cấp</h2>
+                </div>
+                
+                <!-- Supplier Selection Form -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+                    <h3 class="text-lg font-semibold mb-4">Chọn nhà cung cấp</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- List of suppliers from API -->
+                        <div th:each="supplier : ${suppliers}" class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-300">
+                            <div class="flex items-start">
+                                <div class="bg-indigo-100 p-3 rounded-full mr-4">
+                                    <i class="fas fa-building text-indigo-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800" th:text="${supplier.name}">Tên nhà cung cấp</h4>
+                                    <p class="text-sm text-gray-600 mt-1" th:text="'Email: ' + ${supplier.email}">Email</p>
+                                    <p class="text-sm text-gray-600 mt-1" th:text="'Liên hệ: ' + ${supplier.contact}">Liên hệ</p>
+                                    <p class="text-sm text-gray-600 mt-1" th:text="'Địa chỉ: ' + ${supplier.address}">Địa chỉ</p>
+                                </div>
+                            </div>
+                            <button class="select-supplier w-full mt-4 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition" th:data-supplier-id="${supplier.id}">
+                                Chọn nhà cung cấp này
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Supplier Costumes Display (hidden initially) -->
+                <div id="supplierCostumes" class="bg-white rounded-lg shadow-md p-6 mb-8 hidden">
+                    <h3 class="text-lg font-semibold mb-4">Trang phục từ nhà cung cấp</h3>
+                    <p id="loadingCostumes" class="text-gray-600">Đang tải danh sách trang phục...</p>
+                    
+                    <div id="costumesList" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 hidden">
+                        <!-- Costume items will be populated here dynamically -->
+                    </div>
+                    
+                    <div id="noCostumes" class="text-gray-600 mt-4 hidden">
+                        Không có trang phục nào từ nhà cung cấp này.
+                    </div>
+                </div>
+                
+                <!-- Costume Import Form (hidden initially) -->
+                <div id="importForm" class="bg-white rounded-lg shadow-md p-6 hidden">
+                    <h3 class="text-lg font-semibold mb-4">Thông tin nhập hàng</h3>
+                    
+                    <form id="costumeImportForm">
+                        <input type="hidden" id="supplierId" name="supplierId">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label for="supplierName" class="block text-gray-700 mb-2">Nhà cung cấp</label>
+                                <input type="text" id="supplierName" class="w-full px-4 py-2 border rounded-md bg-gray-100" readonly>
+                            </div>
+                            
+                            <div>
+                                <label for="importDate" class="block text-gray-700 mb-2">Ngày nhập</label>
+                                <input type="date" id="importDate" name="importDate" class="w-full px-4 py-2 border rounded-md" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="font-medium mb-2">Trang phục đã chọn</h4>
+                            
+                            <div id="selectedCostumes" class="border p-4 rounded-md mb-4">
+                                <p id="noSelectedCostumes" class="text-gray-600">Chưa có trang phục nào được chọn</p>
+                                <div id="selectedCostumesList" class="space-y-2">
+                                    <!-- Selected costumes will appear here -->
+                                </div>
+                            </div>
+                            
+                            <button type="button" id="addCustomCostume" class="mt-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
+                                <i class="fas fa-plus mr-2"></i>Thêm trang phục mới
+                            </button>
+                        </div>
+                        
+                        <!-- Custom costume section (hidden initially) -->
+                        <div id="customCostumeSection" class="mb-6 hidden">
+                            <h4 class="font-medium mb-2">Thêm trang phục mới</h4>
+                            
+                            <div id="costumeItems">
+                                <div class="costume-item grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-md mb-4">
+                                    <div>
+                                        <label class="block text-gray-700 mb-2">Tên trang phục</label>
+                                        <input type="text" name="costumeName[]" class="w-full px-4 py-2 border rounded-md" required>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 mb-2">Loại</label>
+                                        <select name="costumeType[]" class="w-full px-4 py-2 border rounded-md" required>
+                                            <option value="">Chọn loại</option>
+                                            <option value="formal">Lễ phục</option>
+                                            <option value="traditional">Truyền thống</option>
+                                            <option value="costume">Hoá trang</option>
+                                            <option value="wedding">Cưới</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 mb-2">Số lượng</label>
+                                        <input type="number" name="quantity[]" class="w-full px-4 py-2 border rounded-md" min="1" required>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-gray-700 mb-2">Giá nhập</label>
+                                        <input type="number" name="importPrice[]" class="w-full px-4 py-2 border rounded-md" min="0" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="button" id="addMoreCostume" class="mt-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
+                                <i class="fas fa-plus mr-2"></i>Thêm trang phục mới khác
+                            </button>
+                        </div>
+                        
+                        <div class="flex justify-end">
+                            <button type="button" id="cancelImport" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100 transition mr-2">
+                                Huỷ
+                            </button>
+                            <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition">
+                                <i class="fas fa-save mr-2"></i>Lưu và nhập hàng
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let selectedCostumes = [];
+            
+            // Handle supplier selection
+            document.querySelectorAll('.select-supplier').forEach(button => {
+                button.addEventListener('click', function() {
+                    const supplierId = this.getAttribute('data-supplier-id');
+                    const supplierName = this.closest('div').querySelector('h4').textContent;
+                    
+                    // Populate form fields
+                    document.getElementById('supplierId').value = supplierId;
+                    document.getElementById('supplierName').value = supplierName;
+                    
+                    // Clear previous selections
+                    selectedCostumes = [];
+                    document.getElementById('selectedCostumesList').innerHTML = '';
+                    document.getElementById('noSelectedCostumes').style.display = 'block';
+                    
+                    // Show loading state
+                    document.getElementById('supplierCostumes').classList.remove('hidden');
+                    document.getElementById('loadingCostumes').style.display = 'block';
+                    document.getElementById('costumesList').classList.add('hidden');
+                    document.getElementById('noCostumes').classList.add('hidden');
+                    
+                    // Fetch costumes from this supplier
+                    fetch(`/get-costume-suppliers/${supplierId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('loadingCostumes').style.display = 'none';
+                            
+                            if (data && data.length > 0) {
+                                // Show costumes
+                                document.getElementById('costumesList').classList.remove('hidden');
+                                
+                                // Clear previous costumes
+                                document.getElementById('costumesList').innerHTML = '';
+                                
+                                // Add costumes to the list
+                                data.forEach(item => {
+                                    const costumeInfo = item.costume;
+                                    const costumeElement = document.createElement('div');
+                                    costumeElement.className = 'border border-gray-200 rounded-lg p-4 hover:shadow-md transition';
+                                    costumeElement.innerHTML = `
+                                        <div class="flex items-start">
+                                            <div class="bg-indigo-100 p-3 rounded-full mr-4">
+                                                <i class="fas fa-tshirt text-indigo-600"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-bold text-gray-800">${costumeInfo.name}</h4>
+                                                <p class="text-sm text-gray-600 mt-1">Loại: ${costumeInfo.category}</p>
+                                                <p class="text-sm text-gray-600 mt-1">Mô tả: ${costumeInfo.description}</p>
+                                                <p class="text-sm text-gray-600 mt-1">Giá: ${new Intl.NumberFormat('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND'
+                                                }).format(costumeInfo.price)}</p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-4">
+                                            <div class="flex items-center">
+                                                <label class="block text-gray-700 mr-2">Số lượng:</label>
+                                                <input type="number" class="costume-quantity px-2 py-1 border rounded-md w-20" value="1" min="1">
+                                                <button class="select-costume ml-auto px-4 py-1 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+                                                        data-costume-id="${costumeInfo.id}"
+                                                        data-costume-name="${costumeInfo.name}"
+                                                        data-costume-category="${costumeInfo.category}"
+                                                        data-costume-price="${costumeInfo.price}">
+                                                    Chọn
+                                                </button>
+                                            </div>
+                                        </div>
+                                    `;
+                                    
+                                    // Add to costumes list
+                                    document.getElementById('costumesList').appendChild(costumeElement);
+                                });
+                                
+                                // Add costume selection handlers
+                                addCostumeSelectionHandlers();
+                            } else {
+                                // Show no costumes message
+                                document.getElementById('noCostumes').classList.remove('hidden');
+                            }
+                            
+                            // Show the import form
+                            document.getElementById('importForm').classList.remove('hidden');
+                            
+                            // Scroll to the form
+                            document.getElementById('supplierCostumes').scrollIntoView({ behavior: 'smooth' });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching costumes:', error);
+                            document.getElementById('loadingCostumes').style.display = 'none';
+                            document.getElementById('noCostumes').classList.remove('hidden');
+                            document.getElementById('noCostumes').textContent = 'Đã xảy ra lỗi khi tải danh sách trang phục.';
+                            
+                            // Still show the import form
+                            document.getElementById('importForm').classList.remove('hidden');
+                        });
+                });
+            });
+            
+            // Function to add costume selection handlers
+            function addCostumeSelectionHandlers() {
+                document.querySelectorAll('.select-costume').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const costumeId = this.getAttribute('data-costume-id');
+                        const costumeName = this.getAttribute('data-costume-name');
+                        const costumeCategory = this.getAttribute('data-costume-category');
+                        const costumePrice = parseFloat(this.getAttribute('data-costume-price'));
+                        const quantityInput = this.closest('div').querySelector('.costume-quantity');
+                        const quantity = parseInt(quantityInput.value);
+                        
+                        if (quantity < 1) {
+                            alert('Số lượng phải lớn hơn 0');
+                            return;
+                        }
+                        
+                        // Check if costume already in selected list
+                        const existingIndex = selectedCostumes.findIndex(c => c.id === costumeId);
+                        
+                        if (existingIndex >= 0) {
+                            // Update quantity
+                            selectedCostumes[existingIndex].quantity += quantity;
+                            updateSelectedCostumesList();
+                        } else {
+                            // Add new costume
+                            selectedCostumes.push({
+                                id: costumeId,
+                                name: costumeName,
+                                category: costumeCategory,
+                                price: costumePrice,
+                                quantity: quantity
+                            });
+                            updateSelectedCostumesList();
+                        }
+                        
+                        // Reset quantity input
+                        quantityInput.value = 1;
+                    });
+                });
+            }
+            
+            // Function to update the selected costumes list
+            function updateSelectedCostumesList() {
+                const listElement = document.getElementById('selectedCostumesList');
+                
+                if (selectedCostumes.length === 0) {
+                    document.getElementById('noSelectedCostumes').style.display = 'block';
+                    listElement.innerHTML = '';
+                    return;
+                }
+                
+                document.getElementById('noSelectedCostumes').style.display = 'none';
+                
+                // Clear and rebuild the list
+                listElement.innerHTML = '';
+                
+                selectedCostumes.forEach((costume, index) => {
+                    const costumeElement = document.createElement('div');
+                    costumeElement.className = 'flex items-center justify-between p-2 border-b';
+                    costumeElement.innerHTML = `
+                        <div>
+                            <span class="font-medium">${costume.name}</span>
+                            <span class="text-sm text-gray-600"> (${costume.category})</span>
+                            <span class="ml-2 text-sm">×${costume.quantity}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">${new Intl.NumberFormat('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND'
+                            }).format(costume.price * costume.quantity)}</span>
+                            <button type="button" class="remove-costume text-red-500 hover:text-red-700" data-index="${index}">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `;
+                    
+                    listElement.appendChild(costumeElement);
+                });
+                
+                // Add removal handlers
+                document.querySelectorAll('.remove-costume').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        selectedCostumes.splice(index, 1);
+                        updateSelectedCostumesList();
+                    });
+                });
+            }
+            
+            // Show/hide custom costume section
+            document.getElementById('addCustomCostume').addEventListener('click', function() {
+                document.getElementById('customCostumeSection').classList.toggle('hidden');
+            });
+            
+            // Add more costume items
+            document.getElementById('addMoreCostume').addEventListener('click', function() {
+                const costumeItem = document.querySelector('.costume-item').cloneNode(true);
+                
+                // Clear the input values
+                costumeItem.querySelectorAll('input, select').forEach(input => {
+                    input.value = '';
+                });
+                
+                // Add a remove button to the new item
+                const removeButton = document.createElement('button');
+                removeButton.type = 'button';
+                removeButton.className = 'mt-2 text-red-600 hover:text-red-800';
+                removeButton.innerHTML = '<i class="fas fa-trash"></i> Xoá';
+                removeButton.addEventListener('click', function() {
+                    this.closest('.costume-item').remove();
+                });
+                
+                costumeItem.appendChild(removeButton);
+                
+                // Append the new item
+                document.getElementById('costumeItems').appendChild(costumeItem);
+            });
+            
+            // Cancel import
+            document.getElementById('cancelImport').addEventListener('click', function() {
+                document.getElementById('supplierCostumes').classList.add('hidden');
+                document.getElementById('importForm').classList.add('hidden');
+                document.getElementById('customCostumeSection').classList.add('hidden');
+                document.getElementById('costumeImportForm').reset();
+                selectedCostumes = [];
+                updateSelectedCostumesList();
+            });
+            
+            // Handle form submission
+            document.getElementById('costumeImportForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Gather form data
+                const formData = {
+                    supplierId: document.getElementById('supplierId').value,
+                    importDate: document.getElementById('importDate').value,
+                    costumes: []
+                };
+                
+                // Add selected costumes
+                selectedCostumes.forEach(costume => {
+                    formData.costumes.push({
+                        id: costume.id,
+                        name: costume.name,
+                        type: costume.category,
+                        quantity: costume.quantity,
+                        importPrice: costume.price
+                    });
+                });
+                
+                // Gather custom costume items
+                if (!document.getElementById('customCostumeSection').classList.contains('hidden')) {
+                    document.querySelectorAll('.costume-item').forEach(item => {
+                        const nameInput = item.querySelector('input[name="costumeName[]"]');
+                        const typeSelect = item.querySelector('select[name="costumeType[]"]');
+                        const quantityInput = item.querySelector('input[name="quantity[]"]');
+                        const priceInput = item.querySelector('input[name="importPrice[]"]');
+                        
+                        if (nameInput.value && typeSelect.value && quantityInput.value && priceInput.value) {
+                            formData.costumes.push({
+                                name: nameInput.value,
+                                type: typeSelect.value,
+                                quantity: parseInt(quantityInput.value),
+                                importPrice: parseFloat(priceInput.value)
+                            });
+                        }
+                    });
+                }
+                
+                // Submit form data (currently just displaying in console)
+                console.log('Import data:', formData);
+                alert('Nhập hàng thành công!');
+                
+                // Reset form and hide it
+                document.getElementById('supplierCostumes').classList.add('hidden');
+                document.getElementById('importForm').classList.add('hidden');
+                document.getElementById('customCostumeSection').classList.add('hidden');
+                document.getElementById('costumeImportForm').reset();
+                selectedCostumes = [];
+                updateSelectedCostumesList();
+            });
+        });
+    </script>
+</body>
+</html>

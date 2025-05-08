@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class CostumeServiceImpl implements CostumeService {
@@ -32,5 +33,26 @@ public class CostumeServiceImpl implements CostumeService {
                 new ParameterizedTypeReference<List<Map<String, Object>>>() {}
         );
         return response.getBody();
+    }
+    
+    @Override
+    public List<Map<String, Object>> getCostumesBySupplierId(String supplierId) {
+        String apiUrl = costumeServiceUrl + "/api/costume-suppliers";
+        ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
+                apiUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+        );
+        
+        List<Map<String, Object>> allCostumeSuppliers = response.getBody();
+        if (allCostumeSuppliers == null) {
+            return List.of();
+        }
+        
+        // Filter the costume suppliers by supplierId
+        return allCostumeSuppliers.stream()
+                .filter(item -> supplierId.equals(item.get("supplierId")))
+                .collect(Collectors.toList());
     }
 } 

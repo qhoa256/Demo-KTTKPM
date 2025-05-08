@@ -5,4 +5,5 @@ import java.util.Map;
 
 public interface CostumeService {
     List<Map<String, Object>> getAllCostumes();
+    List<Map<String, Object>> getCostumesBySupplierId(String supplierId);
 } 

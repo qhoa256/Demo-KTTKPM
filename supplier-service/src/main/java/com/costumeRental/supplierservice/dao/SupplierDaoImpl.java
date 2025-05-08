@@ -32,8 +32,10 @@ public class SupplierDaoImpl implements SupplierDao {
     private final RowMapper<Supplier> supplierRowMapper = (rs, rowNum) -> {
         Supplier supplier = new Supplier();
         supplier.setId(rs.getLong("id"));
+        supplier.setName(rs.getString("name"));
         supplier.setEmail(rs.getString("email"));
         supplier.setContact(rs.getString("contact"));
+        supplier.setAddress(rs.getString("address"));
         return supplier;
     };
 
@@ -64,13 +66,15 @@ public class SupplierDaoImpl implements SupplierDao {
     }
 
     private Supplier insert(Supplier supplier) {
-        String sql = "INSERT INTO tblSupplier (email, contact) VALUES (?, ?)";
+        String sql = "INSERT INTO tblSupplier (name, email, contact, address) VALUES (?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         
         getJdbcTemplate().update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, supplier.getEmail());
-            ps.setString(2, supplier.getContact());
+            ps.setString(1, supplier.getName());
+            ps.setString(2, supplier.getEmail());
+            ps.setString(3, supplier.getContact());
+            ps.setString(4, supplier.getAddress());
             return ps;
         }, keyHolder);
         
@@ -79,8 +83,8 @@ public class SupplierDaoImpl implements SupplierDao {
     }
 
     private Supplier update(Supplier supplier) {
-        String sql = "UPDATE tblSupplier SET email = ?, contact = ? WHERE id = ?";
-        getJdbcTemplate().update(sql, supplier.getEmail(), supplier.getContact(), supplier.getId());
+        String sql = "UPDATE tblSupplier SET name = ?, email = ?, contact = ?, address = ? WHERE id = ?";
+        getJdbcTemplate().update(sql, supplier.getName(), supplier.getEmail(), supplier.getContact(), supplier.getAddress(), supplier.getId());
         return supplier;
     }
 
