@@ -2,14 +2,19 @@ package com.quanghoa.costumeservice.controller;
 
 import com.quanghoa.costumeservice.model.LoginRequest;
 import com.quanghoa.costumeservice.model.UserResponse;
+import com.quanghoa.costumeservice.model.BillRequest;
+import com.quanghoa.costumeservice.model.PaymentInfo;
 import com.quanghoa.costumeservice.service.CostumeService;
 import com.quanghoa.costumeservice.service.UserService;
+import com.quanghoa.costumeservice.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -21,11 +26,13 @@ public class ClientController {
 
     private final UserService userService;
     private final CostumeService costumeService;
+    private final BillService billService;
 
     @Autowired
-    public ClientController(UserService userService, CostumeService costumeService) {
+    public ClientController(UserService userService, CostumeService costumeService, BillService billService) {
         this.userService = userService;
         this.costumeService = costumeService;
+        this.billService = billService;
     }
 
     @GetMapping("/")
@@ -54,6 +61,9 @@ public class ClientController {
                     userResponse.getFullName() != null ? 
                     userResponse.getFullName().getFirstName() + " " + userResponse.getFullName().getLastName() : 
                     userResponse.getUsername());
+            
+            // Store the complete user data
+            session.setAttribute("userData", userResponse);
             
             // Redirect based on username
             if ("customer".equalsIgnoreCase(userResponse.getUsername())) {
@@ -96,9 +106,19 @@ public class ClientController {
             return "redirect:/login";
         }
         
-        // Có thể thêm logic để lấy thông tin đơn hàng, thông tin người dùng, v.v.
-        // và đưa vào model nếu cần
+        // Get user data from session and add to model
+        UserResponse userData = (UserResponse) session.getAttribute("userData");
+        if (userData != null) {
+            model.addAttribute("user", userData);
+        }
         
         return "payment_booking";
+    }
+
+    @PostMapping("/create-bill")
+    public ResponseEntity<Map<String, Object>> postCreateBill(@RequestBody BillRequest billRequest) {
+        // Call the bill service to create a new bill
+        Map<String, Object> response = billService.createBill(billRequest);
+        return ResponseEntity.ok(response);
     }
 } 

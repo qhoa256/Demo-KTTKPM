@@ -22,5 +22,7 @@ CREATE TABLE IF NOT EXISTS tblBill (
     rent_date DATE,
     return_date DATE,
     payment_id BIGINT,
+    note VARCHAR(255),
+    address VARCHAR(255),
     FOREIGN KEY (payment_id) REFERENCES tblPayment(id) ON DELETE SET NULL
 ); 

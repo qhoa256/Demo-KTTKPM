@@ -38,6 +38,8 @@ public class BillDaoImpl implements BillDao {
         bill.setCustomerId(rs.getLong("customer_id"));
         bill.setRentDate(rs.getDate("rent_date") != null ? rs.getDate("rent_date").toLocalDate() : null);
         bill.setReturnDate(rs.getDate("return_date") != null ? rs.getDate("return_date").toLocalDate() : null);
+        bill.setNote(rs.getString("note"));
+        bill.setAddress(rs.getString("address"));
         
         Long paymentId = rs.getLong("payment_id");
         if (paymentId != 0) {
@@ -75,7 +77,7 @@ public class BillDaoImpl implements BillDao {
 
     private Bill insert(Bill bill) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        String sql = "INSERT INTO tblBill (customer_id, rent_date, return_date, payment_id) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO tblBill (customer_id, rent_date, return_date, payment_id, note, address) VALUES (?, ?, ?, ?, ?, ?)";
 
         // First save the payment if it exists
         Long paymentId = null;
@@ -110,6 +112,9 @@ public class BillDaoImpl implements BillDao {
                 ps.setNull(4, Types.BIGINT);
             }
             
+            ps.setString(5, bill.getNote());
+            ps.setString(6, bill.getAddress());
+            
             return ps;
         }, keyHolder);
 
@@ -123,12 +128,14 @@ public class BillDaoImpl implements BillDao {
             paymentDao.save(bill.getPayment());
         }
 
-        String sql = "UPDATE tblBill SET customer_id = ?, rent_date = ?, return_date = ?, payment_id = ? WHERE id = ?";
+        String sql = "UPDATE tblBill SET customer_id = ?, rent_date = ?, return_date = ?, payment_id = ?, note = ?, address = ? WHERE id = ?";
         int updated = jdbcTemplate.update(sql,
                 bill.getCustomerId(),
                 bill.getRentDate() != null ? java.sql.Date.valueOf(bill.getRentDate()) : null,
                 bill.getReturnDate() != null ? java.sql.Date.valueOf(bill.getReturnDate()) : null,
                 bill.getPayment() != null ? bill.getPayment().getId() : null,
+                bill.getNote(),
+                bill.getAddress(),
                 bill.getId());
 
         if (updated == 0) {

@@ -72,7 +72,7 @@
             <div class="flex items-center space-x-4">
                 <div class="text-white flex items-center">
                     <i class="fas fa-user-circle text-xl mr-2"></i>
-                    <span>Xin chào, <span th:text="${session.fullName}">Khách hàng</span>!</span>
+                    <span>Xin chào, <span th:text="${user != null && user.fullName != null ? user.fullName.firstName + ' ' + user.fullName.lastName : session.fullName}">Khách hàng</span>!</span>
                 </div>
                 <a th:href="@{/logout}" class="bg-white text-indigo-600 px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition">
                     <i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất
@@ -101,19 +101,19 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Họ và tên</label>
-                                <input type="text" value="Nguyễn Văn A" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" readonly>
+                                <input type="text" th:value="${user != null && user.fullName != null ? user.fullName.firstName + ' ' + user.fullName.lastName : 'Chưa có thông tin'}" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" readonly>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Số điện thoại</label>
-                                <input type="text" value="0901234567" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" readonly>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tên đăng nhập</label>
+                                <input type="text" th:value="${user != null ? user.username : 'Chưa có thông tin'}" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" readonly>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                <input type="email" value="nguyenvana@gmail.com" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" readonly>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">ID Người dùng</label>
+                                <input id="userIdInput" type="text" th:value="${user != null ? user.id : 'Chưa có thông tin'}" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" readonly>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Ngày thuê</label>
-                                <input type="text" value="15/11/2023" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" readonly>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Loại tài khoản</label>
+                                <input type="text" th:value="${user != null ? user.type : 'Chưa có thông tin'}" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" readonly>
                             </div>
                         </div>
                     </div>
@@ -149,15 +149,15 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Ngày thuê</label>
-                                <input type="text" value="15/11/2023" class="w-full px-4 py-2 border border-gray-300 rounded-md" readonly>
+                                <input type="date" id="rentalDate" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Ngày trả</label>
-                                <input type="text" value="18/11/2023" class="w-full px-4 py-2 border border-gray-300 rounded-md" readonly>
+                                <input type="date" id="returnDate" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Số ngày thuê</label>
-                                <input type="text" value="3 ngày" class="w-full px-4 py-2 border border-gray-300 rounded-md" readonly>
+                                <input type="text" id="rentalDuration" class="w-full px-4 py-2 border border-gray-300 rounded-md" readonly>
                             </div>
                         </div>
                     </div>
@@ -171,11 +171,11 @@
                         <div class="grid grid-cols-1 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ nhận hàng</label>
-                                <textarea class="w-full px-4 py-2 border border-gray-300 rounded-md" rows="2" readonly>123 Đường ABC, Phường XYZ, Quận 1, TP.HCM</textarea>
+                                <textarea class="w-full px-4 py-2 border border-gray-300 rounded-md" rows="2" readonly th:text="${user != null && user.address != null ? user.address.street + ', ' + user.address.city : 'Chưa có thông tin địa chỉ'}">123 Đường ABC, Phường XYZ, Quận 1, TP.HCM</textarea>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Ghi chú</label>
-                                <textarea class="w-full px-4 py-2 border border-gray-300 rounded-md" rows="2" readonly>Vui lòng giao hàng trước 14h ngày 15/11</textarea>
+                                <textarea class="w-full px-4 py-2 border border-gray-300 rounded-md" rows="2">Vui lòng giao hàng trước 14h ngày 15/11</textarea>
                             </div>
                         </div>
                     </div>
@@ -331,10 +331,17 @@
                     </div>
                     
                     <!-- Payment Button -->
-                    <button id="paymentBtn" class="btn-primary w-full py-3 rounded-lg text-white font-bold text-lg flex items-center justify-center">
-                        <i class="fas fa-check-circle mr-2"></i>
-                        <span>Xác nhận thanh toán</span>
-                    </button>
+                    <form id="paymentForm" action="/create-bill" method="post">
+                        <input type="hidden" id="rentDateInput" name="rentDate">
+                        <input type="hidden" id="returnDateInput" name="returnDate">
+                        <input type="hidden" id="paymentMethodInput" name="paymentMethod" value="cash">
+                        <input type="hidden" id="noteInput" name="note">
+                        
+                        <button id="paymentBtn" type="submit" class="btn-primary w-full py-3 rounded-lg text-white font-bold text-lg flex items-center justify-center">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            <span>Xác nhận thanh toán</span>
+                        </button>
+                    </form>
                     
                     <!-- Cash Payment Note -->
                     <div id="cashNote" class="mt-4 text-sm text-gray-500">
@@ -452,6 +459,9 @@
             // Add selected class to clicked card
             event.currentTarget.classList.add('selected');
             
+            // Update payment method input
+            document.getElementById('paymentMethodInput').value = method;
+            
             // Hide all details sections
             document.getElementById('bankDetails').classList.add('hidden');
             document.getElementById('ewalletDetails').classList.add('hidden');
@@ -487,6 +497,9 @@
             
             // Add selected class to clicked card
             event.currentTarget.classList.add('selected');
+            
+            // Update payment method input with specific wallet
+            document.getElementById('paymentMethodInput').value = wallet;
             
             // Update payment button text based on selected wallet
             let walletName = '';
@@ -537,7 +550,7 @@
                 // Parse price from string (remove đ and any commas)
                 const priceString = item.price.replace('đ', '').replace(/\./g, '');
                 const price = parseInt(priceString);
-                const itemTotal = price * item.quantity;
+                const itemTotal = price * item.quantity * 1000;
                 totalAmount += itemTotal;
 
                 const itemHtml = `
@@ -589,34 +602,130 @@
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', function() {
             loadCartItems();
+            
+            // Set default dates
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            // Format dates for input
+            document.getElementById('rentalDate').value = formatDateForInput(today);
+            document.getElementById('returnDate').value = formatDateForInput(tomorrow);
+            
+            // Calculate initial duration
+            calculateRentalDuration();
+            
+            // Add event listeners to date inputs
+            document.getElementById('rentalDate').addEventListener('change', calculateRentalDuration);
+            document.getElementById('returnDate').addEventListener('change', calculateRentalDuration);
         });
         
+        // Format date for input (YYYY-MM-DD)
+        function formatDateForInput(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        // Calculate rental duration
+        function calculateRentalDuration() {
+            const rentalDate = new Date(document.getElementById('rentalDate').value);
+            const returnDate = new Date(document.getElementById('returnDate').value);
+            
+            // Validate dates
+            if (returnDate < rentalDate) {
+                alert('Ngày trả không thể trước ngày thuê!');
+                // Reset return date to day after rental date
+                const newReturnDate = new Date(rentalDate);
+                newReturnDate.setDate(rentalDate.getDate() + 1);
+                document.getElementById('returnDate').value = formatDateForInput(newReturnDate);
+                return calculateRentalDuration(); // Recalculate
+            }
+            
+            // Calculate difference in days
+            const diffTime = Math.abs(returnDate - rentalDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            // Update duration field
+            document.getElementById('rentalDuration').value = diffDays + ' ngày';
+        }
+        
         // Payment Button Click
-        document.getElementById('paymentBtn').addEventListener('click', function() {
-            // Check if terms are accepted
+        document.getElementById('paymentBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
             if (!document.getElementById('terms').checked) {
                 alert('Vui lòng đồng ý với Điều khoản dịch vụ và Chính sách bảo mật');
                 return;
             }
             
-            // Show loading state
+            // Hiển thị trạng thái loading
             this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i><span>Đang xử lý...</span>';
             this.classList.add('opacity-75');
             this.disabled = true;
             
-            // Simulate payment processing
-            setTimeout(() => {
-                // Show success modal
-                document.getElementById('successModal').classList.remove('hidden');
+            // Lấy dữ liệu từ form
+            const rentDate = document.getElementById('rentalDate').value;
+            const returnDate = document.getElementById('returnDate').value;
+            const paymentMethod = document.getElementById('paymentMethodInput').value;
+            const note = document.querySelector('textarea').value || '';
+
+            let userIdValue = document.getElementById('userIdInput').value;
+            let customerId = null;
+
+            if (userIdValue !== 'Chưa có thông tin') {
+                const parsedId = parseInt(userIdValue, 10);
+                customerId = Number.isInteger(parsedId) ? parsedId : null;
+            }
+
+            // Tạo JSON data
+            const data = {
+                customerId: customerId,
+                rentDate: rentDate,
+                returnDate: returnDate,
+                payment: {
+                    paymentMethod: paymentMethod,
+                    paymentNote: "Payment pending"
+                },
+                note: document.querySelector('textarea[rows="2"]:not([readonly])').value || '',
+                address: document.querySelector('textarea[readonly]').value || ''
+            };
+            
+            console.log('Đang gửi dữ liệu đến /create-bill:', data);
+            
+            // Gửi request bằng fetch API
+            fetch('/create-bill', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Hiển thị modal thành công
+                    document.getElementById('successModal').classList.remove('hidden');
+                    
+                    // Xóa giỏ hàng
+                    localStorage.removeItem('cartItems');
+                    
+                    // Reset button
+                    this.innerHTML = '<i class="fas fa-check-circle mr-2"></i><span>Xác nhận thanh toán</span>';
+                    this.classList.remove('opacity-75');
+                    this.disabled = false;
+                } else {
+                    throw new Error('Có lỗi xảy ra khi xử lý thanh toán');
+                }
+            })
+            .catch(error => {
+                alert(error.message);
                 
-                // Reset payment button
+                // Reset button
                 this.innerHTML = '<i class="fas fa-check-circle mr-2"></i><span>Xác nhận thanh toán</span>';
                 this.classList.remove('opacity-75');
                 this.disabled = false;
-                
-                // Clear cart after successful payment
-                localStorage.removeItem('cartItems');
-            }, 2000);
+            });
         });
         
         // Close modal when clicking outside

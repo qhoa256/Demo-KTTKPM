@@ -41,6 +41,8 @@ public class BillServiceImpl implements BillService {
         existingBill.setRentDate(bill.getRentDate());
         existingBill.setReturnDate(bill.getReturnDate());
         existingBill.setPayment(bill.getPayment());
+        existingBill.setNote(bill.getNote());
+        existingBill.setAddress(bill.getAddress());
         
         return billDao.save(existingBill);
     }

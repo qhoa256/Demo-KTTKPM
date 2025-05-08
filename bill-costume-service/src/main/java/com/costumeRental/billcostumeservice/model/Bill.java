@@ -15,4 +15,6 @@ public class Bill {
     private LocalDate rentDate;
     private LocalDate returnDate;
     private Payment payment;
+    private String note;
+    private String address;
 } 

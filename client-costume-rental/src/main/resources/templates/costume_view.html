@@ -410,16 +410,40 @@
         const rentButtons = document.querySelectorAll('.rent-btn');
         rentButtons.forEach(button => {
             button.addEventListener('click', function() {
-                const costumeName = this.closest('.card-hover').querySelector('h3').textContent;
-                const quantity = this.closest('.flex').querySelector('.quantity-input').value;
+                const costumeCard = this.closest('.card-hover');
+                const costumeName = costumeCard.querySelector('h3').textContent;
+                const costumeDescription = costumeCard.querySelector('p').textContent;
+                const costumePrice = costumeCard.querySelector('.font-bold.text-indigo-600').textContent;
+                const quantity = parseInt(this.closest('.flex').querySelector('.quantity-input').value);
                 const costumeId = this.getAttribute('data-id');
+                
+                // Get existing cart items from localStorage or initialize empty array
+                const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+                
+                // Check if item already exists in cart
+                const existingItemIndex = cartItems.findIndex(item => item.id === costumeId);
+                
+                if (existingItemIndex !== -1) {
+                    // Update quantity if item already exists
+                    cartItems[existingItemIndex].quantity += quantity;
+                } else {
+                    // Add new item to cart
+                    cartItems.push({
+                        id: costumeId,
+                        name: costumeName,
+                        description: costumeDescription,
+                        price: costumePrice,
+                        quantity: quantity
+                    });
+                }
+                
+                // Save updated cart to localStorage
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
                 
                 alert(`Bạn đã chọn thuê ${quantity} "${costumeName}" (ID: ${costumeId})`);
                 
-                // Tăng số lượng trong giỏ hàng
-                const cartCount = document.getElementById('cartCount');
-                let currentCount = parseInt(cartCount.textContent);
-                cartCount.textContent = currentCount + parseInt(quantity);
+                // Update cart count display
+                updateCartCount();
                 
                 // Hiệu ứng cho nút giỏ hàng
                 const cartBtn = document.getElementById('cartBtn');
@@ -428,6 +452,19 @@
                     cartBtn.classList.remove('animate-bounce');
                 }, 1000);
             });
+        });
+
+        // Function to update cart count
+        function updateCartCount() {
+            const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+            const cartCount = document.getElementById('cartCount');
+            cartCount.textContent = totalQuantity;
+        }
+        
+        // Initialize cart count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
         });
 
         // Cart button click
