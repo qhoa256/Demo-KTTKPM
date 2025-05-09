@@ -198,50 +198,15 @@
                                 <div id="selectedCostumesList" class="space-y-2">
                                     <!-- Selected costumes will appear here -->
                                 </div>
-                            </div>
-                            
-                            <button type="button" id="addCustomCostume" class="mt-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
-                                <i class="fas fa-plus mr-2"></i>Thêm trang phục mới
-                            </button>
-                        </div>
-                        
-                        <!-- Custom costume section (hidden initially) -->
-                        <div id="customCostumeSection" class="mb-6 hidden">
-                            <h4 class="font-medium mb-2">Thêm trang phục mới</h4>
-                            
-                            <div id="costumeItems">
-                                <div class="costume-item grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-md mb-4">
-                                    <div>
-                                        <label class="block text-gray-700 mb-2">Tên trang phục</label>
-                                        <input type="text" name="costumeName[]" class="w-full px-4 py-2 border rounded-md" required>
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-gray-700 mb-2">Loại</label>
-                                        <select name="costumeType[]" class="w-full px-4 py-2 border rounded-md" required>
-                                            <option value="">Chọn loại</option>
-                                            <option value="formal">Lễ phục</option>
-                                            <option value="traditional">Truyền thống</option>
-                                            <option value="costume">Hoá trang</option>
-                                            <option value="wedding">Cưới</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-gray-700 mb-2">Số lượng</label>
-                                        <input type="number" name="quantity[]" class="w-full px-4 py-2 border rounded-md" min="1" required>
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-gray-700 mb-2">Giá nhập</label>
-                                        <input type="number" name="importPrice[]" class="w-full px-4 py-2 border rounded-md" min="0" required>
+                                
+                                <!-- Thêm phần hiển thị tổng tiền -->
+                                <div id="totalPriceSection" class="mt-4 pt-3 border-t border-gray-200 hidden">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-semibold text-gray-800">Tổng tiền:</span>
+                                        <span id="totalPrice" class="font-bold text-lg text-indigo-600">0 ₫</span>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <button type="button" id="addMoreCostume" class="mt-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
-                                <i class="fas fa-plus mr-2"></i>Thêm trang phục mới khác
-                            </button>
                         </div>
                         
                         <div class="flex justify-end">
@@ -261,6 +226,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             let selectedCostumes = [];
+            
+            // Set default date to today
+            const today = new Date();
+            const formattedDate = today.toISOString().slice(0, 10);
+            document.getElementById('importDate').value = formattedDate;
             
             // Handle supplier selection
             document.querySelectorAll('.select-supplier').forEach(button => {
@@ -404,10 +374,13 @@
             // Function to update the selected costumes list
             function updateSelectedCostumesList() {
                 const listElement = document.getElementById('selectedCostumesList');
+                const totalPriceSection = document.getElementById('totalPriceSection');
+                const totalPriceElement = document.getElementById('totalPrice');
                 
                 if (selectedCostumes.length === 0) {
                     document.getElementById('noSelectedCostumes').style.display = 'block';
                     listElement.innerHTML = '';
+                    totalPriceSection.classList.add('hidden');
                     return;
                 }
                 
@@ -416,7 +389,13 @@
                 // Clear and rebuild the list
                 listElement.innerHTML = '';
                 
+                // Calculate total price
+                let totalPrice = 0;
+                
                 selectedCostumes.forEach((costume, index) => {
+                    const itemPrice = costume.price * costume.quantity;
+                    totalPrice += itemPrice;
+                    
                     const costumeElement = document.createElement('div');
                     costumeElement.className = 'flex items-center justify-between p-2 border-b';
                     costumeElement.innerHTML = `
@@ -429,7 +408,7 @@
                             <span class="mr-2">${new Intl.NumberFormat('vi-VN', {
                                 style: 'currency',
                                 currency: 'VND'
-                            }).format(costume.price * costume.quantity)}</span>
+                            }).format(itemPrice)}</span>
                             <button type="button" class="remove-costume text-red-500 hover:text-red-700" data-index="${index}">
                                 <i class="fas fa-times"></i>
                             </button>
@@ -438,6 +417,13 @@
                     
                     listElement.appendChild(costumeElement);
                 });
+                
+                // Update and show total price
+                totalPriceElement.textContent = new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                }).format(totalPrice);
+                totalPriceSection.classList.remove('hidden');
                 
                 // Add removal handlers
                 document.querySelectorAll('.remove-costume').forEach(button => {
@@ -449,40 +435,10 @@
                 });
             }
             
-            // Show/hide custom costume section
-            document.getElementById('addCustomCostume').addEventListener('click', function() {
-                document.getElementById('customCostumeSection').classList.toggle('hidden');
-            });
-            
-            // Add more costume items
-            document.getElementById('addMoreCostume').addEventListener('click', function() {
-                const costumeItem = document.querySelector('.costume-item').cloneNode(true);
-                
-                // Clear the input values
-                costumeItem.querySelectorAll('input, select').forEach(input => {
-                    input.value = '';
-                });
-                
-                // Add a remove button to the new item
-                const removeButton = document.createElement('button');
-                removeButton.type = 'button';
-                removeButton.className = 'mt-2 text-red-600 hover:text-red-800';
-                removeButton.innerHTML = '<i class="fas fa-trash"></i> Xoá';
-                removeButton.addEventListener('click', function() {
-                    this.closest('.costume-item').remove();
-                });
-                
-                costumeItem.appendChild(removeButton);
-                
-                // Append the new item
-                document.getElementById('costumeItems').appendChild(costumeItem);
-            });
-            
             // Cancel import
             document.getElementById('cancelImport').addEventListener('click', function() {
                 document.getElementById('supplierCostumes').classList.add('hidden');
                 document.getElementById('importForm').classList.add('hidden');
-                document.getElementById('customCostumeSection').classList.add('hidden');
                 document.getElementById('costumeImportForm').reset();
                 selectedCostumes = [];
                 updateSelectedCostumesList();
@@ -510,25 +466,6 @@
                     });
                 });
                 
-                // Gather custom costume items
-                if (!document.getElementById('customCostumeSection').classList.contains('hidden')) {
-                    document.querySelectorAll('.costume-item').forEach(item => {
-                        const nameInput = item.querySelector('input[name="costumeName[]"]');
-                        const typeSelect = item.querySelector('select[name="costumeType[]"]');
-                        const quantityInput = item.querySelector('input[name="quantity[]"]');
-                        const priceInput = item.querySelector('input[name="importPrice[]"]');
-                        
-                        if (nameInput.value && typeSelect.value && quantityInput.value && priceInput.value) {
-                            formData.costumes.push({
-                                name: nameInput.value,
-                                type: typeSelect.value,
-                                quantity: parseInt(quantityInput.value),
-                                importPrice: parseFloat(priceInput.value)
-                            });
-                        }
-                    });
-                }
-                
                 // Submit form data (currently just displaying in console)
                 console.log('Import data:', formData);
                 alert('Nhập hàng thành công!');
@@ -536,7 +473,6 @@
                 // Reset form and hide it
                 document.getElementById('supplierCostumes').classList.add('hidden');
                 document.getElementById('importForm').classList.add('hidden');
-                document.getElementById('customCostumeSection').classList.add('hidden');
                 document.getElementById('costumeImportForm').reset();
                 selectedCostumes = [];
                 updateSelectedCostumesList();
