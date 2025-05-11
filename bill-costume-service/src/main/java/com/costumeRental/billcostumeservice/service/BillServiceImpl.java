@@ -11,10 +11,12 @@ import java.util.List;
 @Service
 public class BillServiceImpl implements BillService {
     private final BillDao billDao;
+    private final CustomerService customerService;
 
     @Autowired
-    public BillServiceImpl(BillDao billDao) {
+    public BillServiceImpl(BillDao billDao, CustomerService customerService) {
         this.billDao = billDao;
+        this.customerService = customerService;
     }
 
     @Override
@@ -30,6 +32,10 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill createBill(Bill bill) {
+        // Ensure we have the latest customer data from user-service if customerId is provided
+        if (bill.getCustomer() != null && bill.getCustomer().getId() != null) {
+            bill.setCustomer(customerService.getCustomerById(bill.getCustomer().getId()));
+        }
         return billDao.save(bill);
     }
 
@@ -37,7 +43,13 @@ public class BillServiceImpl implements BillService {
     public Bill updateBill(Long id, Bill bill) {
         Bill existingBill = getBillById(id);
         
-        existingBill.setCustomerId(bill.getCustomerId());
+        // Update customer data from user-service if customerId is provided
+        if (bill.getCustomer() != null && bill.getCustomer().getId() != null) {
+            existingBill.setCustomer(customerService.getCustomerById(bill.getCustomer().getId()));
+        } else {
+            existingBill.setCustomer(bill.getCustomer());
+        }
+        
         existingBill.setRentDate(bill.getRentDate());
         existingBill.setReturnDate(bill.getReturnDate());
         existingBill.setPayment(bill.getPayment());

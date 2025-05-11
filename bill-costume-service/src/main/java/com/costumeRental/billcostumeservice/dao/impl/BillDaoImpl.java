@@ -5,6 +5,7 @@ import com.costumeRental.billcostumeservice.model.Bill;
 import com.costumeRental.billcostumeservice.model.Payment;
 import com.costumeRental.billcostumeservice.dao.BillDao;
 import com.costumeRental.billcostumeservice.dao.PaymentDao;
+import com.costumeRental.billcostumeservice.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,6 +27,9 @@ public class BillDaoImpl implements BillDao {
     
     @Autowired
     private PaymentDao paymentDao;
+    
+    @Autowired
+    private CustomerService customerService;
 
     @Autowired
     public BillDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -35,7 +39,13 @@ public class BillDaoImpl implements BillDao {
     private final RowMapper<Bill> billRowMapper = (rs, rowNum) -> {
         Bill bill = new Bill();
         bill.setId(rs.getLong("id"));
-        bill.setCustomerId(rs.getLong("customer_id"));
+        
+        // Fetch customer from user-service
+        Long customerId = rs.getLong("customer_id");
+        if (customerId != 0) {
+            bill.setCustomer(customerService.getCustomerById(customerId));
+        }
+        
         bill.setRentDate(rs.getDate("rent_date") != null ? rs.getDate("rent_date").toLocalDate() : null);
         bill.setReturnDate(rs.getDate("return_date") != null ? rs.getDate("return_date").toLocalDate() : null);
         bill.setNote(rs.getString("note"));
@@ -92,7 +102,13 @@ public class BillDaoImpl implements BillDao {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setLong(1, bill.getCustomerId());
+            
+            // Use customer ID from the Customer object
+            if (bill.getCustomer() != null && bill.getCustomer().getId() != null) {
+                ps.setLong(1, bill.getCustomer().getId());
+            } else {
+                ps.setNull(1, Types.BIGINT);
+            }
             
             if (bill.getRentDate() != null) {
                 ps.setDate(2, java.sql.Date.valueOf(bill.getRentDate()));
@@ -130,7 +146,7 @@ public class BillDaoImpl implements BillDao {
 
         String sql = "UPDATE tblBill SET customer_id = ?, rent_date = ?, return_date = ?, payment_id = ?, note = ?, address = ? WHERE id = ?";
         int updated = jdbcTemplate.update(sql,
-                bill.getCustomerId(),
+                bill.getCustomer() != null ? bill.getCustomer().getId() : null,
                 bill.getRentDate() != null ? java.sql.Date.valueOf(bill.getRentDate()) : null,
                 bill.getReturnDate() != null ? java.sql.Date.valueOf(bill.getReturnDate()) : null,
                 bill.getPayment() != null ? bill.getPayment().getId() : null,

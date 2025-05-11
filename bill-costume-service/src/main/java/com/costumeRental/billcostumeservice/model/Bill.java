@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Bill {
     private Long id;
-    private Long customerId;
+    private Customer customer;
     private LocalDate rentDate;
     private LocalDate returnDate;
     private Payment payment;

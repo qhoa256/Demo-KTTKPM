@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,28 @@ public class GlobalExceptionHandler {
         body.put("message", ex.getMessage());
         
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+    
+    @ExceptionHandler(ResourceAccessException.class)
+    public ResponseEntity<Object> handleResourceAccessException(
+            ResourceAccessException ex, WebRequest request) {
+        
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", "Service communication error: " + ex.getMessage());
+        
+        return new ResponseEntity<>(body, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+    
+    @ExceptionHandler(ServiceCommunicationException.class)
+    public ResponseEntity<Object> handleServiceCommunicationException(
+            ServiceCommunicationException ex, WebRequest request) {
+        
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        
+        return new ResponseEntity<>(body, HttpStatus.SERVICE_UNAVAILABLE);
     }
     
     @ExceptionHandler(Exception.class)
