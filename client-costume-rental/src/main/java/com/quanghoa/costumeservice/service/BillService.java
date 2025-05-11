@@ -21,11 +21,11 @@ public class BillService {
         this.restTemplate = restTemplate;
     }
 
-    public Map<String, Object> createBill(BillRequest billRequest) {
+    public Map<String, Object> createBill(Map<String, Object> billRequest) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<BillRequest> requestEntity = new HttpEntity<>(billRequest, headers);
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(billRequest, headers);
         
         // Call the bills API endpoint
         return restTemplate.postForObject(apiUrl, requestEntity, Map.class);

@@ -124,7 +124,7 @@ public class ClientController {
     }
 
     @PostMapping("/create-bill")
-    public ResponseEntity<Map<String, Object>> postCreateBill(@RequestBody BillRequest billRequest) {
+    public ResponseEntity<Map<String, Object>> postCreateBill(@RequestBody Map<String, Object> billRequest) {
         // Call the bill service to create a new bill
         Map<String, Object> response = billService.createBill(billRequest);
         return ResponseEntity.ok(response);
