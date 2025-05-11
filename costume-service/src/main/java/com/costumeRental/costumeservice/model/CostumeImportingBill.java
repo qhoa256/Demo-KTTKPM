@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class CostumeImportingBill {
     private Long id;
-    private Costume costume;
+    private CostumeSupplier costumeSupplier;
     private BigDecimal importPrice;
     private int quantity;
     private String name;

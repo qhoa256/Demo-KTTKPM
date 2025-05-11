@@ -1,7 +1,7 @@
 package com.costumeRental.costumeservice.dao.impl;
 
-import com.costumeRental.costumeservice.dao.CostumeDao;
 import com.costumeRental.costumeservice.dao.CostumeImportingBillDao;
+import com.costumeRental.costumeservice.dao.CostumeSupplierDao;
 import com.costumeRental.costumeservice.model.CostumeImportingBill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -21,20 +21,20 @@ import java.util.Optional;
 public class CostumeImportingBillDaoImpl implements CostumeImportingBillDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private final CostumeDao costumeDao;
+    private final CostumeSupplierDao costumeSupplierDao;
     private final RowMapper<CostumeImportingBill> costumeImportingBillRowMapper;
 
     @Autowired
-    public CostumeImportingBillDaoImpl(JdbcTemplate jdbcTemplate, @Lazy CostumeDao costumeDao) {
+    public CostumeImportingBillDaoImpl(JdbcTemplate jdbcTemplate, @Lazy CostumeSupplierDao costumeSupplierDao) {
         this.jdbcTemplate = jdbcTemplate;
-        this.costumeDao = costumeDao;
+        this.costumeSupplierDao = costumeSupplierDao;
         this.costumeImportingBillRowMapper = (rs, rowNum) -> {
             CostumeImportingBill costumeImportingBill = new CostumeImportingBill();
             costumeImportingBill.setId(rs.getLong("id"));
             
-            Long costumeId = rs.getLong("costume_id");
-            if (costumeId != 0) {
-                costumeDao.findById(costumeId).ifPresent(costumeImportingBill::setCostume);
+            Long costumeSupplierIdId = rs.getLong("costume_supplier_id");
+            if (costumeSupplierIdId != 0) {
+                costumeImportingBill.setCostumeSupplier(costumeSupplierDao.findById(costumeSupplierIdId));
             }
             
             costumeImportingBill.setImportPrice(rs.getBigDecimal("import_price"));
@@ -63,9 +63,9 @@ public class CostumeImportingBillDaoImpl implements CostumeImportingBillDao {
     }
 
     @Override
-    public List<CostumeImportingBill> findByCostumeId(Long costumeId) {
-        String sql = "SELECT * FROM tblCostumeImportingBill WHERE costume_id = ?";
-        return jdbcTemplate.query(sql, costumeImportingBillRowMapper, costumeId);
+    public List<CostumeImportingBill> findByCostumeSupplier(Long costumeSupplierIdId) {
+        String sql = "SELECT * FROM tblCostumeImportingBill WHERE costume_supplier_id = ?";
+        return jdbcTemplate.query(sql, costumeImportingBillRowMapper, costumeSupplierIdId);
     }
 
     @Override
@@ -80,14 +80,14 @@ public class CostumeImportingBillDaoImpl implements CostumeImportingBillDao {
     }
 
     private CostumeImportingBill insertCostumeImportingBill(CostumeImportingBill costumeImportingBill) {
-        String sql = "INSERT INTO tblCostumeImportingBill (costume_id, import_price, quantity, name, description) " +
+        String sql = "INSERT INTO tblCostumeImportingBill (costume_supplier_id, import_price, quantity, name, description) " +
                      "VALUES (?, ?, ?, ?, ?)";
                      
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setLong(1, costumeImportingBill.getCostume() != null ? costumeImportingBill.getCostume().getId() : null);
+            ps.setLong(1, costumeImportingBill.getCostumeSupplier() != null ? costumeImportingBill.getCostumeSupplier().getId() : null);
             ps.setBigDecimal(2, costumeImportingBill.getImportPrice());
             ps.setInt(3, costumeImportingBill.getQuantity());
             ps.setString(4, costumeImportingBill.getName());
@@ -101,11 +101,11 @@ public class CostumeImportingBillDaoImpl implements CostumeImportingBillDao {
     }
 
     private CostumeImportingBill updateCostumeImportingBill(CostumeImportingBill costumeImportingBill) {
-        String sql = "UPDATE tblCostumeImportingBill SET costume_id = ?, import_price = ?, " +
+        String sql = "UPDATE tblCostumeImportingBill SET costume_supplier_id = ?, import_price = ?, " +
                      "quantity = ?, name = ?, description = ? WHERE id = ?";
                      
         jdbcTemplate.update(sql, 
-            costumeImportingBill.getCostume() != null ? costumeImportingBill.getCostume().getId() : null,
+            costumeImportingBill.getCostumeSupplier() != null ? costumeImportingBill.getCostumeSupplier().getId() : null,
             costumeImportingBill.getImportPrice(),
             costumeImportingBill.getQuantity(),
             costumeImportingBill.getName(),

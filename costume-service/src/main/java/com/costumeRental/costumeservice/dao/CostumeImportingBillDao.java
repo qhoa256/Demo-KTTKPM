@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface CostumeImportingBillDao {
     List<CostumeImportingBill> findAll();
     Optional<CostumeImportingBill> findById(Long id);
-    List<CostumeImportingBill> findByCostumeId(Long costumeId);
+    List<CostumeImportingBill> findByCostumeSupplier(Long costumeSupplierIdId);
     CostumeImportingBill save(CostumeImportingBill costumeImportingBill);
     void deleteById(Long id);
 } 

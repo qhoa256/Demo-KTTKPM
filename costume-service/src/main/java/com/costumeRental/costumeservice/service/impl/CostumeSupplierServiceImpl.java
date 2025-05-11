@@ -43,7 +43,7 @@ public class CostumeSupplierServiceImpl implements CostumeSupplierService {
     }
 
     @Override
-    public List<CostumeSupplier> findBySupplierId(String supplierId) {
+    public List<CostumeSupplier> findBySupplierId(Long supplierId) {
         return costumeSupplierDao.findBySupplierId(supplierId);
     }
 } 

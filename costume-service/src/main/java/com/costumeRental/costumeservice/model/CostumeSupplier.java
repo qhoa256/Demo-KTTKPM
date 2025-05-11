@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class CostumeSupplier {
     private Long id;
     private Costume costume;
-    private String supplierId;
+    private Supplier supplier;
 } 

@@ -150,7 +150,12 @@
                                     <p class="text-sm text-gray-600 mt-1" th:text="'Địa chỉ: ' + ${supplier.address}">Địa chỉ</p>
                                 </div>
                             </div>
-                            <button class="select-supplier w-full mt-4 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition" th:data-supplier-id="${supplier.id}">
+                            <button class="select-supplier w-full mt-4 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition" 
+                                    th:data-supplier-id="${supplier.id}"
+                                    th:data-supplier-name="${supplier.name}"
+                                    th:data-supplier-email="${supplier.email}"
+                                    th:data-supplier-contact="${supplier.contact}"
+                                    th:data-supplier-address="${supplier.address}">
                                 Chọn nhà cung cấp này
                             </button>
                         </div>
@@ -180,38 +185,8 @@
                             <h4 class="font-medium mb-2">Danh sách trang phục</h4>
                             
                             <div id="costumeItems">
-                                <div class="costume-item grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-md mb-4">
-                                    <div>
-                                        <label class="block text-gray-700 mb-2">Tên trang phục</label>
-                                        <input type="text" name="costumeName[]" class="w-full px-4 py-2 border rounded-md" required>
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-gray-700 mb-2">Loại</label>
-                                        <select name="costumeType[]" class="w-full px-4 py-2 border rounded-md" required>
-                                            <option value="">Chọn loại</option>
-                                            <option value="formal">Lễ phục</option>
-                                            <option value="traditional">Truyền thống</option>
-                                            <option value="costume">Hoá trang</option>
-                                            <option value="wedding">Cưới</option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-gray-700 mb-2">Số lượng</label>
-                                        <input type="number" name="quantity[]" class="w-full px-4 py-2 border rounded-md" min="1" required>
-                                    </div>
-                                    
-                                    <div>
-                                        <label class="block text-gray-700 mb-2">Giá nhập</label>
-                                        <input type="number" name="importPrice[]" class="w-full px-4 py-2 border rounded-md" min="0" required>
-                                    </div>
-                                </div>
+                                <!-- Costume items will be populated here dynamically -->
                             </div>
-                            
-                            <button type="button" id="addMoreCostume" class="mt-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
-                                <i class="fas fa-plus mr-2"></i>Thêm trang phục
-                            </button>
                         </div>
                         
                         <div class="flex justify-end">
@@ -230,15 +205,37 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('importDate').value = today;
+            
+            // Store supplier data
+            let selectedSupplier = null;
+            
             // Handle supplier selection
             document.querySelectorAll('.select-supplier').forEach(button => {
                 button.addEventListener('click', function() {
                     const supplierId = this.getAttribute('data-supplier-id');
-                    const supplierName = this.closest('div').querySelector('h4').textContent;
+                    const supplierName = this.getAttribute('data-supplier-name');
+                    const supplierEmail = this.getAttribute('data-supplier-email');
+                    const supplierContact = this.getAttribute('data-supplier-contact');
+                    const supplierAddress = this.getAttribute('data-supplier-address');
+                    
+                    // Store supplier information
+                    selectedSupplier = {
+                        id: supplierId,
+                        name: supplierName,
+                        email: supplierEmail,
+                        contact: supplierContact,
+                        address: supplierAddress
+                    };
                     
                     // Populate form fields
                     document.getElementById('supplierId').value = supplierId;
                     document.getElementById('supplierName').value = supplierName;
+                    
+                    // Fetch costumes for this supplier
+                    fetchSupplierCostumes(supplierId);
                     
                     // Show the import form
                     document.getElementById('importForm').classList.remove('hidden');
@@ -248,71 +245,164 @@
                 });
             });
             
-            // Add more costume items
-            document.getElementById('addMoreCostume').addEventListener('click', function() {
-                const costumeItem = document.querySelector('.costume-item').cloneNode(true);
+            // Function to fetch costumes from the selected supplier
+            function fetchSupplierCostumes(supplierId) {
+                fetch(`/api/costumes/supplier/${supplierId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Clear existing items
+                        document.getElementById('costumeItems').innerHTML = '';
+                        
+                        if (data.length === 0) {
+                            // If no costumes, show message
+                            const noItemsMessage = document.createElement('div');
+                            noItemsMessage.className = 'p-4 text-center text-gray-500';
+                            noItemsMessage.textContent = 'Không có trang phục từ nhà cung cấp này';
+                            document.getElementById('costumeItems').appendChild(noItemsMessage);
+                        } else {
+                            // Add existing costumes from supplier
+                            data.forEach(item => {
+                                const costume = item.costume;
+                                const costumeSupplierID = item.id; // Get the costumeSupplier ID
+                                addCostumeItem(costumeSupplierID, costume.id, costume.name, costume.category, costume.price, costume.description || '');
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching costumes:', error);
+                        // Show error message
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'p-4 text-center text-red-500';
+                        errorMessage.textContent = 'Lỗi khi lấy dữ liệu trang phục';
+                        document.getElementById('costumeItems').appendChild(errorMessage);
+                    });
+            }
+            
+            // Function to add a costume item with pre-filled data
+            function addCostumeItem(costumeSupplierID, id, name, category, price, description) {
+                const costumeItem = document.createElement('div');
+                costumeItem.className = 'costume-item grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border rounded-md mb-4';
+                costumeItem.dataset.costumeId = id;
+                costumeItem.dataset.costumeSupplierID = costumeSupplierID;
                 
-                // Clear the input values
-                costumeItem.querySelectorAll('input, select').forEach(input => {
-                    input.value = '';
-                });
+                costumeItem.innerHTML = `
+                    <div>
+                        <label class="block text-gray-700 mb-2">Tên trang phục</label>
+                        <input type="text" name="costumeName[]" class="w-full px-4 py-2 border rounded-md bg-gray-100" value="${name}" readonly>
+                        <input type="hidden" name="costumeId[]" value="${id}">
+                        <input type="hidden" name="costumeSupplierID[]" value="${costumeSupplierID}">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2">Loại</label>
+                        <input type="text" name="costumeCategory[]" class="w-full px-4 py-2 border rounded-md bg-gray-100" value="${category}" readonly>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2">Số lượng</label>
+                        <input type="number" name="quantity[]" class="quantity-input w-full px-4 py-2 border rounded-md" min="1" value="1" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 mb-2">Giá nhập</label>
+                        <input type="number" name="importPrice[]" class="import-price w-full px-4 py-2 border rounded-md" value="${price}" required>
+                    </div>
+                    
+                    <div class="flex items-end">
+                        <button type="button" class="delete-costume-item w-full px-3 py-2 bg-red-100 text-red-600 rounded-md hover:bg-red-200 transition">
+                            <i class="fas fa-trash mr-2"></i>Xoá
+                        </button>
+                    </div>
+                `;
                 
-                // Add a remove button to the new item
-                const removeButton = document.createElement('button');
-                removeButton.type = 'button';
-                removeButton.className = 'mt-2 text-red-600 hover:text-red-800';
-                removeButton.innerHTML = '<i class="fas fa-trash"></i> Xoá';
-                removeButton.addEventListener('click', function() {
+                // Add event listener for delete button
+                costumeItem.querySelector('.delete-costume-item').addEventListener('click', function() {
                     this.closest('.costume-item').remove();
                 });
                 
-                costumeItem.appendChild(removeButton);
-                
-                // Append the new item
                 document.getElementById('costumeItems').appendChild(costumeItem);
-            });
+            }
             
             // Cancel import
             document.getElementById('cancelImport').addEventListener('click', function() {
                 document.getElementById('importForm').classList.add('hidden');
                 document.getElementById('costumeImportForm').reset();
+                selectedSupplier = null;
             });
             
             // Handle form submission
             document.getElementById('costumeImportForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // Gather form data
-                const formData = {
-                    supplierId: document.getElementById('supplierId').value,
-                    importDate: document.getElementById('importDate').value,
-                    costumes: []
-                };
+                if (!selectedSupplier) {
+                    alert('Vui lòng chọn nhà cung cấp');
+                    return;
+                }
                 
-                // Gather costume items
+                // Gather form data
+                const importDate = document.getElementById('importDate').value;
+                
+                // Create costumes array
+                const costumes = [];
                 document.querySelectorAll('.costume-item').forEach(item => {
-                    const nameInput = item.querySelector('input[name="costumeName[]"]');
-                    const typeSelect = item.querySelector('select[name="costumeType[]"]');
-                    const quantityInput = item.querySelector('input[name="quantity[]"]');
-                    const priceInput = item.querySelector('input[name="importPrice[]"]');
+                    const costumeId = item.dataset.costumeId;
+                    const costumeSupplierID = item.dataset.costumeSupplierID;
+                    const name = item.querySelector('input[name="costumeName[]"]').value;
+                    const category = item.querySelector('input[name="costumeCategory[]"]').value;
+                    const quantity = item.querySelector('input[name="quantity[]"]').value;
+                    const importPrice = item.querySelector('input[name="importPrice[]"]').value;
                     
-                    if (nameInput.value && typeSelect.value && quantityInput.value && priceInput.value) {
-                        formData.costumes.push({
-                            name: nameInput.value,
-                            type: typeSelect.value,
-                            quantity: parseInt(quantityInput.value),
-                            importPrice: parseFloat(priceInput.value)
+                    if (quantity && importPrice) {
+                        costumes.push({
+                            id: costumeId,
+                            costumeSupplierID: costumeSupplierID,
+                            name: name,
+                            category: category,
+                            quantity: parseInt(quantity),
+                            importPrice: parseFloat(importPrice)
                         });
                     }
                 });
                 
-                // Submit form data (currently just displaying in console)
-                console.log('Import data:', formData);
-                alert('Nhập hàng thành công!');
+                if (costumes.length === 0) {
+                    alert('Vui lòng chọn ít nhất một trang phục');
+                    return;
+                }
                 
-                // Reset form and hide it
-                document.getElementById('costumeImportForm').reset();
-                document.getElementById('importForm').classList.add('hidden');
+                // Prepare request data
+                const requestData = {
+                    supplier: selectedSupplier,
+                    importDate: importDate,
+                    costumes: costumes
+                };
+                
+                // Submit data via AJAX
+                fetch('/importing-bill', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Success:', data);
+                    alert('Nhập hàng thành công!');
+                    
+                    // Reset form and hide it
+                    document.getElementById('costumeImportForm').reset();
+                    document.getElementById('importForm').classList.add('hidden');
+                    selectedSupplier = null;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('Lỗi khi gửi dữ liệu: ' + error.message);
+                });
             });
         });
     </script>

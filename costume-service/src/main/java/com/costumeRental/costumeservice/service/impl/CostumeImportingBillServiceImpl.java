@@ -32,8 +32,8 @@ public class CostumeImportingBillServiceImpl implements CostumeImportingBillServ
     }
 
     @Override
-    public List<CostumeImportingBill> getCostumeImportingBillsByCostumeId(Long costumeId) {
-        return costumeImportingBillDao.findByCostumeId(costumeId);
+    public List<CostumeImportingBill> getCostumeImportingBillsByCostumeSupplier(Long costumeSupplierIdId) {
+        return costumeImportingBillDao.findByCostumeSupplier(costumeSupplierIdId);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class CostumeImportingBillServiceImpl implements CostumeImportingBillServ
         CostumeImportingBill existingCostumeImportingBill = costumeImportingBillDao.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("CostumeImportingBill not found with id: " + id));
 
-        existingCostumeImportingBill.setCostume(costumeImportingBillDetails.getCostume());
+        existingCostumeImportingBill.setCostumeSupplier(costumeImportingBillDetails.getCostumeSupplier());
         existingCostumeImportingBill.setImportPrice(costumeImportingBillDetails.getImportPrice());
         existingCostumeImportingBill.setQuantity(costumeImportingBillDetails.getQuantity());
         existingCostumeImportingBill.setName(costumeImportingBillDetails.getName());

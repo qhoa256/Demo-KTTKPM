@@ -8,5 +8,5 @@ public interface CostumeSupplierService {
     CostumeSupplier findById(Long id);
     CostumeSupplier save(CostumeSupplier costumeSupplier);
     void deleteById(Long id);
-    List<CostumeSupplier> findBySupplierId(String supplierId);
+    List<CostumeSupplier> findBySupplierId(Long supplierId);
 } 

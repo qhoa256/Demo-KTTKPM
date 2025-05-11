@@ -37,7 +37,7 @@ public class CostumeServiceImpl implements CostumeService {
     
     @Override
     public List<Map<String, Object>> getCostumesBySupplierId(String supplierId) {
-        String apiUrl = costumeServiceUrl + "/api/costume-suppliers";
+        String apiUrl = costumeServiceUrl + "/api/costume-suppliers/supplier/" + supplierId;
         ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
                 apiUrl,
                 HttpMethod.GET,
@@ -45,14 +45,6 @@ public class CostumeServiceImpl implements CostumeService {
                 new ParameterizedTypeReference<List<Map<String, Object>>>() {}
         );
         
-        List<Map<String, Object>> allCostumeSuppliers = response.getBody();
-        if (allCostumeSuppliers == null) {
-            return List.of();
-        }
-        
-        // Filter the costume suppliers by supplierId
-        return allCostumeSuppliers.stream()
-                .filter(item -> supplierId.equals(item.get("supplierId")))
-                .collect(Collectors.toList());
+        return response.getBody() != null ? response.getBody() : List.of();
     }
 } 

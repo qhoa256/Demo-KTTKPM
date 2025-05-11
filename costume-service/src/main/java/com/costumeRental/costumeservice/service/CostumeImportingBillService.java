@@ -8,7 +8,7 @@ public interface CostumeImportingBillService {
     CostumeImportingBill createCostumeImportingBill(CostumeImportingBill costumeImportingBill);
     CostumeImportingBill getCostumeImportingBillById(Long id);
     List<CostumeImportingBill> getAllCostumeImportingBills();
-    List<CostumeImportingBill> getCostumeImportingBillsByCostumeId(Long costumeId);
+    List<CostumeImportingBill> getCostumeImportingBillsByCostumeSupplier(Long costumeSupplierIdId);
     CostumeImportingBill updateCostumeImportingBill(Long id, CostumeImportingBill costumeImportingBill);
     void deleteCostumeImportingBill(Long id);
 } 

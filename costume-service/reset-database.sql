@@ -27,12 +27,28 @@ CREATE TABLE tblCostumeBill (
     FOREIGN KEY (costume_id) REFERENCES tblCostume(id)
 );
 
-CREATE TABLE tblCostumeImportingBill (
+CREATE TABLE tblSupplier (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(255),
+    contact VARCHAR(255),
+    address VARCHAR(255)
+);
+
+CREATE TABLE tblCostumeSupplier (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     costume_id BIGINT,
+    supplier_id BIGINT,
+    FOREIGN KEY (costume_id) REFERENCES tblCostume(id),
+    FOREIGN KEY (supplier_id) REFERENCES tblSupplier(id)
+);
+
+CREATE TABLE tblCostumeImportingBill (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    costume_supplier_id BIGINT,
     import_price DECIMAL(19,2),
     quantity INT,
     name VARCHAR(255),
     description VARCHAR(255),
-    FOREIGN KEY (costume_id) REFERENCES tblCostume(id)
+    FOREIGN KEY (costume_supplier_id) REFERENCES tblCostumeSupplier(id)
 ); 

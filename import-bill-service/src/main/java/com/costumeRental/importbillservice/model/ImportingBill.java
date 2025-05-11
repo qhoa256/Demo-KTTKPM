@@ -5,13 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ImportingBill {
     private Long id;
-    private Long managerId;
-    private Long supplierId;
+    private Staff manager;
+    private Supplier supplier;
     private LocalDate importDate;
+    private List<CostumeImportingBill> costumeImportingBills;
 } 

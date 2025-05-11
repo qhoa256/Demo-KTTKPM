@@ -1,6 +1,7 @@
 package com.costumeRental.importbillservice.service;
 
 import com.costumeRental.importbillservice.dao.ImportingBillDao;
+import com.costumeRental.importbillservice.model.CostumeImportingBill;
 import com.costumeRental.importbillservice.model.ImportingBill;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,9 +34,10 @@ public class ImportingBillServiceImpl implements ImportingBillService {
     public ImportingBill updateImportingBill(Long id, ImportingBill importingBill) {
         ImportingBill existingImportingBill = getImportingBillById(id);
         
-        existingImportingBill.setManagerId(importingBill.getManagerId());
-        existingImportingBill.setSupplierId(importingBill.getSupplierId());
+        existingImportingBill.setManager(importingBill.getManager());
+        existingImportingBill.setSupplier(importingBill.getSupplier());
         existingImportingBill.setImportDate(importingBill.getImportDate());
+        existingImportingBill.setCostumeImportingBills(importingBill.getCostumeImportingBills());
         
         return importingBillDao.save(existingImportingBill);
     }
@@ -44,5 +46,35 @@ public class ImportingBillServiceImpl implements ImportingBillService {
     public void deleteImportingBill(Long id) {
         ImportingBill importingBill = getImportingBillById(id);
         importingBillDao.delete(importingBill);
+    }
+    
+    @Override
+    public List<CostumeImportingBill> getCostumeImportingBillsByImportingBillId(Long importingBillId) {
+        // Verify the importing bill exists
+        getImportingBillById(importingBillId);
+        return importingBillDao.findCostumeImportingBillsByImportingBillId(importingBillId);
+    }
+    
+    @Override
+    public CostumeImportingBill addCostumeImportingBill(Long importingBillId, CostumeImportingBill costumeImportingBill) {
+        // Verify the importing bill exists
+        getImportingBillById(importingBillId);
+        return importingBillDao.saveCostumeImportingBill(importingBillId, costumeImportingBill);
+    }
+    
+    @Override
+    public CostumeImportingBill updateCostumeImportingBill(Long importingBillId, Long id, CostumeImportingBill costumeImportingBill) {
+        // Verify the importing bill exists
+        getImportingBillById(importingBillId);
+        
+        // Set the ID to ensure we're updating the existing record
+        costumeImportingBill.setId(id);
+        
+        return importingBillDao.saveCostumeImportingBill(importingBillId, costumeImportingBill);
+    }
+    
+    @Override
+    public void deleteCostumeImportingBill(Long id) {
+        importingBillDao.deleteCostumeImportingBill(id);
     }
 } 

@@ -8,6 +8,7 @@ import com.quanghoa.costumeservice.service.CostumeService;
 import com.quanghoa.costumeservice.service.UserService;
 import com.quanghoa.costumeservice.service.BillService;
 import com.quanghoa.costumeservice.service.SupplierService;
+import com.quanghoa.costumeservice.service.ImportBillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,13 +32,15 @@ public class ClientController {
     private final CostumeService costumeService;
     private final BillService billService;
     private final SupplierService supplierService;
+    private final ImportBillService importBillService;
 
     @Autowired
-    public ClientController(UserService userService, CostumeService costumeService, BillService billService, SupplierService supplierService) {
+    public ClientController(UserService userService, CostumeService costumeService, BillService billService, SupplierService supplierService, ImportBillService importBillService) {
         this.userService = userService;
         this.costumeService = costumeService;
         this.billService = billService;
         this.supplierService = supplierService;
+        this.importBillService = importBillService;
     }
 
     @GetMapping("/")
@@ -149,5 +152,28 @@ public class ClientController {
     public List<Map<String, Object>> getCostumeSuppliers(@PathVariable String supplierId) {
         // Call the external API to get costumes for this supplier
         return costumeService.getCostumesBySupplierId(supplierId);
+    }
+
+    // Add new API endpoint to fetch costumes by supplier ID
+    @GetMapping("/api/costumes/supplier/{supplierId}")
+    @ResponseBody
+    public List<Map<String, Object>> getCostumesBySupplierId(@PathVariable String supplierId) {
+        return costumeService.getCostumesBySupplierId(supplierId);
+    }
+    
+    // New method to handle importing bill submission
+    @PostMapping("/importing-bill")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> postImportingBill(@RequestBody Map<String, Object> importData, HttpSession session) {
+        // Get the logged in user data from the session
+        UserResponse userData = (UserResponse) session.getAttribute("userData");
+        
+        // Prepare the request payload for the import-bill-service
+        Map<String, Object> requestPayload = importBillService.prepareImportBillRequest(userData, importData);
+        
+        // Call the import-bill-service to create a new importing bill
+        Map<String, Object> response = importBillService.createImportBill(requestPayload);
+        
+        return ResponseEntity.ok(response);
     }
 } 

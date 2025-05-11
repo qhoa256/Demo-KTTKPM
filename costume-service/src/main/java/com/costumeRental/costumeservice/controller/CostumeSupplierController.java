@@ -32,7 +32,7 @@ public class CostumeSupplierController {
     }
 
     @GetMapping("/supplier/{supplierId}")
-    public ResponseEntity<List<CostumeSupplier>> getCostumesBySupplierId(@PathVariable String supplierId) {
+    public ResponseEntity<List<CostumeSupplier>> getCostumesBySupplierId(@PathVariable Long supplierId) {
         return ResponseEntity.ok(costumeSupplierService.findBySupplierId(supplierId));
     }
 
