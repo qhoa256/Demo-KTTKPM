@@ -1,14 +1,14 @@
 -- Insert sample addresses
 INSERT INTO Address (id, street, city) VALUES 
-(1, '123 Main St', 'New York'),
-(2, '456 Elm St', 'Los Angeles'),
-(3, '789 Oak St', 'Chicago');
+(1, 'so nha 22 pho Cao', 'Hung Yen'),
+(2, 'duong Quat Lam', 'Nam Dinh'),
+(3, '217 Tran Phu', 'Ha Noi');
 
 -- Insert sample full names
 INSERT INTO FullName (id, firstName, lastName) VALUES 
-(1, 'John', 'Doe'),
-(2, 'Jane', 'Smith'),
-(3, 'Admin', 'User');
+(1, 'Hieu', 'Nguyen Huu'),
+(2, 'Anh', 'Nguyen Tien'),
+(3, 'Hoa', 'Nguyen Huu Quang');
 
 -- Insert sample users
 INSERT INTO tblUser (id, username, password, AddressId, FullNameId, Discriminator) VALUES 
