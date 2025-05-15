@@ -1,6 +1,7 @@
 package com.costumeRental.costumeservice.service.impl;
 
 import com.costumeRental.costumeservice.dao.CostumeImportingBillDao;
+import com.costumeRental.costumeservice.dao.impl.CostumeImportingBillDaoImpl;
 import com.costumeRental.costumeservice.model.CostumeImportingBill;
 import com.costumeRental.costumeservice.service.CostumeImportingBillService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,13 @@ public class CostumeImportingBillServiceImpl implements CostumeImportingBillServ
     public CostumeImportingBill createCostumeImportingBill(CostumeImportingBill costumeImportingBill) {
         return costumeImportingBillDao.save(costumeImportingBill);
     }
+    
+    @Override
+    public CostumeImportingBill createCostumeImportingBillWithImportingBill(CostumeImportingBill costumeImportingBill, Long importingBillId) {
+        CostumeImportingBill savedBill = costumeImportingBillDao.save(costumeImportingBill);
+        ((CostumeImportingBillDaoImpl)costumeImportingBillDao).linkToImportingBill(savedBill.getId(), importingBillId);
+        return savedBill;
+    }
 
     @Override
     public CostumeImportingBill getCostumeImportingBillById(Long id) {
@@ -34,6 +42,11 @@ public class CostumeImportingBillServiceImpl implements CostumeImportingBillServ
     @Override
     public List<CostumeImportingBill> getCostumeImportingBillsByCostumeSupplier(Long costumeSupplierIdId) {
         return costumeImportingBillDao.findByCostumeSupplier(costumeSupplierIdId);
+    }
+
+    @Override
+    public List<CostumeImportingBill> getCostumeImportingBillsByImportingBillId(Long importingBillId) {
+        return costumeImportingBillDao.findByImportingBillId(importingBillId);
     }
 
     @Override

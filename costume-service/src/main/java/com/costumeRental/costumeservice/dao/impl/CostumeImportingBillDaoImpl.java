@@ -69,6 +69,14 @@ public class CostumeImportingBillDaoImpl implements CostumeImportingBillDao {
     }
 
     @Override
+    public List<CostumeImportingBill> findByImportingBillId(Long importingBillId) {
+        String sql = "SELECT cib.* FROM tblCostumeImportingBill cib " +
+//                "JOIN tblImportingBillCostumeImportingBill ibcib ON cib.id = ibcib.costume_importing_bill_id " +
+                "WHERE cib.importing_bill_id = ?";
+        return jdbcTemplate.query(sql, costumeImportingBillRowMapper, importingBillId);
+    }
+
+    @Override
     public CostumeImportingBill save(CostumeImportingBill costumeImportingBill) {
         if (costumeImportingBill.getId() == null) {
             // Insert new costume importing bill
@@ -120,5 +128,11 @@ public class CostumeImportingBillDaoImpl implements CostumeImportingBillDao {
     public void deleteById(Long id) {
         String sql = "DELETE FROM tblCostumeImportingBill WHERE id = ?";
         jdbcTemplate.update(sql, id);
+    }
+    
+    // Helper method to associate a costume importing bill with an importing bill
+    public void linkToImportingBill(Long costumeImportingBillId, Long importingBillId) {
+        String sql = "INSERT INTO tblImportingBillCostumeImportingBill (importing_bill_id, costume_importing_bill_id) VALUES (?, ?)";
+        jdbcTemplate.update(sql, importingBillId, costumeImportingBillId);
     }
 } 

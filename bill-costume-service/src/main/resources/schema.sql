@@ -1,7 +1,8 @@
+CREATE DATABASE IF NOT EXISTS bill_costume_service_db;
+USE bill_costume_service_db;
 -- Disable foreign key checks to allow dropping tables with foreign key constraints
 SET FOREIGN_KEY_CHECKS=0;
 
--- Drop tables if they exist
 DROP TABLE IF EXISTS tblBill;
 DROP TABLE IF EXISTS tblPayment;
 

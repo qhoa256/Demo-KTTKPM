@@ -9,6 +9,7 @@ public interface CostumeImportingBillDao {
     List<CostumeImportingBill> findAll();
     Optional<CostumeImportingBill> findById(Long id);
     List<CostumeImportingBill> findByCostumeSupplier(Long costumeSupplierIdId);
+    List<CostumeImportingBill> findByImportingBillId(Long importingBillId);
     CostumeImportingBill save(CostumeImportingBill costumeImportingBill);
     void deleteById(Long id);
 } 

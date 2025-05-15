@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS costume_service_db;
+USE costume_service_db;
 -- Drop tables if they exist (in reverse order due to foreign key constraints)
 DROP TABLE IF EXISTS tblCostumeImportingBill;
 DROP TABLE IF EXISTS tblCostumeBill;
@@ -25,24 +27,16 @@ CREATE TABLE IF NOT EXISTS tblCostumeBill (
     FOREIGN KEY (costume_id) REFERENCES tblCostume(id)
 );
 
-CREATE TABLE IF NOT EXISTS tblSupplier (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255),
-    email VARCHAR(255),
-    contact VARCHAR(255),
-    address VARCHAR(255)
-);
-
 CREATE TABLE IF NOT EXISTS tblCostumeSupplier (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     costume_id BIGINT,
     supplier_id BIGINT,
-    FOREIGN KEY (costume_id) REFERENCES tblCostume(id),
-    FOREIGN KEY (supplier_id) REFERENCES tblSupplier(id)
+    FOREIGN KEY (costume_id) REFERENCES tblCostume(id)
 );
 
 CREATE TABLE IF NOT EXISTS tblCostumeImportingBill (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    importing_bill_id BIGINT,
     costume_supplier_id BIGINT,
     import_price DECIMAL(19,2),
     quantity INT,

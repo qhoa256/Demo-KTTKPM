@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS user_service_db;
+USE user_service_db;
 -- Insert sample addresses
 INSERT INTO Address (id, street, city) VALUES 
 (1, 'so nha 22 pho Cao', 'Hung Yen'),

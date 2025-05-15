@@ -21,6 +21,16 @@ public class CostumeImportingBillController {
         return new ResponseEntity<>(costumeImportingBillService.createCostumeImportingBill(costumeImportingBill), HttpStatus.CREATED);
     }
 
+    @PostMapping("/importing-bill/{importingBillId}")
+    public ResponseEntity<CostumeImportingBill> createCostumeImportingBillWithImportingBill(
+            @RequestBody CostumeImportingBill costumeImportingBill,
+            @PathVariable Long importingBillId) {
+        return new ResponseEntity<>(
+            costumeImportingBillService.createCostumeImportingBillWithImportingBill(costumeImportingBill, importingBillId), 
+            HttpStatus.CREATED
+        );
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CostumeImportingBill> getCostumeImportingBillById(@PathVariable Long id) {
         return ResponseEntity.ok(costumeImportingBillService.getCostumeImportingBillById(id));
@@ -34,6 +44,11 @@ public class CostumeImportingBillController {
     @GetMapping("/costume-supplier/{costumeSupplierIdId}")
     public ResponseEntity<List<CostumeImportingBill>> getCostumeImportingBillsByCostumeSupplier(@PathVariable Long costumeSupplierIdId) {
         return ResponseEntity.ok(costumeImportingBillService.getCostumeImportingBillsByCostumeSupplier(costumeSupplierIdId));
+    }
+
+    @GetMapping("/importing-bill/{importingBillId}")
+    public ResponseEntity<List<CostumeImportingBill>> getCostumeImportingBillsByImportingBillId(@PathVariable Long importingBillId) {
+        return ResponseEntity.ok(costumeImportingBillService.getCostumeImportingBillsByImportingBillId(importingBillId));
     }
 
     @PutMapping("/{id}")
