@@ -62,22 +62,12 @@ public class BillController {
                 LocalDate billRentDate = bill.getRentDate();
                 LocalDate billReturnDate = bill.getReturnDate();
                 
-                // Một trang phục đang được thuê nếu:
-                // 1. Nếu ngày trả của hóa đơn >= ngày thuê mới (người dùng muốn thuê từ rentDate)
-                // VÀ
-                // 2. Ngày thuê của hóa đơn <= ngày trả mới (người dùng muốn trả vào returnDate)
-                //
-                // Nói cách khác, costume chỉ KHÔNG khả dụng khi khoảng thời gian thuê 
-                // chồng chéo với khoảng thời gian đã cho
-                
-                // Nếu trang phục đã được trả trước khi người dùng muốn thuê (billReturnDate < rentDate),
-                // thì trang phục đó vẫn khả dụng
+                // Nếu trang phục đã được trả trước khi người dùng muốn thuê (billReturnDate < rentDate) => Khả dụng
                 if (billReturnDate.isBefore(rentDate)) {
                     return false;
                 }
                 
-                // Nếu trang phục chỉ được thuê sau khi người dùng đã trả (billRentDate > returnDate),
-                // thì trang phục đó vẫn khả dụng
+                // Nếu trang phục chỉ được thuê sau khi người dùng đã trả (billRentDate > returnDate) => Khả dụng
                 if (billRentDate.isAfter(returnDate)) {
                     return false;
                 }
@@ -87,15 +77,10 @@ public class BillController {
             })
             .collect(Collectors.toList());
         
-        // Trong triển khai thực tế, bạn sẽ cần truy vấn bảng bill_items hoặc bill_costumes để lấy 
-        // danh sách chi tiết các trang phục từ mỗi đơn hàng
+
         List<Map<String, Object>> rentedCostumes = new java.util.ArrayList<>();
         
         for (Bill bill : overlappingBills) {
-            // Giả định rằng mỗi bill có thể chứa nhiều trang phục
-            // Đây chỉ là ví dụ, trong triển khai thực tế bạn cần truy vấn bảng liên kết giữa Bill và Costume
-            
-            // Giả sử chúng ta có danh sách costume IDs từ một hàm giả định
             List<Long> costumeIds = getCostumeIdsFromBill(bill); 
             
             for (Long costumeId : costumeIds) {
@@ -111,13 +96,8 @@ public class BillController {
         return ResponseEntity.ok(rentedCostumes);
     }
     
-    /**
-     * Hàm giả định để lấy danh sách costume IDs từ một bill
-     * Trong triển khai thực tế, đây sẽ là một truy vấn đến bảng bill_items hoặc bill_costumes
-     */
+
     private List<Long> getCostumeIdsFromBill(Bill bill) {
-        // Giả sử mỗi hóa đơn có một số trang phục mặc định
-        // Đây chỉ là dữ liệu mẫu
         return List.of(1L, 2L, 3L);
     }
 

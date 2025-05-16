@@ -117,13 +117,15 @@ public class ClientController {
                 // Gọi API bill-costume-service để lấy danh sách các trang phục đang được thuê trong khoảng thời gian
                 List<Map<String, Object>> rentedCostumes = billService.getRentedCostumes(rentDate, returnDate);
                 
+                // Trang phục khả dụng bao gồm:
+                // 1. Trang phục nằm trong bill nhưng không thuê trong khoảng thời gian đã chọn
                 if (rentedCostumes != null && !rentedCostumes.isEmpty()) {
-                    // Tạo set chứa ID của tất cả trang phục đang được thuê
+                    // Tạo set chứa ID của tất cả trang phục đang được thuê trong khoảng thời gian
                     Set<Long> rentedCostumeIds = rentedCostumes.stream()
                         .map(rentedCostume -> Long.valueOf(rentedCostume.get("costumeId").toString()))
                         .collect(Collectors.toSet());
                     
-                    // Lọc ra những trang phục khả dụng (không nằm trong danh sách đang thuê)
+                // 2. Trang phục không nằm trong bill nào
                     availableCostumes = allCostumes.stream()
                         .filter(costume -> {
                             Long costumeId = Long.valueOf(costume.get("id").toString());
@@ -137,6 +139,8 @@ public class ClientController {
                         model.addAttribute("unavailableCount", unavailableCount);
                     }
                 }
+                // Nếu không có trang phục nào đang được thuê, tất cả trang phục đều khả dụng
+                // availableCostumes đã được gán = allCostumes ở trên
                 
                 // Thêm thông tin ngày thuê/trả vào model để hiển thị trong form tìm kiếm
                 model.addAttribute("rentDate", rentDate);
