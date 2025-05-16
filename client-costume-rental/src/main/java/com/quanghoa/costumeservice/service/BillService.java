@@ -43,24 +43,34 @@ public class BillService {
     /**
      * Lấy danh sách các trang phục đang được thuê trong khoảng thời gian được chỉ định
      * 
-     * @param rentDate Ngày bắt đầu thuê
-     * @param returnDate Ngày trả
-     * @return Danh sách các trang phục đang được thuê
+     * @param rentDate Ngày khách hàng muốn thuê
+     * @param returnDate Ngày khách hàng sẽ trả
+     * @return Danh sách các trang phục đang được thuê và không khả dụng trong khoảng thời gian này
      */
     public List<Map<String, Object>> getRentedCostumes(String rentDate, String returnDate) {
         String apiUrl = billServiceUrl + "/api/bills/rented-costumes";
         
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiUrl)
-            .queryParam("rentDate", rentDate)
-            .queryParam("returnDate", returnDate);
-        
-        ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
-            builder.toUriString(),
-            HttpMethod.GET,
-            null,
-            new ParameterizedTypeReference<List<Map<String, Object>>>() {}
-        );
-        
-        return response.getBody() != null ? response.getBody() : List.of();
+        try {
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiUrl)
+                .queryParam("rentDate", rentDate)
+                .queryParam("returnDate", returnDate);
+            
+            System.out.println("Gọi API kiểm tra trang phục đã thuê: " + builder.toUriString());
+            
+            ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Map<String, Object>>>() {}
+            );
+            
+            List<Map<String, Object>> result = response.getBody() != null ? response.getBody() : List.of();
+            System.out.println("Tìm thấy " + result.size() + " trang phục đã được thuê trong khoảng thời gian này");
+            return result;
+        } catch (Exception e) {
+            System.err.println("Lỗi khi gọi API kiểm tra trang phục đã thuê: " + e.getMessage());
+            e.printStackTrace();
+            return List.of(); // Trả về danh sách rỗng trong trường hợp lỗi
+        }
     }
 } 

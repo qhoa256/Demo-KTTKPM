@@ -184,15 +184,19 @@
                         </div>
                     </div>
                     <!-- Thêm bộ lọc ngày -->
-                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Ngày thuê</label>
-                            <input type="date" id="rentDateFilter" class="w-full border border-gray-300 rounded-md px-3 py-2">
+                    <div class="mt-4">
+                        <h4 class="text-sm font-medium text-gray-700 mb-2">Kiểm tra khả dụng trong khoảng thời gian:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tôi muốn thuê từ ngày</label>
+                                <input type="date" id="rentDateFilter" class="w-full border border-gray-300 rounded-md px-3 py-2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Đến ngày</label>
+                                <input type="date" id="returnDateFilter" class="w-full border border-gray-300 rounded-md px-3 py-2">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Ngày trả</label>
-                            <input type="date" id="returnDateFilter" class="w-full border border-gray-300 rounded-md px-3 py-2">
-                        </div>
+                        <p class="text-xs text-gray-500 mt-1 italic">Chỉ hiển thị trang phục có sẵn trong khoảng thời gian được chọn</p>
                     </div>
                     <div class="flex justify-end mt-4">
                         <button id="resetFilterBtn" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md mr-2 hover:bg-gray-300">
@@ -247,6 +251,40 @@
                         <option>Đánh giá cao</option>
                         <option>Mới nhất</option>
                     </select>
+                </div>
+            </div>
+            
+            <!-- Thông báo khả dụng -->
+            <div th:if="${rentDate != null and returnDate != null}" class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-4 rounded">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-info-circle text-blue-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-blue-700">
+                            <strong>Đang hiển thị trang phục có sẵn để thuê</strong> trong thời gian từ <span th:text="${rentDate}"></span> đến <span th:text="${returnDate}"></span>
+                        </p>
+                        <p th:if="${unavailableCount != null && unavailableCount > 0}" class="text-xs text-blue-600 mt-1">
+                            <i class="fas fa-exclamation-circle"></i> <span th:text="${unavailableCount}"></span> trang phục khác không khả dụng trong khoảng thời gian này do đã được thuê
+                        </p>
+                        <p th:if="${unavailableCount != null && unavailableCount == 0}" class="text-xs text-green-600 mt-1">
+                            <i class="fas fa-check-circle"></i> Tất cả trang phục đều khả dụng trong khoảng thời gian này!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Thông báo lỗi -->
+            <div th:if="${errorMessage != null}" class="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-red-500"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-red-700" th:text="${errorMessage}">
+                            Thông báo lỗi
+                        </p>
+                    </div>
                 </div>
             </div>
             
@@ -476,6 +514,29 @@
             const size = document.getElementById('sizeFilter').value;
             const price = document.getElementById('priceFilter').value;
             const color = document.getElementById('colorFilter').value;
+            
+            // Date validation
+            if (rentDate && returnDate) {
+                const rentDateObj = new Date(rentDate);
+                const returnDateObj = new Date(returnDate);
+                
+                if (rentDateObj > returnDateObj) {
+                    alert('Ngày thuê phải trước ngày trả!');
+                    return;
+                }
+                
+                // Check that dates are not in the past
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                if (rentDateObj < today) {
+                    alert('Ngày thuê không thể là ngày trong quá khứ!');
+                    return;
+                }
+            } else if ((rentDate && !returnDate) || (!rentDate && returnDate)) {
+                alert('Vui lòng nhập cả ngày thuê và ngày trả!');
+                return;
+            }
 
             // Build query string
             let queryParams = new URLSearchParams();

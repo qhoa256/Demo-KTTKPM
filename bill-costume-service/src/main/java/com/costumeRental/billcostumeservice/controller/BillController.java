@@ -37,49 +37,88 @@ public class BillController {
     /**
      * Endpoint để lấy danh sách các trang phục đang được thuê trong khoảng thời gian
      * 
-     * @param rentDate Ngày bắt đầu thuê (định dạng yyyy-MM-dd)
-     * @param returnDate Ngày trả (định dạng yyyy-MM-dd)
-     * @return Danh sách ID của các trang phục đang được thuê
+     * @param rentDate Ngày khách hàng muốn thuê (định dạng yyyy-MM-dd)
+     * @param returnDate Ngày khách hàng sẽ trả (định dạng yyyy-MM-dd)
+     * @return Danh sách ID của các trang phục không khả dụng trong khoảng thời gian này
      */
     @GetMapping("/rented-costumes")
     public ResponseEntity<List<Map<String, Object>>> getRentedCostumes(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate rentDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate returnDate) {
         
+        // Xác thực đầu vào
+        if (rentDate.isAfter(returnDate)) {
+            throw new IllegalArgumentException("Ngày thuê phải trước ngày trả.");
+        }
+        
         // Lấy danh sách các hóa đơn có ngày thuê và ngày trả giao với khoảng thời gian đã cho
         List<Bill> overlappingBills = billService.getAllBills().stream()
             .filter(bill -> {
-                // Kiểm tra xem hóa đơn có giao với khoảng thời gian đã cho không
+                // Kiểm tra nếu bill có null data
+                if (bill.getRentDate() == null || bill.getReturnDate() == null) {
+                    return false;
+                }
+                
                 LocalDate billRentDate = bill.getRentDate();
                 LocalDate billReturnDate = bill.getReturnDate();
                 
-                // Các trường hợp giao nhau:
-                // 1. Ngày thuê của hóa đơn nằm trong khoảng thời gian
-                // 2. Ngày trả của hóa đơn nằm trong khoảng thời gian
-                // 3. Khoảng thời gian nằm hoàn toàn trong khoảng thời gian thuê của hóa đơn
-                return (billRentDate.isBefore(returnDate) || billRentDate.isEqual(returnDate)) &&
-                       (billReturnDate.isAfter(rentDate) || billReturnDate.isEqual(rentDate));
+                // Một trang phục đang được thuê nếu:
+                // 1. Nếu ngày trả của hóa đơn >= ngày thuê mới (người dùng muốn thuê từ rentDate)
+                // VÀ
+                // 2. Ngày thuê của hóa đơn <= ngày trả mới (người dùng muốn trả vào returnDate)
+                //
+                // Nói cách khác, costume chỉ KHÔNG khả dụng khi khoảng thời gian thuê 
+                // chồng chéo với khoảng thời gian đã cho
+                
+                // Nếu trang phục đã được trả trước khi người dùng muốn thuê (billReturnDate < rentDate),
+                // thì trang phục đó vẫn khả dụng
+                if (billReturnDate.isBefore(rentDate)) {
+                    return false;
+                }
+                
+                // Nếu trang phục chỉ được thuê sau khi người dùng đã trả (billRentDate > returnDate),
+                // thì trang phục đó vẫn khả dụng
+                if (billRentDate.isAfter(returnDate)) {
+                    return false;
+                }
+                
+                // Trong mọi trường hợp khác, trang phục không khả dụng trong khoảng thời gian
+                return true;
             })
             .collect(Collectors.toList());
         
-        // Biến đổi thành danh sách các trang phục (giả định rằng mỗi hóa đơn có thể chứa nhiều trang phục)
-        // Đối với API này, chúng ta trả về ID của hoá đơn và ID của trang phục
-        // Trong triển khai thực tế, bạn cần thay đổi điều này để trả về danh sách chi tiết từ bảng bill_costume
-        List<Map<String, Object>> rentedCostumes = overlappingBills.stream()
-            .map(bill -> {
-                Map<String, Object> rentedCostume = new HashMap<>();
-                rentedCostume.put("billId", bill.getId());
-                // Giả định rằng bạn có thể lấy danh sách các ID trang phục từ bảng bill_costume
-                // Trong triển khai thực tế, bạn cần thay đổi điều này dựa trên cấu trúc dữ liệu thực tế của bạn
-                // rentedCostume.put("costumeIds", getCostumeIdsForBill(bill.getId()));
-                rentedCostume.put("costumeId", 1L); // Thay thế bằng mã lấy ID trang phục thực tế từ bill
-                rentedCostume.put("rentDate", bill.getRentDate());
-                rentedCostume.put("returnDate", bill.getReturnDate());
-                return rentedCostume;
-            })
-            .collect(Collectors.toList());
+        // Trong triển khai thực tế, bạn sẽ cần truy vấn bảng bill_items hoặc bill_costumes để lấy 
+        // danh sách chi tiết các trang phục từ mỗi đơn hàng
+        List<Map<String, Object>> rentedCostumes = new java.util.ArrayList<>();
+        
+        for (Bill bill : overlappingBills) {
+            // Giả định rằng mỗi bill có thể chứa nhiều trang phục
+            // Đây chỉ là ví dụ, trong triển khai thực tế bạn cần truy vấn bảng liên kết giữa Bill và Costume
+            
+            // Giả sử chúng ta có danh sách costume IDs từ một hàm giả định
+            List<Long> costumeIds = getCostumeIdsFromBill(bill); 
+            
+            for (Long costumeId : costumeIds) {
+                Map<String, Object> rentedItem = new HashMap<>();
+                rentedItem.put("billId", bill.getId());
+                rentedItem.put("costumeId", costumeId);
+                rentedItem.put("rentDate", bill.getRentDate());
+                rentedItem.put("returnDate", bill.getReturnDate());
+                rentedCostumes.add(rentedItem);
+            }
+        }
         
         return ResponseEntity.ok(rentedCostumes);
+    }
+    
+    /**
+     * Hàm giả định để lấy danh sách costume IDs từ một bill
+     * Trong triển khai thực tế, đây sẽ là một truy vấn đến bảng bill_items hoặc bill_costumes
+     */
+    private List<Long> getCostumeIdsFromBill(Bill bill) {
+        // Giả sử mỗi hóa đơn có một số trang phục mặc định
+        // Đây chỉ là dữ liệu mẫu
+        return List.of(1L, 2L, 3L);
     }
 
     @PostMapping
