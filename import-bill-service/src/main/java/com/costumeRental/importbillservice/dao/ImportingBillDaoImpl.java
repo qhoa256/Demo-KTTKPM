@@ -343,12 +343,18 @@ public class ImportingBillDaoImpl implements ImportingBillDao {
             // Call the costume-service API endpoint instead of directly inserting to database
             String apiUrl = costumeServiceUrl + "/api/costume-importing-bills/importing-bill/" + importingBillId;
             
-            // Make a POST request to the costume-service and handle ResponseEntity wrapper
+            System.out.println("Calling costume-service API: " + apiUrl);
+            System.out.println("Request payload: " + costumeImportingBill);
+            
+            // Make sure to set importingBillId in the costume importing bill if needed
+            // Make a POST request to the costume-service
             ResponseEntity<CostumeImportingBill> response = restTemplate.postForEntity(
                 apiUrl,
                 costumeImportingBill,
                 CostumeImportingBill.class
             );
+            
+            System.out.println("Response status: " + response.getStatusCode());
             
             if (response.getStatusCode().is2xxSuccessful()) {
                 return response.getBody();
@@ -357,7 +363,8 @@ public class ImportingBillDaoImpl implements ImportingBillDao {
             }
         } catch (Exception e) {
             System.err.println("Error calling costume-service: " + e.getMessage());
-            throw new RuntimeException("Failed to create costume importing bill", e);
+            e.printStackTrace();
+            throw new RuntimeException("Failed to create costume importing bill: " + e.getMessage(), e);
         }
     }
 

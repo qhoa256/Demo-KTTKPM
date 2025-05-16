@@ -132,7 +132,7 @@ public class CostumeImportingBillDaoImpl implements CostumeImportingBillDao {
     
     // Helper method to associate a costume importing bill with an importing bill
     public void linkToImportingBill(Long costumeImportingBillId, Long importingBillId) {
-        String sql = "INSERT INTO tblImportingBillCostumeImportingBill (importing_bill_id, costume_importing_bill_id) VALUES (?, ?)";
+        String sql = "UPDATE tblCostumeImportingBill SET importing_bill_id = ? WHERE id = ?";
         jdbcTemplate.update(sql, importingBillId, costumeImportingBillId);
     }
 } 
