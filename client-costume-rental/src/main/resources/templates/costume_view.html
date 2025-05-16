@@ -141,7 +141,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Loại trang phục</label>
-                            <select class="w-full border border-gray-300 rounded-md px-3 py-2">
+                            <select id="categoryFilter" class="w-full border border-gray-300 rounded-md px-3 py-2">
                                 <option>Tất cả</option>
                                 <option>Trang phục truyền thống</option>
                                 <option>Trang phục hiện đại</option>
@@ -152,7 +152,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Kích cỡ</label>
-                            <select class="w-full border border-gray-300 rounded-md px-3 py-2">
+                            <select id="sizeFilter" class="w-full border border-gray-300 rounded-md px-3 py-2">
                                 <option>Tất cả</option>
                                 <option>XS</option>
                                 <option>S</option>
@@ -163,7 +163,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Giá thuê</label>
-                            <select class="w-full border border-gray-300 rounded-md px-3 py-2">
+                            <select id="priceFilter" class="w-full border border-gray-300 rounded-md px-3 py-2">
                                 <option>Tất cả</option>
                                 <option>Dưới 100k</option>
                                 <option>100k - 200k</option>
@@ -173,7 +173,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Màu sắc</label>
-                            <select class="w-full border border-gray-300 rounded-md px-3 py-2">
+                            <select id="colorFilter" class="w-full border border-gray-300 rounded-md px-3 py-2">
                                 <option>Tất cả</option>
                                 <option>Đen</option>
                                 <option>Trắng</option>
@@ -183,11 +183,22 @@
                             </select>
                         </div>
                     </div>
+                    <!-- Thêm bộ lọc ngày -->
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Ngày thuê</label>
+                            <input type="date" id="rentDateFilter" class="w-full border border-gray-300 rounded-md px-3 py-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Ngày trả</label>
+                            <input type="date" id="returnDateFilter" class="w-full border border-gray-300 rounded-md px-3 py-2">
+                        </div>
+                    </div>
                     <div class="flex justify-end mt-4">
-                        <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md mr-2 hover:bg-gray-300">
+                        <button id="resetFilterBtn" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md mr-2 hover:bg-gray-300">
                             Đặt lại
                         </button>
-                        <button class="btn-primary text-white px-6 py-2 rounded-md">
+                        <button id="applyFilterBtn" class="btn-primary text-white px-6 py-2 rounded-md">
                             Áp dụng
                         </button>
                     </div>
@@ -351,7 +362,72 @@
         </div>
     </footer>
 
-    <script>
+    <script th:inline="javascript">
+        // Get values from model for filter initialization
+        const initialRentDate = /*[[${rentDate}]]*/ '';
+        const initialReturnDate = /*[[${returnDate}]]*/ '';
+        const initialSearch = /*[[${search}]]*/ '';
+        const initialCategory = /*[[${category}]]*/ '';
+        const initialSize = /*[[${size}]]*/ '';
+        const initialPrice = /*[[${price}]]*/ '';
+        const initialColor = /*[[${color}]]*/ '';
+        
+        // Set initial values on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set date filter values
+            if (initialRentDate) {
+                document.getElementById('rentDateFilter').value = initialRentDate;
+            }
+            if (initialReturnDate) {
+                document.getElementById('returnDateFilter').value = initialReturnDate;
+            }
+            
+            // Set other filter values
+            if (initialSearch) {
+                document.getElementById('searchInput').value = initialSearch;
+            }
+            
+            if (initialCategory) {
+                const categorySelect = document.getElementById('categoryFilter');
+                for (let i = 0; i < categorySelect.options.length; i++) {
+                    if (categorySelect.options[i].text === initialCategory) {
+                        categorySelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            
+            if (initialSize) {
+                const sizeSelect = document.getElementById('sizeFilter');
+                for (let i = 0; i < sizeSelect.options.length; i++) {
+                    if (sizeSelect.options[i].text === initialSize) {
+                        sizeSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            
+            if (initialPrice) {
+                const priceSelect = document.getElementById('priceFilter');
+                for (let i = 0; i < priceSelect.options.length; i++) {
+                    if (priceSelect.options[i].text === initialPrice) {
+                        priceSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            
+            if (initialColor) {
+                const colorSelect = document.getElementById('colorFilter');
+                for (let i = 0; i < colorSelect.options.length; i++) {
+                    if (colorSelect.options[i].text === initialColor) {
+                        colorSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+        });
+
         // Toggle filter options
         document.getElementById('filterBtn').addEventListener('click', function() {
             const filterOptions = document.getElementById('filterOptions');
@@ -371,10 +447,55 @@
         document.getElementById('searchBtn').addEventListener('click', function() {
             const searchTerm = document.getElementById('searchInput').value;
             if (searchTerm.trim() !== '') {
-                alert(`Đang tìm kiếm: "${searchTerm}"`);
-                // In a real app, you would make an API call or filter results here
+                searchCostumes(searchTerm);
             }
         });
+
+        // Filter functionality
+        document.getElementById('applyFilterBtn').addEventListener('click', function() {
+            applyFilters();
+        });
+
+        // Reset filters
+        document.getElementById('resetFilterBtn').addEventListener('click', function() {
+            document.getElementById('rentDateFilter').value = '';
+            document.getElementById('returnDateFilter').value = '';
+            document.getElementById('categoryFilter').selectedIndex = 0;
+            document.getElementById('sizeFilter').selectedIndex = 0;
+            document.getElementById('priceFilter').selectedIndex = 0;
+            document.getElementById('colorFilter').selectedIndex = 0;
+            document.getElementById('searchInput').value = '';
+        });
+
+        // Function to search costumes with all filters
+        function searchCostumes(searchTerm) {
+            // Get filter values
+            const rentDate = document.getElementById('rentDateFilter').value;
+            const returnDate = document.getElementById('returnDateFilter').value;
+            const category = document.getElementById('categoryFilter').value;
+            const size = document.getElementById('sizeFilter').value;
+            const price = document.getElementById('priceFilter').value;
+            const color = document.getElementById('colorFilter').value;
+
+            // Build query string
+            let queryParams = new URLSearchParams();
+            if (searchTerm) queryParams.append('search', searchTerm);
+            if (rentDate) queryParams.append('rentDate', rentDate);
+            if (returnDate) queryParams.append('returnDate', returnDate);
+            if (category && category !== 'Tất cả') queryParams.append('category', category);
+            if (size && size !== 'Tất cả') queryParams.append('size', size);
+            if (price && price !== 'Tất cả') queryParams.append('price', price);
+            if (color && color !== 'Tất cả') queryParams.append('color', color);
+            
+            // Redirect to the costumes page with filters
+            window.location.href = '/costumes?' + queryParams.toString();
+        }
+
+        // Function to apply filters without search term
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value;
+            searchCostumes(searchTerm);
+        }
 
         // Quantity controls
         document.querySelectorAll('.quantity-control').forEach(control => {

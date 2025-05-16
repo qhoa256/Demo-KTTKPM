@@ -96,15 +96,63 @@ public class ClientController {
     }
     
     @GetMapping("/costumes")
-    public String getCostumeViewPage(Model model) {
-        // Call API to get costume data
-        List<Map<String, Object>> costumes = costumeService.getAllCostumes();
+    public String getCostumeViewPage(Model model, 
+                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String search,
+                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String rentDate,
+                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String returnDate,
+                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String category,
+                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String size,
+                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String price,
+                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String color) {
         
-        // Add data to model
+        // Gọi API để lấy dữ liệu trang phục từ costume-service
+        List<Map<String, Object>> costumes = costumeService.getAllCostumes(search, category, size, price, color);
+        
+        // Nếu có lọc theo thời gian thuê, thì gọi đến bill-costume-service để kiểm tra
+        if (rentDate != null && !rentDate.isEmpty() && returnDate != null && !returnDate.isEmpty()) {
+            // Gọi API bill-costume-service để lấy danh sách các trang phục đang được thuê trong khoảng thời gian
+            List<Map<String, Object>> rentedCostumes = billService.getRentedCostumes(rentDate, returnDate);
+            
+            // Loại bỏ các trang phục đang được thuê khỏi danh sách trả về
+            if (rentedCostumes != null && !rentedCostumes.isEmpty()) {
+                costumes = costumes.stream()
+                    .filter(costume -> isAvailable(costume, rentedCostumes))
+                    .collect(java.util.stream.Collectors.toList());
+            }
+            
+            // Thêm thông tin ngày thuê/trả vào model để hiển thị trong form tìm kiếm
+            model.addAttribute("rentDate", rentDate);
+            model.addAttribute("returnDate", returnDate);
+        }
+        
+        // Thêm các thông tin tìm kiếm và bộ lọc vào model
+        model.addAttribute("search", search);
+        model.addAttribute("category", category);
+        model.addAttribute("size", size);
+        model.addAttribute("price", price);
+        model.addAttribute("color", color);
+        
+        // Thêm danh sách trang phục vào model
         model.addAttribute("costumes", costumes);
         model.addAttribute("costumeCount", costumes.size());
         
         return "costume_view";
+    }
+    
+    /**
+     * Kiểm tra xem một trang phục có khả dụng trong khoảng thời gian cho thuê hay không
+     */
+    private boolean isAvailable(Map<String, Object> costume, List<Map<String, Object>> rentedCostumes) {
+        Long costumeId = Long.valueOf(costume.get("id").toString());
+        
+        // Kiểm tra xem trang phục có trong danh sách đang cho thuê không
+        for (Map<String, Object> rentedCostume : rentedCostumes) {
+            if (costumeId.equals(Long.valueOf(rentedCostume.get("costumeId").toString()))) {
+                return false; // Trang phục đã được thuê
+            }
+        }
+        
+        return true; // Trang phục có sẵn để cho thuê
     }
     
     @GetMapping("/payment_booking")

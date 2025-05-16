@@ -24,15 +24,50 @@ public class CostumeServiceImpl implements CostumeService {
     }
     
     @Override
-    public List<Map<String, Object>> getAllCostumes() {
-        String apiUrl = costumeServiceUrl + "/api/costumes";
+    public List<Map<String, Object>> getAllCostumes(String search, String category, String size, String price, String color) {
+        StringBuilder apiUrl = new StringBuilder(costumeServiceUrl + "/api/costumes?");
+        
+        // Add filters to query parameters
+        boolean hasParam = false;
+        
+        if (search != null && !search.isEmpty()) {
+            apiUrl.append("search=").append(search);
+            hasParam = true;
+        }
+        
+        if (category != null && !category.isEmpty() && !category.equals("Tất cả")) {
+            if (hasParam) apiUrl.append("&");
+            apiUrl.append("category=").append(category);
+            hasParam = true;
+        }
+        
+        if (size != null && !size.isEmpty() && !size.equals("Tất cả")) {
+            if (hasParam) apiUrl.append("&");
+            apiUrl.append("size=").append(size);
+            hasParam = true;
+        }
+        
+        if (price != null && !price.isEmpty() && !price.equals("Tất cả")) {
+            if (hasParam) apiUrl.append("&");
+            apiUrl.append("price=").append(price);
+            hasParam = true;
+        }
+        
+        if (color != null && !color.isEmpty() && !color.equals("Tất cả")) {
+            if (hasParam) apiUrl.append("&");
+            apiUrl.append("color=").append(color);
+        }
+        
         ResponseEntity<List<Map<String, Object>>> response = restTemplate.exchange(
-                apiUrl,
+                apiUrl.toString(),
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Map<String, Object>>>() {}
         );
-        return response.getBody();
+        
+        List<Map<String, Object>> costumes = response.getBody();
+        
+        return costumes != null ? costumes : List.of();
     }
     
     @Override
@@ -46,5 +81,10 @@ public class CostumeServiceImpl implements CostumeService {
         );
         
         return response.getBody() != null ? response.getBody() : List.of();
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllCostumes() {
+        return getAllCostumes(null, null, null, null, null);
     }
 } 
