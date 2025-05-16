@@ -177,7 +177,7 @@
                             
                             <div>
                                 <label for="importDate" class="block text-gray-700 mb-2">Ngày nhập</label>
-                                <input type="date" id="importDate" name="importDate" class="w-full px-4 py-2 border rounded-md" required>
+                                <input type="date" id="importDate" name="importDate" class="w-full px-4 py-2 border rounded-md bg-gray-100" readonly disabled>
                             </div>
                         </div>
                         
@@ -230,10 +230,27 @@
                     <button id="closeImportSuccessModal" class="flex-1 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 text-center">
                         <i class="fas fa-times mr-2"></i>Đóng
                     </button>
-                    <a th:href="@{/admin}" class="flex-1 border border-indigo-600 text-indigo-600 py-2 rounded-lg hover:bg-indigo-50 text-center">
-                        <i class="fas fa-tachometer-alt mr-2"></i>Về bảng điều khiển
+                    <a th:href="@{/admin}" class="flex-1 border border-indigo-600 text-indigo-600 py-2 rounded-lg hover:bg-indigo-50 text-center" id="viewOrderDetailBtn">
+                        <i class="fas fa-info-circle mr-2"></i>Xem chi tiết
                     </a>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Order Detail Modal -->
+    <div id="orderDetailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-8 max-w-2xl w-full mx-4">
+            <div class="text-center mb-4">
+                <h3 class="text-2xl font-bold mb-2">Chi tiết đơn nhập hàng</h3>
+            </div>
+            <div id="orderDetailContent" class="mb-6 text-left">
+                <!-- Nội dung chi tiết đơn hàng sẽ được render ở đây -->
+            </div>
+            <div class="flex justify-center">
+                <button id="closeOrderDetailModal" class="bg-indigo-600 text-white py-2 px-6 rounded-lg hover:bg-indigo-700 text-center">
+                    <i class="fas fa-times mr-2"></i>Đóng
+                </button>
             </div>
         </div>
     </div>
@@ -243,9 +260,14 @@
             // Set default date to today
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('importDate').value = today;
+            // Đảm bảo input ngày nhập luôn là ngày hiện tại và không chỉnh được
+            document.getElementById('importDate').setAttribute('readonly', true);
+            document.getElementById('importDate').setAttribute('disabled', true);
             
             // Store supplier data
             let selectedSupplier = null;
+            // Store last imported order data
+            let lastImportedOrder = null;
             
             // Handle supplier selection
             document.querySelectorAll('.select-supplier').forEach(button => {
@@ -427,12 +449,17 @@
                 })
                 .then(data => {
                     console.log('Success:', data);
+                    // Lưu lại dữ liệu đơn hàng vừa nhập
+                    lastImportedOrder = {
+                        supplier: selectedSupplier,
+                        importDate: importDate,
+                        costumes: costumes
+                    };
                     // Populate and show success modal
                     document.getElementById('modalSupplierName').textContent = selectedSupplier.name;
                     document.getElementById('modalImportDate').textContent = importDate;
                     document.getElementById('modalTotalCostumeTypes').textContent = costumes.length;
                     document.getElementById('importSuccessModal').classList.remove('hidden');
-                    
                     // Reset form and hide it
                     document.getElementById('costumeImportForm').reset();
                     document.getElementById('importForm').classList.add('hidden');
@@ -447,6 +474,48 @@
             // Close import success modal
             document.getElementById('closeImportSuccessModal').addEventListener('click', function() {
                 document.getElementById('importSuccessModal').classList.add('hidden');
+            });
+
+            // Xem chi tiết đơn hàng
+            document.getElementById('viewOrderDetailBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!lastImportedOrder) return;
+                // Render chi tiết đơn hàng
+                const order = lastImportedOrder;
+                let html = `<div class='mb-4'><strong>Nhà cung cấp:</strong> ${order.supplier.name} <br>
+                    <strong>Email:</strong> ${order.supplier.email} <br>
+                    <strong>Liên hệ:</strong> ${order.supplier.contact} <br>
+                    <strong>Địa chỉ:</strong> ${order.supplier.address} <br>
+                    <strong>Ngày nhập:</strong> ${order.importDate}
+                </div>`;
+                html += `<table class='w-full text-left border mb-4'><thead><tr class='bg-gray-100'>
+                    <th class='p-2 border'>Tên trang phục</th>
+                    <th class='p-2 border'>Loại</th>
+                    <th class='p-2 border'>Số lượng</th>
+                    <th class='p-2 border'>Giá nhập</th>
+                    <th class='p-2 border'>Thành tiền</th>
+                </tr></thead><tbody>`;
+                let total = 0;
+                order.costumes.forEach(item => {
+                    const thanhTien = item.quantity * item.importPrice;
+                    total += thanhTien;
+                    html += `<tr>
+                        <td class='p-2 border'>${item.name}</td>
+                        <td class='p-2 border'>${item.category}</td>
+                        <td class='p-2 border'>${item.quantity}</td>
+                        <td class='p-2 border'>${item.importPrice.toLocaleString('vi-VN')} đ</td>
+                        <td class='p-2 border'>${thanhTien.toLocaleString('vi-VN')} đ</td>
+                    </tr>`;
+                });
+                html += `</tbody></table>`;
+                html += `<div class='text-right font-bold text-lg'>Tổng tiền: <span class='text-indigo-600'>${total.toLocaleString('vi-VN')} đ</span></div>`;
+                document.getElementById('orderDetailContent').innerHTML = html;
+                document.getElementById('orderDetailModal').classList.remove('hidden');
+            });
+
+            // Đóng modal chi tiết đơn hàng
+            document.getElementById('closeOrderDetailModal').addEventListener('click', function() {
+                document.getElementById('orderDetailModal').classList.add('hidden');
             });
         });
     </script>

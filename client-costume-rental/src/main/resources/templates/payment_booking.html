@@ -127,13 +127,13 @@
                         
                         <div class="border border-gray-200 rounded-lg overflow-hidden">
                             <div class="grid grid-cols-12 bg-gray-50 p-3 font-medium text-gray-700">
-                                <div class="col-span-6">Tên trang phục</div>
+                                <div class="col-span-5">Tên trang phục</div>
                                 <div class="col-span-2 text-center">Số lượng</div>
                                 <div class="col-span-2 text-center">Đơn giá</div>
                                 <div class="col-span-2 text-right">Thành tiền</div>
+                                <div class="col-span-1 text-center">Xóa</div>
                             </div>
                             
-                            <!-- Cart items will be loaded here -->
                             <div id="cartItemsContainer">
                                 <!-- Items will be dynamically inserted here -->
                             </div>
@@ -429,21 +429,168 @@
                 <div class="bg-gray-50 p-4 rounded-lg mb-6">
                     <div class="flex justify-between mb-1">
                         <span class="text-gray-600">Mã đơn hàng:</span>
-                        <span class="font-medium">QH20231115-001</span>
+                        <span id="orderIdDisplay" class="font-medium">QH20231115-001</span>
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-600">Tổng thanh toán:</span>
-                        <span class="font-bold text-green-600">950.000đ</span>
+                        <span id="totalPaymentDisplay" class="font-bold text-green-600">950.000đ</span>
                     </div>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3">
                     <a th:href="@{/costumes}" class="flex-1 bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 text-center">
                         <i class="fas fa-home mr-2"></i>Về trang chủ
                     </a>
-                    <button onclick="window.location.href='order-detail.html'" class="flex-1 border border-indigo-600 text-indigo-600 py-2 rounded-lg hover:bg-indigo-50">
+                    <button id="viewOrderDetailsBtn" class="flex-1 border border-indigo-600 text-indigo-600 py-2 rounded-lg hover:bg-indigo-50">
                         <i class="fas fa-receipt mr-2"></i>Xem chi tiết
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div id="orderDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl p-6 max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold flex items-center">
+                    <i class="fas fa-receipt text-indigo-500 mr-3"></i>
+                    <span>Chi tiết đơn hàng <span id="orderIdHeader"></span></span>
+                </h2>
+                <button class="text-gray-500 hover:text-gray-700" onclick="document.getElementById('orderDetailsModal').classList.add('hidden')">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="bg-indigo-50 rounded-lg p-4 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <span class="text-gray-600 text-sm">Trạng thái:</span>
+                        <div class="font-semibold text-green-600">Đã xác nhận</div>
+                    </div>
+                    <div>
+                        <span class="text-gray-600 text-sm">Ngày đặt:</span>
+                        <div id="orderDateDisplay" class="font-semibold"></div>
+                    </div>
+                    <div>
+                        <span class="text-gray-600 text-sm">Phương thức thanh toán:</span>
+                        <div id="paymentMethodDisplay" class="font-semibold"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Customer Info -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-lg mb-3 flex items-center">
+                    <i class="fas fa-user-circle text-gray-500 mr-2"></i>
+                    Thông tin khách hàng
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg">
+                    <div>
+                        <span class="text-gray-600 text-sm">Họ và tên:</span>
+                        <div id="customerNameDisplay" class="font-semibold"></div>
+                    </div>
+                    <div>
+                        <span class="text-gray-600 text-sm">ID Khách hàng:</span>
+                        <div id="customerIdDisplay" class="font-semibold"></div>
+                    </div>
+                    <div class="md:col-span-2">
+                        <span class="text-gray-600 text-sm">Địa chỉ giao hàng:</span>
+                        <div id="deliveryAddressDisplay" class="font-semibold"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Rental Period -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-lg mb-3 flex items-center">
+                    <i class="far fa-calendar-alt text-gray-500 mr-2"></i>
+                    Thời gian thuê
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-50 p-4 rounded-lg">
+                    <div>
+                        <span class="text-gray-600 text-sm">Ngày thuê:</span>
+                        <div id="rentDateDisplay" class="font-semibold"></div>
+                    </div>
+                    <div>
+                        <span class="text-gray-600 text-sm">Ngày trả:</span>
+                        <div id="returnDateDisplay" class="font-semibold"></div>
+                    </div>
+                    <div>
+                        <span class="text-gray-600 text-sm">Số ngày thuê:</span>
+                        <div id="rentalDurationDisplay" class="font-semibold"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Rental Items -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-lg mb-3 flex items-center">
+                    <i class="fas fa-tshirt text-gray-500 mr-2"></i>
+                    Trang phục thuê
+                </h3>
+                
+                <div class="border border-gray-200 rounded-lg overflow-hidden">
+                    <div class="grid grid-cols-12 bg-gray-50 p-3 font-medium text-gray-700">
+                        <div class="col-span-5">Tên trang phục</div>
+                        <div class="col-span-2 text-center">Số lượng</div>
+                        <div class="col-span-2 text-center">Đơn giá</div>
+                        <div class="col-span-3 text-right">Thành tiền</div>
+                    </div>
+                    
+                    <div id="orderItemsContainer">
+                        <!-- Items will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Payment Summary -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-lg mb-3 flex items-center">
+                    <i class="fas fa-money-bill-wave text-gray-500 mr-2"></i>
+                    Tổng kết thanh toán
+                </h3>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Tổng tiền thuê:</span>
+                            <span id="subtotalDisplay" class="font-medium"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Phí vận chuyển:</span>
+                            <span id="shippingFeeDisplay" class="font-medium"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Giảm giá:</span>
+                            <span id="discountDisplay" class="font-medium text-green-600"></span>
+                        </div>
+                        <div class="border-t border-gray-200 pt-2 mt-2 flex justify-between font-bold text-lg">
+                            <span>Tổng cộng:</span>
+                            <span id="finalTotalDisplay" class="text-indigo-600"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Information -->
+            <div class="mb-6">
+                <h3 class="font-semibold text-lg mb-3 flex items-center">
+                    <i class="fas fa-info-circle text-gray-500 mr-2"></i>
+                    Thông tin bổ sung
+                </h3>
+                
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="mb-3">
+                        <span class="text-gray-600 text-sm">Ghi chú đơn hàng:</span>
+                        <div id="orderNoteDisplay" class="font-semibold mt-1"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-center">
+                <button onclick="document.getElementById('orderDetailsModal').classList.add('hidden')" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
+                    <i class="fas fa-times mr-2"></i>Đóng
+                </button>
             </div>
         </div>
     </div>
@@ -546,7 +693,7 @@
             }
 
             // Add each item to the container
-            cartItems.forEach(item => {
+            cartItems.forEach((item, index) => {
                 // Parse price from string (remove đ and any commas)
                 const priceString = item.price.replace('đ', '').replace(/\./g, '');
                 const price = parseInt(priceString);
@@ -555,7 +702,7 @@
 
                 const itemHtml = `
                     <div class="grid grid-cols-12 p-3 border-b border-gray-200 receipt-item">
-                        <div class="col-span-6 flex items-center">
+                        <div class="col-span-5 flex items-center">
                             <div class="w-16 h-16 bg-gray-200 rounded-md mr-3 flex items-center justify-center">
                                 <i class="fas fa-tshirt text-gray-400"></i>
                             </div>
@@ -569,6 +716,11 @@
                         <div class="col-span-2 flex items-center justify-end font-medium">
                             ${formatCurrency(itemTotal)}đ
                         </div>
+                        <div class="col-span-1 flex items-center justify-center">
+                            <button class="text-red-500 hover:text-red-700" onclick="removeCartItem(${index})">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
                     </div>
                 `;
 
@@ -577,6 +729,40 @@
 
             // Update order summary
             updateOrderSummary(totalAmount);
+        }
+
+        // Remove cart item
+        function removeCartItem(index) {
+            // Get current cart items
+            const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            
+            // Check if index is valid
+            if (index >= 0 && index < cartItems.length) {
+                // Remove the item at the specified index
+                cartItems.splice(index, 1);
+                
+                // Save updated cart back to localStorage
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                
+                // Reload cart items on the page
+                loadCartItems();
+                
+                // Show confirmation toast
+                const toast = document.createElement('div');
+                toast.className = 'fixed bottom-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md z-50';
+                toast.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-trash-alt mr-2"></i>
+                        <span>Trang phục đã được xóa khỏi giỏ hàng</span>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+                
+                // Remove toast after 3 seconds
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+            }
         }
 
         // Update order summary
@@ -718,19 +904,34 @@
             })
             .then(response => {
                 if (response.ok) {
-                    // Hiển thị modal thành công
-                    document.getElementById('successModal').classList.remove('hidden');
-                    
-                    // Xóa giỏ hàng
-                    localStorage.removeItem('cartItems');
-                    
-                    // Reset button
-                    this.innerHTML = '<i class="fas fa-check-circle mr-2"></i><span>Xác nhận thanh toán</span>';
-                    this.classList.remove('opacity-75');
-                    this.disabled = false;
+                    return response.json(); // Parse JSON response
                 } else {
                     throw new Error('Có lỗi xảy ra khi xử lý thanh toán');
                 }
+            })
+            .then(orderData => {
+                // Store order data in local storage for details view
+                localStorage.setItem('currentOrder', JSON.stringify(orderData));
+                
+                // Save cart items to a separate key before clearing
+                const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+                localStorage.setItem('lastOrderItems', JSON.stringify(cartItems));
+                
+                // Update order ID in success modal
+                if (orderData && orderData.id) {
+                    document.getElementById('orderIdDisplay').textContent = `QH${new Date().getFullYear()}${String(orderData.id).padStart(6, '0')}`;
+                }
+                
+                // Hiển thị modal thành công
+                document.getElementById('successModal').classList.remove('hidden');
+                
+                // RESET giỏ hàng ngay sau khi thanh toán thành công
+                localStorage.removeItem('cartItems');
+                
+                // Reset button
+                this.innerHTML = '<i class="fas fa-check-circle mr-2"></i><span>Xác nhận thanh toán</span>';
+                this.classList.remove('opacity-75');
+                this.disabled = false;
             })
             .catch(error => {
                 alert(error.message);
@@ -747,6 +948,138 @@
             if (e.target === this) {
                 this.classList.add('hidden');
             }
+        });
+
+        // View Order Details Button Click
+        document.getElementById('viewOrderDetailsBtn').addEventListener('click', function() {
+            // Get order data from localStorage
+            const orderData = JSON.parse(localStorage.getItem('currentOrder')) || {};
+            // Use the saved order items instead of current cart
+            const cartItems = JSON.parse(localStorage.getItem('lastOrderItems')) || [];
+            
+            // Format order ID
+            const orderId = orderData.id ? `QH${new Date().getFullYear()}${String(orderData.id).padStart(6, '0')}` : 'N/A';
+            
+            // Update order details in modal
+            document.getElementById('orderIdHeader').textContent = orderId;
+            
+            // Format date as DD/MM/YYYY
+            const formatDate = (dateString) => {
+                if (!dateString) return 'N/A';
+                const date = new Date(dateString);
+                return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+            };
+            
+            // Payment Method display names
+            const paymentMethodNames = {
+                'cash': 'Thanh toán tiền mặt',
+                'bank': 'Chuyển khoản ngân hàng',
+                'momo': 'Ví Momo',
+                'zalopay': 'Ví ZaloPay',
+                'vnpay': 'Ví VNPay'
+            };
+            
+            // Update order info
+            document.getElementById('orderDateDisplay').textContent = formatDate(new Date().toISOString().split('T')[0]);
+            document.getElementById('paymentMethodDisplay').textContent = paymentMethodNames[orderData.payment?.paymentMethod] || 'N/A';
+            
+            // Update customer info
+            const customer = orderData.customer || {};
+            const fullName = customer.fullName || {};
+            document.getElementById('customerNameDisplay').textContent = `${fullName.firstName || ''} ${fullName.lastName || ''}`.trim() || 'N/A';
+            document.getElementById('customerIdDisplay').textContent = customer.id || 'N/A';
+            
+            // Update address
+            const address = customer.address || {};
+            document.getElementById('deliveryAddressDisplay').textContent = orderData.address || `${address.street || ''} ${address.city || ''}`.trim() || 'N/A';
+            
+            // Update rental period
+            document.getElementById('rentDateDisplay').textContent = formatDate(orderData.rentDate) || 'N/A';
+            document.getElementById('returnDateDisplay').textContent = formatDate(orderData.returnDate) || 'N/A';
+            
+            // Calculate rental duration
+            let rentalDuration = 'N/A';
+            if (orderData.rentDate && orderData.returnDate) {
+                const start = new Date(orderData.rentDate);
+                const end = new Date(orderData.returnDate);
+                const diffTime = Math.abs(end - start);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                rentalDuration = `${diffDays} ngày`;
+            }
+            document.getElementById('rentalDurationDisplay').textContent = rentalDuration;
+            
+            // Update order items
+            const orderItemsContainer = document.getElementById('orderItemsContainer');
+            orderItemsContainer.innerHTML = '';
+            
+            let totalAmount = 0;
+            
+            if (cartItems.length === 0) {
+                orderItemsContainer.innerHTML = `
+                    <div class="grid grid-cols-12 p-3 border-b border-gray-200">
+                        <div class="col-span-12 py-4 text-center text-gray-500">
+                            Không có trang phục nào trong đơn hàng
+                        </div>
+                    </div>
+                `;
+            } else {
+                cartItems.forEach(item => {
+                    // Parse price from string (remove đ and any commas)
+                    const priceString = item.price.replace('đ', '').replace(/\./g, '');
+                    const price = parseInt(priceString);
+                    const itemTotal = price * item.quantity * 1000;
+                    totalAmount += itemTotal;
+                    
+                    const itemHtml = `
+                        <div class="grid grid-cols-12 p-3 border-b border-gray-200">
+                            <div class="col-span-5 flex items-center">
+                                <div class="w-16 h-16 bg-gray-200 rounded-md mr-3 flex items-center justify-center">
+                                    <i class="fas fa-tshirt text-gray-400"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium">${item.name}</div>
+                                    <div class="text-sm text-gray-500">${item.description}</div>
+                                </div>
+                            </div>
+                            <div class="col-span-2 flex items-center justify-center">${item.quantity}</div>
+                            <div class="col-span-2 flex items-center justify-center">${item.price}</div>
+                            <div class="col-span-3 flex items-center justify-end font-medium">
+                                ${formatCurrency(itemTotal)}đ
+                            </div>
+                        </div>
+                    `;
+                    
+                    orderItemsContainer.innerHTML += itemHtml;
+                });
+            }
+            
+            // Update payment summary
+            const shippingFee = 50000;
+            const discount = totalAmount >= 500000 ? 100000 : 0;
+            const finalTotal = totalAmount + shippingFee - discount;
+            
+            document.getElementById('subtotalDisplay').textContent = `${formatCurrency(totalAmount)}đ`;
+            document.getElementById('shippingFeeDisplay').textContent = `${formatCurrency(shippingFee)}đ`;
+            document.getElementById('discountDisplay').textContent = `-${formatCurrency(discount)}đ`;
+            document.getElementById('finalTotalDisplay').textContent = `${formatCurrency(finalTotal)}đ`;
+            
+            // Update order note
+            document.getElementById('orderNoteDisplay').textContent = orderData.note || 'Không có ghi chú';
+            
+            // Show the order details modal
+            document.getElementById('orderDetailsModal').classList.remove('hidden');
+        });
+        
+        // Close order details modal when clicking outside
+        document.getElementById('orderDetailsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+
+        // Close button in order details modal
+        document.querySelector('#orderDetailsModal button[onclick]').addEventListener('click', function() {
+            // Just close the modal, cart already cleared
         });
     </script>
 </body>
