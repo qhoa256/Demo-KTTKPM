@@ -1,54 +1,92 @@
 -- Thêm dữ liệu mẫu cho bảng tblCostume
-INSERT INTO tblCostume (category, name, description, price) VALUES ('Trang phục truyền thống', 'Áo dài truyền thống', 'Áo dài truyền thống màu đỏ size M', 150000);
-INSERT INTO tblCostume (category, name, description, price) VALUES ('Trang phục hiện đại', 'Vest công sở', 'Vest công sở màu đen size L', 200000);
-INSERT INTO tblCostume (category, name, description, price) VALUES ('Trang phục lịch sử', 'Trang phục hoàng gia', 'Trang phục hoàng gia màu vàng size XL', 300000);
-INSERT INTO tblCostume (category, name, description, price) VALUES ('Trang phục thể thao', 'Đồng phục thể thao', 'Đồng phục thể thao màu xanh size S', 100000);
-INSERT INTO tblCostume (category, name, description, price) VALUES ('Trang phục dạ hội', 'Đầm dạ hội', 'Đầm dạ hội màu bạc size M', 500000);
+INSERT INTO tblCostume (category, name, description, price) VALUES
+('Trang phục truyền thống', 'Áo bà ba', 'Áo bà ba màu nâu size M', 120000),
+('Trang phục truyền thống', 'Khăn rằn Nam Bộ', 'Khăn rằn sọc đen trắng truyền thống', 50000),
+('Trang phục hiện đại', 'Áo hoodie', 'Áo hoodie màu xám size L', 180000),
+('Trang phục hiện đại', 'Đầm công sở', 'Đầm công sở màu be size M', 220000),
+('Trang phục dạ hội', 'Vest dạ hội nam', 'Vest dạ hội màu xanh navy size XL', 450000),
+('Trang phục dạ hội', 'Đầm đuôi cá', 'Đầm đuôi cá ánh kim size S', 550000),
+('Trang phục thể thao', 'Áo bóng đá', 'Áo bóng đá đội tuyển quốc gia size M', 130000),
+('Trang phục thể thao', 'Quần thể thao', 'Quần thể thao màu đen size L', 80000),
+('Trang phục lịch sử', 'Giáp chiến binh', 'Trang phục giáp chiến binh cổ đại size XL', 350000),
+('Trang phục lịch sử', 'Áo tấc', 'Áo tấc truyền thống triều Nguyễn size M', 250000),
+('Trang phục hóa trang', 'Bộ siêu nhân', 'Bộ trang phục siêu nhân màu đỏ size M', 160000),
+('Trang phục hóa trang', 'Bộ công chúa', 'Bộ hóa trang công chúa Elsa size S', 170000),
+('Trang phục cosplay', 'Naruto', 'Trang phục cosplay Naruto size M', 280000),
+('Trang phục cosplay', 'Kimetsu no Yaiba', 'Trang phục cosplay Tanjiro size L', 300000),
+('Trang phục dân tộc', 'Trang phục H’Mông', 'Bộ trang phục dân tộc H’Mông size M', 240000),
+('Trang phục dân tộc', 'Trang phục Thái', 'Bộ trang phục dân tộc Thái size S', 230000),
+('Trang phục biểu diễn', 'Áo múa lân', 'Áo biểu diễn múa lân màu đỏ size L', 200000),
+('Trang phục biểu diễn', 'Đầm múa dân gian', 'Đầm múa dân gian màu vàng size M', 210000),
+('Trang phục Halloween', 'Ma cà rồng', 'Trang phục ma cà rồng kèm áo choàng size L', 190000),
+('Trang phục Halloween', 'Bộ phù thủy', 'Bộ trang phục phù thủy kèm mũ size M', 180000);
 
 -- Thêm dữ liệu mẫu cho bảng tblCostumeBill
-INSERT INTO tblCostumeBill (costume_id, rent_price, bill_id, quantity, name, description) 
-VALUES (1, 150000, '1', 2, 'Áo dài truyền thống', 'Áo dài màu đỏ truyền thống');
-
-INSERT INTO tblCostumeBill (costume_id, rent_price, bill_id, quantity, name, description) 
-VALUES (2, 200000, '2', 1, 'Vest công sở', 'Vest đen công sở nam');
-
-INSERT INTO tblCostumeBill (costume_id, rent_price, bill_id, quantity, name, description) 
-VALUES (3, 300000, '3', 1, 'Trang phục hoàng gia', 'Trang phục hoàng gia cổ điển');
-
-INSERT INTO tblCostumeBill (costume_id, rent_price, bill_id, quantity, name, description) 
-VALUES (4, 100000, '3', 3, 'Đồng phục thể thao', 'Bộ đồng phục thể thao đội tuyển');
-
-INSERT INTO tblCostumeBill (costume_id, rent_price, bill_id, quantity, name, description) 
-VALUES (5, 500000, '4', 1, 'Đầm dạ hội', 'Đầm dự tiệc màu bạc sang trọng');
+INSERT INTO tblCostumeBill (costume_id, rent_price, bill_id, quantity, name, description) VALUES
+(6, 180000, 5, 1, 'Áo hoodie', 'Áo hoodie xám ấm áp cho mùa đông'),
+(7, 220000, 3, 2, 'Đầm công sở', 'Đầm công sở màu be lịch sự'),
+(8, 450000, 6, 1, 'Vest dạ hội nam', 'Vest dạ hội xanh navy dành cho nam'),
+(9, 550000, 7, 1, 'Đầm đuôi cá', 'Đầm đuôi cá ánh kim lấp lánh'),
+(10, 130000, 8, 3, 'Áo bóng đá', 'Áo bóng đá đội tuyển quốc gia'),
+(11, 80000, 9, 2, 'Quần thể thao', 'Quần thể thao đen co giãn'),
+(12, 350000, 10, 1, 'Giáp chiến binh', 'Trang phục chiến binh cổ đại'),
+(13, 250000, 11, 2, 'Áo tấc', 'Áo tấc triều Nguyễn màu xanh'),
+(14, 160000, 12, 2, 'Bộ siêu nhân', 'Bộ siêu nhân đỏ năng động'),
+(15, 170000, 13, 1, 'Bộ công chúa', 'Trang phục công chúa Elsa đáng yêu'),
+(1, 150000, 14, 1, 'Áo dài truyền thống', 'Áo dài đỏ truyền thống size M'),
+(2, 200000, 15, 2, 'Vest công sở', 'Vest công sở đen lịch lãm'),
+(3, 300000, 1, 1, 'Trang phục hoàng gia', 'Trang phục vua chúa cổ xưa'),
+(4, 100000, 2, 2, 'Đồng phục thể thao', 'Đồng phục thể thao xanh trẻ trung'),
+(5, 500000, 3, 1, 'Đầm dạ hội', 'Đầm bạc sang trọng dự tiệc'),
+(6, 180000, 4, 1, 'Áo hoodie', 'Hoodie thời trang mùa thu'),
+(7, 220000, 5, 1, 'Đầm công sở', 'Đầm công sở màu kem thanh lịch'),
+(8, 450000, 6, 1, 'Vest dạ hội nam', 'Vest nam sang trọng'),
+(9, 550000, 7, 1, 'Đầm đuôi cá', 'Đầm đuôi cá ánh kim dự tiệc'),
+(10, 130000, 8, 2, 'Áo bóng đá', 'Áo thể thao đội tuyển Việt Nam');
 
 -- Thêm dữ liệu mẫu cho bảng tblCostumeSupplier
-INSERT INTO tblCostumeSupplier (costume_id, supplier_id) 
-VALUES (1, 1);
+INSERT INTO tblCostumeSupplier (costume_id, supplier_id) VALUES
+(1, 1),
+(2, 2),
+(3, 1),
+(4, 3),
+(5, 2),
+(6, 1),
+(7, 2),
+(8, 3),
+(9, 1),
+(10, 2),
+(11, 3),
+(12, 1),
+(13, 2),
+(14, 3),
+(15, 1),
+(16, 2),
+(17, 3),
+(18, 1),
+(19, 2),
+(20, 3);
 
-INSERT INTO tblCostumeSupplier (costume_id, supplier_id) 
-VALUES (2, 2);
-
-INSERT INTO tblCostumeSupplier (costume_id, supplier_id) 
-VALUES (3, 1);
-
-INSERT INTO tblCostumeSupplier (costume_id, supplier_id) 
-VALUES (4, 3);
-
-INSERT INTO tblCostumeSupplier (costume_id, supplier_id) 
-VALUES (5, 2);
 
 -- Thêm dữ liệu mẫu cho bảng tblCostumeImportingBill
-INSERT INTO tblCostumeImportingBill (costume_supplier_id, importing_bill_id, import_price, quantity, name, description) 
-VALUES (1, 1, 100000, 10, 'Áo dài truyền thống', 'Nhập lô áo dài mới cho mùa Tết');
-
-INSERT INTO tblCostumeImportingBill (costume_supplier_id, importing_bill_id, import_price, quantity, name, description) 
-VALUES (2, 1, 150000, 5, 'Vest công sở', 'Nhập bổ sung vest đen cho thuê');
-
-INSERT INTO tblCostumeImportingBill (costume_supplier_id, importing_bill_id, import_price, quantity, name, description) 
-VALUES (3, 2, 250000, 3, 'Trang phục hoàng gia', 'Nhập từ nhà thiết kế cao cấp');
-
-INSERT INTO tblCostumeImportingBill (costume_supplier_id, importing_bill_id, import_price, quantity, name, description) 
-VALUES (4, 2, 80000, 15, 'Đồng phục thể thao', 'Nhập từ xưởng may cho mùa giải mới');
-
-INSERT INTO tblCostumeImportingBill (costume_supplier_id, importing_bill_id, import_price, quantity, name, description) 
-VALUES (5, 2, 400000, 2, 'Đầm dạ hội', 'Nhập theo đơn đặt hàng dự tiệc'); 
+INSERT INTO tblCostumeImportingBill (costume_supplier_id, importing_bill_id, import_price, quantity, name, description) VALUES
+(1, 1, 100000, 10, 'Áo dài truyền thống', 'Nhập lô áo dài mới cho mùa Tết'),
+(2, 2, 150000, 5, 'Vest công sở', 'Nhập bổ sung vest đen cho thuê'),
+(3, 3, 250000, 3, 'Trang phục hoàng gia', 'Nhập từ nhà thiết kế cao cấp'),
+(4, 4, 80000, 15, 'Đồng phục thể thao', 'Nhập từ xưởng may cho mùa giải mới'),
+(5, 5, 400000, 2, 'Đầm dạ hội', 'Nhập theo đơn đặt hàng dự tiệc'),
+(6, 6, 140000, 6, 'Áo hoodie', 'Nhập lô hoodie cho mùa lạnh'),
+(7, 7, 180000, 4, 'Đầm công sở', 'Nhập từ nhà thiết kế nội địa'),
+(8, 8, 350000, 2, 'Vest dạ hội nam', 'Nhập số lượng giới hạn mẫu mới'),
+(9, 9, 450000, 3, 'Đầm đuôi cá', 'Đặt hàng theo xu hướng mới'),
+(10, 10, 110000, 10, 'Áo bóng đá', 'Nhập cho mùa World Cup'),
+(11, 11, 60000, 12, 'Quần thể thao', 'Nhập từ xưởng thể thao'),
+(12, 12, 300000, 3, 'Giáp chiến binh', 'Nhập từ đơn vị sản xuất phục trang phim'),
+(13, 13, 200000, 5, 'Áo tấc', 'Trang phục lễ hội truyền thống'),
+(14, 14, 120000, 7, 'Bộ siêu nhân', 'Trang phục hóa trang cho thiếu nhi'),
+(15, 15, 130000, 6, 'Bộ công chúa', 'Trang phục hóa trang công chúa Elsa'),
+(16, 1, 200000, 4, 'Trang phục H’Mông', 'Trang phục dân tộc miền núi'),
+(17, 2, 190000, 4, 'Trang phục Thái', 'Trang phục dân tộc vùng Tây Bắc'),
+(18, 3, 170000, 3, 'Áo múa lân', 'Trang phục biểu diễn múa lân'),
+(19, 4, 210000, 3, 'Đầm múa dân gian', 'Trang phục biểu diễn dân gian truyền thống'),
+(20, 5, 160000, 6, 'Ma cà rồng', 'Trang phục Halloween độc đáo');

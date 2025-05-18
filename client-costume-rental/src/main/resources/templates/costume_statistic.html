@@ -150,7 +150,7 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-gray-500">Tổng doanh thu</p>
-                                <h3 class="text-2xl font-bold mt-2">152.5M đ</h3>
+                                <h3 class="text-2xl font-bold mt-2">1,520,500 VND</h3>
                             </div>
                             <div class="bg-indigo-100 p-3 rounded-full">
                                 <i class="fas fa-money-bill-wave text-indigo-600 text-xl"></i>
@@ -180,7 +180,7 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-gray-500">Doanh thu trung bình/đơn</p>
-                                <h3 class="text-2xl font-bold mt-2">531.4K đ</h3>
+                                <h3 class="text-2xl font-bold mt-2">531,400 VND</h3>
                             </div>
                             <div class="bg-purple-100 p-3 rounded-full">
                                 <i class="fas fa-calculator text-purple-600 text-xl"></i>
@@ -337,7 +337,7 @@
             // Update total revenue display in the summary card
             const totalRevenueElement = document.querySelector('.bg-white:nth-child(1) h3');
             if (totalRevenueElement) {
-                totalRevenueElement.textContent = totalRevenue + 'M đ';
+                totalRevenueElement.textContent = (totalRevenue * 1).toLocaleString() + ' VND';
             }
             
             // 1. Pie Chart for Revenue Distribution
@@ -347,7 +347,7 @@
                 data: {
                     labels: categoryNames,
                     datasets: [{
-                        data: categoryRevenues,
+                        data: categoryRevenues.map(rev => rev * 1),
                         backgroundColor: chartColors,
                         borderWidth: 1
                     }]
@@ -364,7 +364,7 @@
                                 label: function(context) {
                                     const categoryData = revenueData.categories[context.dataIndex];
                                     const percentage = ((context.raw / totalRevenue) * 100).toFixed(1);
-                                    return `${context.label}: ${context.raw}M đ (${percentage}%) - ${categoryData.count} lượt thuê`;
+                                    return `${context.label}: ${(context.raw * 1).toLocaleString()} VND (${percentage}%) - ${categoryData.count} lượt thuê`;
                                 }
                             }
                         }
@@ -379,8 +379,8 @@
                 data: {
                     labels: categoryNames,
                     datasets: [{
-                        label: 'Doanh thu (triệu đồng)',
-                        data: categoryRevenues,
+                        label: 'Doanh thu (VND)',
+                        data: categoryRevenues.map(rev => rev * 1),
                         backgroundColor: chartColors,
                         borderWidth: 1
                     }]
@@ -398,7 +398,7 @@
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Doanh thu (triệu đồng)'
+                                text: 'Doanh thu (VND)'
                             }
                         }
                     }
@@ -477,8 +477,8 @@
                     labels: categoryNames,
                     datasets: [
                         {
-                            label: 'Doanh thu (triệu đồng)',
-                            data: categoryRevenues,
+                            label: 'Doanh thu (VND)',
+                            data: categoryRevenues.map(rev => rev * 1),
                             backgroundColor: 'rgba(79, 70, 229, 0.2)',
                             borderColor: 'rgba(79, 70, 229, 0.8)',
                             pointBackgroundColor: 'rgba(79, 70, 229, 1)',
@@ -516,8 +516,8 @@
                 data: {
                     labels: categoryNames,
                     datasets: [{
-                        label: 'Doanh thu TB/lượt thuê (triệu đồng)',
-                        data: avgRevenuePerRental,
+                        label: 'Doanh thu TB/lượt thuê (VND)',
+                        data: avgRevenuePerRental.map(rev => rev * 1),
                         backgroundColor: chartColors,
                         borderWidth: 1
                     }]
@@ -535,7 +535,7 @@
                             beginAtZero: true,
                             title: {
                                 display: true,
-                                text: 'Doanh thu trung bình/lượt thuê (triệu đồng)'
+                                text: 'Doanh thu trung bình/lượt thuê (VND)'
                             }
                         }
                     }
@@ -558,7 +558,7 @@
                         <h4 class="font-medium text-gray-800">${categoryData.category}</h4>
                     </div>
                     <div class="flex items-center">
-                        <span class="mr-6 text-gray-600">${categoryData.revenue}M đ (${percentages[index]}%)</span>
+                        <span class="mr-6 text-gray-600">${(categoryData.revenue * 1).toLocaleString()} VND (${percentages[index]}%)</span>
                         <i class="fas fa-chevron-down text-gray-500 category-toggle"></i>
                     </div>
                 `;
