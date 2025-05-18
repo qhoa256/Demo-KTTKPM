@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống kê doanh thu - Quang Hòa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .admin-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar {
+            transition: all 0.3s ease;
+            width: 250px;
+        }
+        
+        .content-area {
+            transition: all 0.3s ease;
+            margin-left: 250px;
+        }
+        
+        .sidebar-item {
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Admin Header -->
+    <header class="admin-gradient shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <i class="fas fa-tshirt text-white text-2xl mr-3"></i>
+                <h1 class="text-white text-xl font-bold">Quản trị cửa hàng Quang Hòa</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="text-white flex items-center">
+                    <i class="fas fa-user-circle text-xl mr-2"></i>
+                    <span>Xin chào, <span th:text="${session.fullName}">Admin</span>!</span>
+                </div>
+                <a th:href="@{/logout}" class="bg-white text-indigo-600 px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Layout -->
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="sidebar bg-gray-800 text-white h-screen fixed top-0 left-0 pt-20 overflow-y-auto">
+            <nav class="p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a th:href="@{/admin}" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-tachometer-alt mr-3 text-lg"></i>
+                            <span class="font-medium">Bảng điều khiển</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-users mr-3 text-lg"></i>
+                            <span class="font-medium">Quản lý khách hàng</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-tshirt mr-3 text-lg"></i>
+                            <span class="font-medium">Quản lý trang phục</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-truck mr-3 text-lg"></i>
+                            <span class="font-medium">Nhà cung cấp</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-file-invoice-dollar mr-3 text-lg"></i>
+                            <span class="font-medium">Hóa đơn</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/costume-statistic}" class="sidebar-item active flex items-center p-3 rounded-lg">
+                            <i class="fas fa-chart-line mr-3 text-lg"></i>
+                            <span class="font-medium">Báo cáo thống kê</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
+                            <i class="fas fa-cog mr-3 text-lg"></i>
+                            <span class="font-medium">Cài đặt</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content-area flex-1 p-8 pt-24">
+            <div class="container mx-auto">
+                <!-- Page Header -->
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800">Báo cáo thống kê doanh thu</h2>
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <select id="period-selector" class="pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                <option value="all">Tất cả thời gian</option>
+                                <option value="year">Năm hiện tại</option>
+                                <option value="quarter">Quý hiện tại</option>
+                                <option value="month">Tháng hiện tại</option>
+                            </select>
+                        </div>
+                        <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center">
+                            <i class="fas fa-download mr-2"></i> Xuất báo cáo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Revenue Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500">Tổng doanh thu</p>
+                                <h3 class="text-2xl font-bold mt-2">152.5M đ</h3>
+                            </div>
+                            <div class="bg-indigo-100 p-3 rounded-full">
+                                <i class="fas fa-money-bill-wave text-indigo-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <p class="text-green-500 text-sm mt-4">
+                            <i class="fas fa-arrow-up mr-1"></i> 15% so với kỳ trước
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500">Số lượng đơn hàng</p>
+                                <h3 class="text-2xl font-bold mt-2">287</h3>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <i class="fas fa-receipt text-green-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <p class="text-green-500 text-sm mt-4">
+                            <i class="fas fa-arrow-up mr-1"></i> 8% so với kỳ trước
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-gray-500">Doanh thu trung bình/đơn</p>
+                                <h3 class="text-2xl font-bold mt-2">531.4K đ</h3>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-full">
+                                <i class="fas fa-calculator text-purple-600 text-xl"></i>
+                            </div>
+                        </div>
+                        <p class="text-green-500 text-sm mt-4">
+                            <i class="fas fa-arrow-up mr-1"></i> 5% so với kỳ trước
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Revenue by Category -->
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Doanh thu theo loại trang phục</h3>
+                    <div class="h-80">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 py-6 border-t border-gray-200">
+        <div class="container mx-auto px-4 text-center text-gray-600">
+            <p>© 2023 Hệ thống quản trị cửa hàng Quang Hòa. Phiên bản 1.0.0</p>
+        </div>
+    </footer>
+
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get data from Thymeleaf model
+            const revenueData = /*[[${revenueByCategory}]]*/ {
+                categories: [
+                    { category: 'Váy dạ hội', revenue: 42.5, count: 10 },
+                    { category: 'Vest nam', revenue: 38.2, count: 8 },
+                    { category: 'Áo dài', revenue: 25.8, count: 15 },
+                    { category: 'Trang phục dân tộc', revenue: 15.6, count: 5 },
+                    { category: 'Khác', revenue: 30.4, count: 12 }
+                ],
+                totalRevenue: 152.5
+            };
+            
+            // Process data for chart
+            const categoryNames = revenueData.categories.map(item => item.category);
+            const categoryRevenues = revenueData.categories.map(item => item.revenue);
+            const totalRevenue = revenueData.totalRevenue || categoryRevenues.reduce((a, b) => a + b, 0);
+            
+            // Update total revenue display in the summary card
+            const totalRevenueElement = document.querySelector('.bg-white:nth-child(1) h3');
+            if (totalRevenueElement) {
+                totalRevenueElement.textContent = totalRevenue + 'M đ';
+            }
+            
+            // Render the category revenue chart
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'pie',
+                data: {
+                    labels: categoryNames,
+                    datasets: [{
+                        data: categoryRevenues,
+                        backgroundColor: [
+                            'rgba(79, 70, 229, 0.8)',
+                            'rgba(16, 185, 129, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(107, 114, 128, 0.8)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const categoryData = revenueData.categories[context.dataIndex];
+                                    const percentage = ((context.raw / totalRevenue) * 100).toFixed(1);
+                                    return `${context.label}: ${context.raw}M đ (${percentage}%) - ${categoryData.count} lượt thuê`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Period selector functionality
+            document.getElementById('period-selector').addEventListener('change', function() {
+                // In a real application, this would trigger an API call to get data for the selected period
+                alert('Đang tải dữ liệu cho: ' + this.options[this.selectedIndex].text);
+            });
+        });
+    </script>
+</body>
+</html> 

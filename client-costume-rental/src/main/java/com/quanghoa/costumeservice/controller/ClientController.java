@@ -237,4 +237,24 @@ public class ClientController {
         
         return ResponseEntity.ok(response);
     }
+    
+    /**
+     * Endpoint for displaying costume statistics and revenue reports
+     */
+    @GetMapping("/costume-statistic")
+    public String getCostumeStatistic(Model model, HttpSession session) {
+        // Check if user is logged in and is admin
+        if (session.getAttribute("username") == null || 
+            !"admin".equalsIgnoreCase((String) session.getAttribute("username"))) {
+            return "redirect:/login";
+        }
+        
+        // Get revenue statistics by costume category
+        Map<String, Object> revenueByCategory = costumeService.getRevenueByCategory();
+        
+        // Add data to model
+        model.addAttribute("revenueByCategory", revenueByCategory);
+        
+        return "costume_statistic";
+    }
 } 

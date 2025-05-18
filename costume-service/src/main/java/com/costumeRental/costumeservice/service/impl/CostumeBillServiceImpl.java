@@ -7,7 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,5 +67,50 @@ public class CostumeBillServiceImpl implements CostumeBillService {
             throw new EntityNotFoundException("CostumeBill not found with id: " + id);
         }
         costumeBillDao.deleteById(id);
+    }
+    
+    @Override
+    public Map<String, Object> getRevenueByCategory() {
+        List<CostumeBill> allCostumeBills = costumeBillDao.findAll();
+        
+        // Group costume bills by category and calculate revenue
+        Map<String, BigDecimal> categoryRevenue = new HashMap<>();
+        Map<String, Integer> categoryCount = new HashMap<>();
+        
+        for (CostumeBill bill : allCostumeBills) {
+            if (bill.getCostume() != null && bill.getCostume().getCategory() != null) {
+                String category = bill.getCostume().getCategory();
+                BigDecimal revenue = bill.getRentPrice().multiply(BigDecimal.valueOf(bill.getQuantity()));
+                
+                // Update revenue for category
+                categoryRevenue.put(
+                    category, 
+                    categoryRevenue.getOrDefault(category, BigDecimal.ZERO).add(revenue)
+                );
+                
+                // Update count for category
+                categoryCount.put(
+                    category,
+                    categoryCount.getOrDefault(category, 0) + bill.getQuantity()
+                );
+            }
+        }
+        
+        // Prepare result in format expected by client
+        List<Map<String, Object>> categories = new ArrayList<>();
+        for (String category : categoryRevenue.keySet()) {
+            Map<String, Object> categoryData = new HashMap<>();
+            categoryData.put("category", category);
+            categoryData.put("revenue", categoryRevenue.get(category));
+            categoryData.put("count", categoryCount.get(category));
+            categories.add(categoryData);
+        }
+        
+        Map<String, Object> result = new HashMap<>();
+        result.put("categories", categories);
+        result.put("totalRevenue", categoryRevenue.values().stream()
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
+        
+        return result;
     }
 } 

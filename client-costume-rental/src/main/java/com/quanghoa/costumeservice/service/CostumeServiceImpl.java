@@ -87,4 +87,24 @@ public class CostumeServiceImpl implements CostumeService {
     public List<Map<String, Object>> getAllCostumes() {
         return getAllCostumes(null, null, null, null, null);
     }
+    
+    @Override
+    public Map<String, Object> getRevenueByCategory() {
+        String apiUrl = costumeServiceUrl + "/api/costume-bills/statistics/revenue-by-category";
+        
+        try {
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                apiUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+            
+            return response.getBody() != null ? response.getBody() : Map.of();
+        } catch (Exception e) {
+            System.err.println("Error when getting revenue by category: " + e.getMessage());
+            e.printStackTrace();
+            return Map.of(); // Return empty map on error
+        }
+    }
 } 

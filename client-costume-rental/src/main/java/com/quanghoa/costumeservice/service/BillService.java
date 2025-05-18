@@ -73,4 +73,28 @@ public class BillService {
             return List.of(); // Trả về danh sách rỗng trong trường hợp lỗi
         }
     }
+    
+    /**
+     * Get costume revenue statistics grouped by category
+     * 
+     * @return Revenue data grouped by costume category
+     */
+    public Map<String, Object> getRevenueByCategory() {
+        String apiUrl = billServiceUrl + "/api/costume-bills/statistics/revenue-by-category";
+        
+        try {
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                apiUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+            
+            return response.getBody() != null ? response.getBody() : Map.of();
+        } catch (Exception e) {
+            System.err.println("Error when getting revenue by category: " + e.getMessage());
+            e.printStackTrace();
+            return Map.of(); // Return empty map on error
+        }
+    }
 } 

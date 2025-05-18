@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/costume-bills")
@@ -50,5 +51,10 @@ public class CostumeBillController {
     public ResponseEntity<Void> deleteCostumeBill(@PathVariable Long id) {
         costumeBillService.deleteCostumeBill(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping("/statistics/revenue-by-category")
+    public ResponseEntity<Map<String, Object>> getRevenueByCategory() {
+        return ResponseEntity.ok(costumeBillService.getRevenueByCategory());
     }
 } 
