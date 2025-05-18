@@ -193,10 +193,59 @@
                 </div>
 
                 <!-- Revenue by Category -->
-                <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">Doanh thu theo loại trang phục</h3>
-                    <div class="h-80">
-                        <canvas id="categoryChart"></canvas>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Pie Chart for Revenue Distribution -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Phân bố doanh thu theo loại trang phục</h3>
+                        <div class="h-80">
+                            <canvas id="categoryPieChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Bar Chart for Revenue Comparison -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">So sánh doanh thu theo loại trang phục</h3>
+                        <div class="h-80">
+                            <canvas id="categoryBarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Charts -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Horizontal Bar Chart for Rental Count -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Số lượt thuê theo loại trang phục</h3>
+                        <div class="h-80">
+                            <canvas id="rentalCountChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Doughnut Chart for Revenue Percentage -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Tỷ lệ doanh thu (%)</h3>
+                        <div class="h-80">
+                            <canvas id="percentageChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Radar Chart and Revenue per Rental -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Radar Chart -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Phân tích đa chiều</h3>
+                        <div class="h-80">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Average Revenue per Rental -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Doanh thu trung bình mỗi lượt thuê</h3>
+                        <div class="h-80">
+                            <canvas id="avgRevenueChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -224,10 +273,27 @@
                 totalRevenue: 152.5
             };
             
-            // Process data for chart
+            // Process data for charts
             const categoryNames = revenueData.categories.map(item => item.category);
             const categoryRevenues = revenueData.categories.map(item => item.revenue);
+            const categoryCount = revenueData.categories.map(item => item.count);
             const totalRevenue = revenueData.totalRevenue || categoryRevenues.reduce((a, b) => a + b, 0);
+            const percentages = categoryRevenues.map(revenue => ((revenue / totalRevenue) * 100).toFixed(1));
+            const avgRevenuePerRental = revenueData.categories.map(item => 
+                item.count > 0 ? (item.revenue / item.count).toFixed(2) : 0
+            );
+            
+            // Chart colors
+            const chartColors = [
+                'rgba(79, 70, 229, 0.8)',    // Indigo
+                'rgba(16, 185, 129, 0.8)',   // Green
+                'rgba(245, 158, 11, 0.8)',   // Yellow
+                'rgba(239, 68, 68, 0.8)',    // Red
+                'rgba(107, 114, 128, 0.8)',  // Gray
+                'rgba(124, 58, 237, 0.8)',   // Purple
+                'rgba(14, 165, 233, 0.8)',   // Sky blue
+                'rgba(236, 72, 153, 0.8)'    // Pink
+            ];
             
             // Update total revenue display in the summary card
             const totalRevenueElement = document.querySelector('.bg-white:nth-child(1) h3');
@@ -235,21 +301,15 @@
                 totalRevenueElement.textContent = totalRevenue + 'M đ';
             }
             
-            // Render the category revenue chart
-            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-            new Chart(categoryCtx, {
+            // 1. Pie Chart for Revenue Distribution
+            const pieChartCtx = document.getElementById('categoryPieChart').getContext('2d');
+            new Chart(pieChartCtx, {
                 type: 'pie',
                 data: {
                     labels: categoryNames,
                     datasets: [{
                         data: categoryRevenues,
-                        backgroundColor: [
-                            'rgba(79, 70, 229, 0.8)',
-                            'rgba(16, 185, 129, 0.8)',
-                            'rgba(245, 158, 11, 0.8)',
-                            'rgba(239, 68, 68, 0.8)',
-                            'rgba(107, 114, 128, 0.8)'
-                        ],
+                        backgroundColor: chartColors,
                         borderWidth: 1
                     }]
                 },
@@ -267,6 +327,176 @@
                                     const percentage = ((context.raw / totalRevenue) * 100).toFixed(1);
                                     return `${context.label}: ${context.raw}M đ (${percentage}%) - ${categoryData.count} lượt thuê`;
                                 }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 2. Bar Chart for Revenue Comparison
+            const barChartCtx = document.getElementById('categoryBarChart').getContext('2d');
+            new Chart(barChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: categoryNames,
+                    datasets: [{
+                        label: 'Doanh thu (triệu đồng)',
+                        data: categoryRevenues,
+                        backgroundColor: chartColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Doanh thu (triệu đồng)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 3. Horizontal Bar Chart for Rental Count
+            const rentalCountCtx = document.getElementById('rentalCountChart').getContext('2d');
+            new Chart(rentalCountCtx, {
+                type: 'bar',
+                data: {
+                    labels: categoryNames,
+                    datasets: [{
+                        label: 'Số lượt thuê',
+                        data: categoryCount,
+                        backgroundColor: chartColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Số lượt thuê'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 4. Doughnut Chart for Revenue Percentage
+            const percentageCtx = document.getElementById('percentageChart').getContext('2d');
+            new Chart(percentageCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: categoryNames,
+                    datasets: [{
+                        data: percentages,
+                        backgroundColor: chartColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 5. Radar Chart for Multi-dimensional Analysis
+            const radarCtx = document.getElementById('radarChart').getContext('2d');
+            new Chart(radarCtx, {
+                type: 'radar',
+                data: {
+                    labels: categoryNames,
+                    datasets: [
+                        {
+                            label: 'Doanh thu (triệu đồng)',
+                            data: categoryRevenues,
+                            backgroundColor: 'rgba(79, 70, 229, 0.2)',
+                            borderColor: 'rgba(79, 70, 229, 0.8)',
+                            pointBackgroundColor: 'rgba(79, 70, 229, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(79, 70, 229, 1)'
+                        },
+                        {
+                            label: 'Số lượt thuê',
+                            data: categoryCount,
+                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                            borderColor: 'rgba(16, 185, 129, 0.8)',
+                            pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: 'rgba(16, 185, 129, 1)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: {
+                            borderWidth: 2
+                        }
+                    }
+                }
+            });
+            
+            // 6. Bar Chart for Average Revenue per Rental
+            const avgRevenueCtx = document.getElementById('avgRevenueChart').getContext('2d');
+            new Chart(avgRevenueCtx, {
+                type: 'bar',
+                data: {
+                    labels: categoryNames,
+                    datasets: [{
+                        label: 'Doanh thu TB/lượt thuê (triệu đồng)',
+                        data: avgRevenuePerRental,
+                        backgroundColor: chartColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Doanh thu trung bình/lượt thuê (triệu đồng)'
                             }
                         }
                     }
