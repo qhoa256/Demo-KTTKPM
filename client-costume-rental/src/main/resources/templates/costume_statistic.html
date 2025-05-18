@@ -248,6 +248,45 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- Categories and Bill IDs List -->
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Danh sách hóa đơn theo loại trang phục</h3>
+                    
+                    <div class="grid grid-cols-1 gap-4" id="categoriesList">
+                        <!-- Categories will be populated here by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Bill Details Modal -->
+                <div id="billModal" class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50 flex items-center justify-center">
+                    <div class="bg-white rounded-xl max-w-2xl w-full mx-4">
+                        <div class="p-6 border-b border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-bold text-gray-800">Chi tiết hóa đơn</h3>
+                                <button id="closeBillModal" class="text-gray-500 hover:text-gray-700">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6" id="billDetails">
+                            <!-- Bill details will be populated here by JavaScript -->
+                            <div class="animate-pulse">
+                                <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                                <div class="h-6 bg-gray-200 rounded w-1/2 mb-4"></div>
+                                <div class="h-6 bg-gray-200 rounded w-5/6 mb-4"></div>
+                                <div class="h-6 bg-gray-200 rounded w-2/3 mb-4"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-gray-50 border-t border-gray-200 flex justify-end rounded-b-xl">
+                            <button id="closeBillModalBtn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md font-medium hover:bg-gray-400 transition">
+                                Đóng
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -264,11 +303,11 @@
             // Get data from Thymeleaf model
             const revenueData = /*[[${revenueByCategory}]]*/ {
                 categories: [
-                    { category: 'Váy dạ hội', revenue: 42.5, count: 10 },
-                    { category: 'Vest nam', revenue: 38.2, count: 8 },
-                    { category: 'Áo dài', revenue: 25.8, count: 15 },
-                    { category: 'Trang phục dân tộc', revenue: 15.6, count: 5 },
-                    { category: 'Khác', revenue: 30.4, count: 12 }
+                    { category: 'Váy dạ hội', revenue: 42.5, count: 10, billIds: ['BILL001', 'BILL002', 'BILL003'] },
+                    { category: 'Vest nam', revenue: 38.2, count: 8, billIds: ['BILL004', 'BILL005'] },
+                    { category: 'Áo dài', revenue: 25.8, count: 15, billIds: ['BILL006', 'BILL007', 'BILL008'] },
+                    { category: 'Trang phục dân tộc', revenue: 15.6, count: 5, billIds: ['BILL009'] },
+                    { category: 'Khác', revenue: 30.4, count: 12, billIds: ['BILL010', 'BILL011'] }
                 ],
                 totalRevenue: 152.5
             };
@@ -500,6 +539,184 @@
                             }
                         }
                     }
+                }
+            });
+            
+            // Generate categories and bill IDs list
+            const categoriesList = document.getElementById('categoriesList');
+            
+            revenueData.categories.forEach((categoryData, index) => {
+                const categoryContainer = document.createElement('div');
+                categoryContainer.className = 'border border-gray-200 rounded-lg p-4 mb-4';
+                
+                // Category header with toggle functionality
+                const categoryHeader = document.createElement('div');
+                categoryHeader.className = 'flex justify-between items-center cursor-pointer';
+                categoryHeader.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 rounded-full mr-3" style="background-color: ${chartColors[index % chartColors.length]}"></div>
+                        <h4 class="font-medium text-gray-800">${categoryData.category}</h4>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="mr-6 text-gray-600">${categoryData.revenue}M đ (${percentages[index]}%)</span>
+                        <i class="fas fa-chevron-down text-gray-500 category-toggle"></i>
+                    </div>
+                `;
+                categoryContainer.appendChild(categoryHeader);
+                
+                // Bill IDs list (hidden by default)
+                const billIdsList = document.createElement('div');
+                billIdsList.className = 'mt-3 pl-7 hidden bill-ids-list';
+                
+                if (categoryData.billIds && categoryData.billIds.length > 0) {
+                    const billIdsWrapper = document.createElement('div');
+                    billIdsWrapper.className = 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2';
+                    
+                    categoryData.billIds.forEach(billId => {
+                        const billIdBtn = document.createElement('button');
+                        billIdBtn.className = 'px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm rounded-md transition';
+                        billIdBtn.textContent = billId;
+                        billIdBtn.addEventListener('click', () => openBillDetails(billId));
+                        billIdsWrapper.appendChild(billIdBtn);
+                    });
+                    
+                    billIdsList.appendChild(billIdsWrapper);
+                } else {
+                    billIdsList.innerHTML = '<p class="text-gray-500 text-sm italic">Không có hóa đơn nào cho loại trang phục này.</p>';
+                }
+                
+                categoryContainer.appendChild(billIdsList);
+                
+                // Toggle bill IDs list when clicking on category header
+                categoryHeader.addEventListener('click', () => {
+                    billIdsList.classList.toggle('hidden');
+                    categoryHeader.querySelector('.category-toggle').classList.toggle('fa-chevron-down');
+                    categoryHeader.querySelector('.category-toggle').classList.toggle('fa-chevron-up');
+                });
+                
+                categoriesList.appendChild(categoryContainer);
+            });
+            
+            // Bill details modal functionality
+            const modal = document.getElementById('billModal');
+            const closeModal = document.getElementById('closeBillModal');
+            const closeModalBtn = document.getElementById('closeBillModalBtn');
+            const billDetails = document.getElementById('billDetails');
+            
+            function openBillDetails(billId) {
+                // Show loading state
+                billDetails.innerHTML = `
+                    <div class="animate-pulse">
+                        <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
+                        <div class="h-6 bg-gray-200 rounded w-1/2 mb-4"></div>
+                        <div class="h-6 bg-gray-200 rounded w-5/6 mb-4"></div>
+                        <div class="h-6 bg-gray-200 rounded w-2/3 mb-4"></div>
+                    </div>
+                `;
+                
+                // Show modal
+                modal.classList.remove('hidden');
+                
+                // Fetch bill details
+                fetch(`/get-bill-by-category?billId=${billId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Update modal content with bill details
+                        let content = `
+                            <div class="mb-6">
+                                <h4 class="text-lg font-medium text-gray-800 mb-2">Thông tin chung</h4>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-sm text-gray-500">Mã hóa đơn</p>
+                                        <p class="font-medium">${data.id || billId}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Ngày thuê</p>
+                                        <p class="font-medium">${data.rentDate || 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Ngày trả</p>
+                                        <p class="font-medium">${data.returnDate || 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Khách hàng</p>
+                                        <p class="font-medium">${data.customer.username || 'N/A'}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-500">Phương thức thanh toán</p>
+                                        <p class="font-medium text-indigo-600">${data.payment.paymentMethod || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        if (data.costumeBills && data.costumeBills.length > 0) {
+                            content += `
+                                <div>
+                                    <h4 class="text-lg font-medium text-gray-800 mb-2">Chi tiết trang phục</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full divide-y divide-gray-200">
+                                            <thead class="bg-gray-50">
+                                                <tr>
+                                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tên trang phục</th>
+                                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Loại</th>
+                                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Số lượng</th>
+                                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Đơn giá</th>
+                                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Thành tiền</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="bg-white divide-y divide-gray-200">
+                            `;
+                            
+                            data.costumeBills.forEach(item => {
+                                content += `
+                                    <tr>
+                                        <td class="px-3 py-2 whitespace-nowrap text-sm">${item.name || 'N/A'}</td>
+                                        <td class="px-3 py-2 whitespace-nowrap text-sm">${item.costume?.category || 'N/A'}</td>
+                                        <td class="px-3 py-2 whitespace-nowrap text-sm">${item.quantity || 'N/A'}</td>
+                                        <td class="px-3 py-2 whitespace-nowrap text-sm">${item.rentPrice || 'N/A'}</td>
+                                        <td class="px-3 py-2 whitespace-nowrap text-sm font-medium">${item.rentPrice * item.quantity || 'N/A'}</td>
+                                    </tr>
+                                `;
+                            });
+                            
+                            content += `
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                        
+                        billDetails.innerHTML = content;
+                    })
+                    .catch(error => {
+                        billDetails.innerHTML = `
+                            <div class="text-center p-6">
+                                <div class="text-red-500 mb-2"><i class="fas fa-exclamation-circle text-xl"></i></div>
+                                <p class="font-medium text-gray-800">Không thể tải thông tin hóa đơn</p>
+                                <p class="text-gray-500 mt-1">${error.message}</p>
+                            </div>
+                        `;
+                    });
+            }
+            
+            closeModal.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+            
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
                 }
             });
             

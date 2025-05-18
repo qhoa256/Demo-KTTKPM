@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -99,13 +100,13 @@ public class ClientController {
     
     @GetMapping("/costumes")
     public String getCostumeViewPage(Model model, 
-                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String search,
-                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String rentDate,
-                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String returnDate,
-                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String category,
-                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String size,
-                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String price,
-                                    @org.springframework.web.bind.annotation.RequestParam(required = false) String color) {
+                                    @RequestParam(required = false) String search,
+                                    @RequestParam(required = false) String rentDate,
+                                    @RequestParam(required = false) String returnDate,
+                                    @RequestParam(required = false) String category,
+                                    @RequestParam(required = false) String size,
+                                    @RequestParam(required = false) String price,
+                                    @RequestParam(required = false) String color) {
         
         // Gọi API để lấy dữ liệu trang phục từ costume-service
         List<Map<String, Object>> allCostumes = costumeService.getAllCostumes(search, category, size, price, color);
@@ -256,5 +257,19 @@ public class ClientController {
         model.addAttribute("revenueByCategory", revenueByCategory);
         
         return "costume_statistic";
+    }
+    
+    /**
+     * API endpoint to get bill details by ID
+     */
+    @GetMapping("/get-bill-by-category")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getBillByCategory(
+            @RequestParam String billId) {
+        
+        // Call the bill service to get bill details
+        Map<String, Object> billDetails = billService.getBillDetails(billId);
+        
+        return ResponseEntity.ok(billDetails);
     }
 } 

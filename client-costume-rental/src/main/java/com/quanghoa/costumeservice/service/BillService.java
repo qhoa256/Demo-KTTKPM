@@ -97,4 +97,29 @@ public class BillService {
             return Map.of(); // Return empty map on error
         }
     }
+    
+    /**
+     * Get bill details by ID
+     * 
+     * @param billId ID of the bill to fetch
+     * @return Bill details including costume bills
+     */
+    public Map<String, Object> getBillDetails(String billId) {
+        String apiUrl = billServiceUrl + "/api/bills/" + billId;
+        
+        try {
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                apiUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+            
+            return response.getBody() != null ? response.getBody() : Map.of();
+        } catch (Exception e) {
+            System.err.println("Error when getting bill details: " + e.getMessage());
+            e.printStackTrace();
+            return Map.of(); // Return empty map on error
+        }
+    }
 } 

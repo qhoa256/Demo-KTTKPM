@@ -76,6 +76,7 @@ public class CostumeBillServiceImpl implements CostumeBillService {
         // Group costume bills by category and calculate revenue
         Map<String, BigDecimal> categoryRevenue = new HashMap<>();
         Map<String, Integer> categoryCount = new HashMap<>();
+        Map<String, List<String>> categoryBillIds = new HashMap<>();
         
         for (CostumeBill bill : allCostumeBills) {
             if (bill.getCostume() != null && bill.getCostume().getCategory() != null) {
@@ -93,6 +94,15 @@ public class CostumeBillServiceImpl implements CostumeBillService {
                     category,
                     categoryCount.getOrDefault(category, 0) + bill.getQuantity()
                 );
+                
+                // Add bill ID to the list of bill IDs for this category
+                if (bill.getBillId() != null) {
+                    List<String> billIds = categoryBillIds.getOrDefault(category, new ArrayList<>());
+                    if (!billIds.contains(bill.getBillId())) {
+                        billIds.add(bill.getBillId());
+                    }
+                    categoryBillIds.put(category, billIds);
+                }
             }
         }
         
@@ -103,6 +113,7 @@ public class CostumeBillServiceImpl implements CostumeBillService {
             categoryData.put("category", category);
             categoryData.put("revenue", categoryRevenue.get(category));
             categoryData.put("count", categoryCount.get(category));
+            categoryData.put("billIds", categoryBillIds.getOrDefault(category, new ArrayList<>()));
             categories.add(categoryData);
         }
         
