@@ -107,4 +107,24 @@ public class CostumeServiceImpl implements CostumeService {
             return Map.of(); // Return empty map on error
         }
     }
+    
+    @Override
+    public Map<String, Object> getCostumeBillDetails(String costumeBillId) {
+        String apiUrl = costumeServiceUrl + "/api/costume-bills/" + costumeBillId;
+        
+        try {
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                apiUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+            
+            return response.getBody() != null ? response.getBody() : Map.of();
+        } catch (Exception e) {
+            System.err.println("Error when getting costume bill details: " + e.getMessage());
+            e.printStackTrace();
+            return Map.of(); // Return empty map on error
+        }
+    }
 } 

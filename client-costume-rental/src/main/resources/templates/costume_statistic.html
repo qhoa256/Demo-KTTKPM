@@ -626,6 +626,17 @@
                         return response.json();
                     })
                     .then(data => {
+                        // Check for error response
+                        if (data.error) {
+                            throw new Error(data.message || 'Failed to fetch bill details');
+                        }
+
+                        console.log("API Response:", data);
+                        
+                        // Extract data from the response
+                        const billData = data.billDetails || {};
+                        const costumeData = data.costumeDetails || {};
+
                         // Update modal content with bill details
                         let content = `
                             <div class="mb-6">
@@ -633,15 +644,15 @@
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <p class="text-sm text-gray-500">Mã hóa đơn</p>
-                                        <p class="font-medium">${data.id || billId}</p>
+                                        <p class="font-medium">${billData.id || billId}</p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-500">Ngày thuê</p>
-                                        <p class="font-medium">${data.rentDate || 'N/A'}</p>
+                                        <p class="font-medium">${billData.rentDate || 'N/A'}</p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-500">Ngày trả</p>
-                                        <p class="font-medium">${data.returnDate || 'N/A'}</p>
+                                        <p class="font-medium">${billData.returnDate || 'N/A'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -651,21 +662,21 @@
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <p class="text-sm text-gray-500">Tên đăng nhập</p>
-                                        <p class="font-medium">${data.customer?.username || 'N/A'}</p>
+                                        <p class="font-medium">${billData.customer?.username || 'N/A'}</p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-500">Họ tên</p>
-                                        <p class="font-medium">${data.customer?.fullName ? 
-                                            `${data.customer.fullName.firstName} ${data.customer.fullName.lastName}` : 'N/A'}</p>
+                                        <p class="font-medium">${billData.customer?.fullName ? 
+                                            `${billData.customer.fullName.firstName} ${billData.customer.fullName.lastName}` : 'N/A'}</p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-500">Địa chỉ</p>
-                                        <p class="font-medium">${data.customer?.address ? 
-                                            `${data.customer.address.street}, ${data.customer.address.city}` : 'N/A'}</p>
+                                        <p class="font-medium">${billData.customer?.address ? 
+                                            `${billData.customer.address.street}, ${billData.customer.address.city}` : 'N/A'}</p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-500">Điểm thành viên</p>
-                                        <p class="font-medium">${data.customer?.loyaltyPoints || '0'}</p>
+                                        <p class="font-medium">${billData.customer?.loyaltyPoints || '0'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -675,24 +686,25 @@
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
                                         <p class="text-sm text-gray-500">Phương thức thanh toán</p>
-                                        <p class="font-medium">${data.payment?.paymentMethod || 'N/A'}</p>
+                                        <p class="font-medium">${billData.payment?.paymentMethod || 'N/A'}</p>
                                     </div>
                                     <div>
                                         <p class="text-sm text-gray-500">Ghi chú thanh toán</p>
-                                        <p class="font-medium">${data.payment?.paymentNote || 'N/A'}</p>
+                                        <p class="font-medium">${billData.payment?.paymentNote || 'N/A'}</p>
                                     </div>
                                 </div>
                             </div>
                             
-                            ${data.note ? `
+                            ${billData.note ? `
                             <div class="mb-6">
                                 <h4 class="text-lg font-medium text-gray-800 mb-2">Ghi chú</h4>
-                                <p class="p-3 bg-gray-50 rounded border border-gray-200">${data.note}</p>
+                                <p class="p-3 bg-gray-50 rounded border border-gray-200">${billData.note}</p>
                             </div>
                             ` : ''}
                         `;
                          
-                        if (data.costumeBills && data.costumeBills.length > 0) {
+                        // Add costume details section
+                        if (costumeData && Object.keys(costumeData).length > 0) {
                             content += `
                                 <div>
                                     <h4 class="text-lg font-medium text-gray-800 mb-2">Chi tiết trang phục</h4>
@@ -708,35 +720,34 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="bg-white divide-y divide-gray-200">
-                            `;
-                            
-                            let totalAmount = 0;
-                            
-                            data.costumeBills.forEach(item => {
-                                const itemTotal = (item.rentPrice || 0) * (item.quantity || 0);
-                                totalAmount += itemTotal;
-                                
-                                content += `
-                                    <tr>
-                                        <td class="px-3 py-2 whitespace-nowrap text-sm">${item.name || 'N/A'}</td>
-                                        <td class="px-3 py-2 whitespace-nowrap text-sm">${item.costume?.category || 'N/A'}</td>
-                                        <td class="px-3 py-2 whitespace-nowrap text-sm">${item.quantity || 'N/A'}</td>
-                                        <td class="px-3 py-2 whitespace-nowrap text-sm">${item.rentPrice ? item.rentPrice.toLocaleString() + ' đ' : 'N/A'}</td>
-                                        <td class="px-3 py-2 whitespace-nowrap text-sm font-medium">${itemTotal.toLocaleString()} đ</td>
-                                    </tr>
-                                `;
-                            });
-                            
-                            content += `
+                                                <tr>
+                                                    <td class="px-3 py-2 text-sm">
+                                                        <div>
+                                                            <p class="font-medium">${costumeData.name || 'N/A'}</p>
+                                                            <p class="text-xs text-gray-500 mt-1">${costumeData.description || 'Không có mô tả'}</p>
+                                                            <p class="text-xs text-gray-500 mt-1">Mã trang phục: ${costumeData.id || 'N/A'}</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-3 py-2 text-sm">${costumeData.category || 'N/A'}</td>
+                                                    <td class="px-3 py-2 text-sm text-center">${costumeData.quantity || '0'}</td>
+                                                    <td class="px-3 py-2 text-sm">${costumeData.rentPrice ? Number(costumeData.rentPrice).toLocaleString() + ' đ' : '0 đ'}</td>
+                                                    <td class="px-3 py-2 text-sm font-medium">${costumeData.totalAmount ? Number(costumeData.totalAmount).toLocaleString() + ' đ' : '0 đ'}</td>
+                                                </tr>
                                             </tbody>
                                             <tfoot>
                                                 <tr class="bg-gray-50">
                                                     <td colspan="4" class="px-3 py-2 text-right font-medium">Tổng cộng:</td>
-                                                    <td class="px-3 py-2 whitespace-nowrap text-sm font-bold text-indigo-600">${totalAmount.toLocaleString()} đ</td>
+                                                    <td class="px-3 py-2 whitespace-nowrap text-sm font-bold text-indigo-600">${costumeData.totalAmount ? Number(costumeData.totalAmount).toLocaleString() + ' đ' : '0 đ'}</td>
                                                 </tr>
                                             </tfoot>
                                         </table>
                                     </div>
+                                </div>
+                            `;
+                        } else {
+                            content += `
+                                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                                    <p class="text-gray-500">Không có thông tin chi tiết về trang phục</p>
                                 </div>
                             `;
                         }
@@ -751,6 +762,7 @@
                                 <p class="text-gray-500 mt-1">${error.message}</p>
                             </div>
                         `;
+                        console.error("Error fetching bill details:", error);
                     });
             }
             

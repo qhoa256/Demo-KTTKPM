@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.HashMap;
 
 @Controller
 public class ClientController {
@@ -264,12 +265,78 @@ public class ClientController {
      */
     @GetMapping("/get-bill-by-category")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> getBillByCategory(
-            @RequestParam String billId) {
+    public ResponseEntity<Map<String, Object>> getBillByCategory(@RequestParam String billId) {
+        try {
+            // 1. Get basic bill details
+            Map<String, Object> billDetails = billService.getBillDetails(billId);
+            
+            // 2. Get costume details associated with this bill
+            Map<String, Object> costumeDetails = costumeService.getCostumeBillDetails(billId);
+            
+            // 3. Extract and format the relevant fields from costumeDetails
+            Map<String, Object> formattedCostumeDetails = new HashMap<>();
+            formattedCostumeDetails.put("id", costumeDetails.get("id"));
+            formattedCostumeDetails.put("name", costumeDetails.get("name"));
+            formattedCostumeDetails.put("description", costumeDetails.get("description"));
+            formattedCostumeDetails.put("category", costumeDetails.containsKey("costume") ? 
+                ((Map<String, Object>)costumeDetails.get("costume")).get("category") : "");
+            formattedCostumeDetails.put("rentPrice", costumeDetails.get("rentPrice"));
+            formattedCostumeDetails.put("quantity", costumeDetails.get("quantity"));
+            
+            // Calculate totalAmount
+            double rentPrice = 0;
+            int quantity = 0;
+            
+            if (costumeDetails.get("rentPrice") != null) {
+                if (costumeDetails.get("rentPrice") instanceof Number) {
+                    rentPrice = ((Number) costumeDetails.get("rentPrice")).doubleValue();
+                } else {
+                    rentPrice = Double.parseDouble(costumeDetails.get("rentPrice").toString());
+                }
+            }
+            
+            if (costumeDetails.get("quantity") != null) {
+                if (costumeDetails.get("quantity") instanceof Number) {
+                    quantity = ((Number) costumeDetails.get("quantity")).intValue();
+                } else {
+                    quantity = Integer.parseInt(costumeDetails.get("quantity").toString());
+                }
+            }
+            
+            double totalAmount = rentPrice * quantity;
+            formattedCostumeDetails.put("totalAmount", totalAmount);
+            
+            // 4. Combine results into one response
+            Map<String, Object> combinedResponse = new HashMap<>();
+            combinedResponse.put("billDetails", billDetails);
+            combinedResponse.put("costumeDetails", formattedCostumeDetails);
+            
+            return ResponseEntity.ok(combinedResponse);
+            
+        } catch (Exception e) {
+            System.err.println("Error in getBillByCategory: " + e.getMessage());
+            e.printStackTrace();
+            
+            Map<String, Object> errorResponse = Map.of(
+                "error", "Failed to fetch bill details",
+                "message", e.getMessage()
+            );
+            return ResponseEntity.ok(errorResponse);
+        }
+    }
+    
+    /**
+     * Helper method to merge costume bill details
+     */
+    private Map<String, Object> mergeDetails(Map<String, Object> original, Map<String, Object> additional) {
+        // Create a new map to avoid modifying the original
+        Map<String, Object> result = new HashMap<>(original);
         
-        // Call the bill service to get bill details
-        Map<String, Object> billDetails = billService.getBillDetails(billId);
+        // Copy all fields from additional to result, handling nested objects
+        for (Map.Entry<String, Object> entry : additional.entrySet()) {
+            result.put(entry.getKey(), entry.getValue());
+        }
         
-        return ResponseEntity.ok(billDetails);
+        return result;
     }
 } 
