@@ -576,7 +576,7 @@
                         const billIdBtn = document.createElement('button');
                         billIdBtn.className = 'px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm rounded-md transition';
                         billIdBtn.textContent = billId;
-                        billIdBtn.addEventListener('click', () => openBillDetails(billId));
+                        billIdBtn.addEventListener('click', () => openBillDetails(billId, categoryData.category));
                         billIdsWrapper.appendChild(billIdBtn);
                     });
                     
@@ -603,7 +603,7 @@
             const closeModalBtn = document.getElementById('closeBillModalBtn');
             const billDetails = document.getElementById('billDetails');
             
-            function openBillDetails(billId) {
+            function openBillDetails(billId, category) {
                 // Show loading state
                 billDetails.innerHTML = `
                     <div class="animate-pulse">
@@ -617,8 +617,8 @@
                 // Show modal
                 modal.classList.remove('hidden');
                 
-                // Fetch bill details
-                fetch(`/get-bill-by-category?billId=${billId}`)
+                // Fetch bill details with category filter
+                fetch(`/get-bill-by-category?billId=${billId}&category=${category}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
@@ -636,6 +636,18 @@
                         // Extract data from the response
                         const billData = data.billDetails || {};
                         const costumeData = data.costumeDetails || {};
+                        
+                        // Check if we have a message about no costumes in this category
+                        if (data.message && Object.keys(costumeData).length === 0) {
+                            billDetails.innerHTML = `
+                                <div class="text-center p-6">
+                                    <div class="text-amber-500 mb-2"><i class="fas fa-info-circle text-xl"></i></div>
+                                    <p class="font-medium text-gray-800">Không tìm thấy trang phục phù hợp</p>
+                                    <p class="text-gray-500 mt-1">${data.message}</p>
+                                </div>
+                            `;
+                            return;
+                        }
 
                         // Update modal content with bill details
                         let content = `
@@ -704,8 +716,9 @@
                         `;
                          
                         // Add costume details section
-                        if (costumeData && Object.keys(costumeData).length > 0) {
-                            content += `
+                        if (costumeData && Array.isArray(costumeData) && costumeData.length > 0) {
+                            // Start building the costumes table
+                            let costumesTable = `
                                 <div>
                                     <h4 class="text-lg font-medium text-gray-800 mb-2">Chi tiết trang phục</h4>
                                     <div class="overflow-x-auto">
@@ -719,31 +732,41 @@
                                                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Thành tiền</th>
                                                 </tr>
                                             </thead>
-                                            <tbody class="bg-white divide-y divide-gray-200">
-                                                <tr>
-                                                    <td class="px-3 py-2 text-sm">
-                                                        <div>
-                                                            <p class="font-medium">${costumeData.name || 'N/A'}</p>
-                                                            <p class="text-xs text-gray-500 mt-1">${costumeData.description || 'Không có mô tả'}</p>
-                                                            <p class="text-xs text-gray-500 mt-1">Mã trang phục: ${costumeData.id || 'N/A'}</p>
-                                                        </div>
-                                                    </td>
-                                                    <td class="px-3 py-2 text-sm">${costumeData.category || 'N/A'}</td>
-                                                    <td class="px-3 py-2 text-sm text-center">${costumeData.quantity || '0'}</td>
-                                                    <td class="px-3 py-2 text-sm">${costumeData.rentPrice ? Number(costumeData.rentPrice).toLocaleString() + ' đ' : '0 đ'}</td>
-                                                    <td class="px-3 py-2 text-sm font-medium">${costumeData.totalAmount ? Number(costumeData.totalAmount).toLocaleString() + ' đ' : '0 đ'}</td>
-                                                </tr>
+                                            <tbody class="bg-white divide-y divide-gray-200">`;
+                            
+                            // Add a row for each costume
+                            costumeData.forEach(costume => {
+                                costumesTable += `
+                                <tr>
+                                    <td class="px-3 py-2 text-sm">
+                                        <div>
+                                            <p class="font-medium">${costume.name || 'N/A'}</p>
+                                            <p class="text-xs text-gray-500 mt-1">${costume.description || 'Không có mô tả'}</p>
+                                            <p class="text-xs text-gray-500 mt-1">Mã trang phục: ${costume.id || 'N/A'}</p>
+                                        </div>
+                                    </td>
+                                    <td class="px-3 py-2 text-sm">${costume.category || 'N/A'}</td>
+                                    <td class="px-3 py-2 text-sm text-center">${costume.quantity || '0'}</td>
+                                    <td class="px-3 py-2 text-sm">${costume.rentPrice ? Number(costume.rentPrice).toLocaleString() + ' đ' : '0 đ'}</td>
+                                    <td class="px-3 py-2 text-sm font-medium">${costume.totalAmount ? Number(costume.totalAmount).toLocaleString() + ' đ' : '0 đ'}</td>
+                                </tr>`;
+                            });
+                            
+                            // Close the tbody and add the footer with total sum
+                            costumesTable += `
                                             </tbody>
                                             <tfoot>
                                                 <tr class="bg-gray-50">
                                                     <td colspan="4" class="px-3 py-2 text-right font-medium">Tổng cộng:</td>
-                                                    <td class="px-3 py-2 whitespace-nowrap text-sm font-bold text-indigo-600">${costumeData.totalAmount ? Number(costumeData.totalAmount).toLocaleString() + ' đ' : '0 đ'}</td>
+                                                    <td class="px-3 py-2 whitespace-nowrap text-sm font-bold text-indigo-600">${data.billTotalAmount ? Number(data.billTotalAmount).toLocaleString() + ' đ' : '0 đ'}</td>
                                                 </tr>
                                             </tfoot>
                                         </table>
                                     </div>
                                 </div>
                             `;
+                            
+                            content += costumesTable;
                         } else {
                             content += `
                                 <div class="text-center p-4 bg-gray-50 rounded-lg">
@@ -788,4 +811,4 @@
         });
     </script>
 </body>
-</html> 
+</html>

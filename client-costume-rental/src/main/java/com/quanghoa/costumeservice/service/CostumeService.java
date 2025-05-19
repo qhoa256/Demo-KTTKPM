@@ -8,5 +8,5 @@ public interface CostumeService {
     List<Map<String, Object>> getAllCostumes(String search, String category, String size, String price, String color);
     List<Map<String, Object>> getCostumesBySupplierId(String supplierId);
     Map<String, Object> getRevenueByCategory();
-    Map<String, Object> getCostumeBillDetails(String costumeBillId);
+    List<Map<String, Object>> getCostumeBillDetails(String costumeBillId);
 } 
