@@ -2,7 +2,9 @@ package com.costumeRental.costumeservice.controller;
 
 import com.costumeRental.costumeservice.model.CostumeBill;
 import com.costumeRental.costumeservice.service.CostumeBillService;
+import com.costumeRental.costumeservice.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +14,16 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/costume-bills")
-@RequiredArgsConstructor
 public class CostumeBillController {
 
     private final CostumeBillService costumeBillService;
+    private final StatisticsService statisticsService;
+
+    public CostumeBillController(CostumeBillService costumeBillService, 
+                               @Qualifier("cachingStatisticsDecorator") StatisticsService statisticsService) {
+        this.costumeBillService = costumeBillService;
+        this.statisticsService = statisticsService;
+    }
 
     @PostMapping
     public ResponseEntity<CostumeBill> createCostumeBill(@RequestBody CostumeBill costumeBill) {
@@ -55,6 +63,6 @@ public class CostumeBillController {
     
     @GetMapping("/statistics/revenue-by-category")
     public ResponseEntity<Map<String, Object>> getRevenueByCategory() {
-        return ResponseEntity.ok(costumeBillService.getRevenueByCategory());
+        return ResponseEntity.ok(statisticsService.getRevenueByCategory());
     }
 } 

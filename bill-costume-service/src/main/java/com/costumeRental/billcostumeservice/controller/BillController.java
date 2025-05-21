@@ -2,7 +2,9 @@ package com.costumeRental.billcostumeservice.controller;
 
 import com.costumeRental.billcostumeservice.model.Bill;
 import com.costumeRental.billcostumeservice.service.BillService;
+import com.costumeRental.billcostumeservice.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +20,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/bills")
 public class BillController {
     private final BillService billService;
+    private final StatisticsService statisticsService;
     
     @Autowired
-    public BillController(BillService billService) {
+    public BillController(BillService billService, 
+                         @Qualifier("cachingStatisticsDecorator") StatisticsService statisticsService) {
         this.billService = billService;
+        this.statisticsService = statisticsService;
     }
 
     @GetMapping
@@ -115,5 +120,10 @@ public class BillController {
     public ResponseEntity<Void> deleteBill(@PathVariable Long id) {
         billService.deleteBill(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/statistics/revenue-by-category")
+    public ResponseEntity<Map<String, Object>> getRevenueByCategory() {
+        return ResponseEntity.ok(statisticsService.getRevenueByCategory());
     }
 } 

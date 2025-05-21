@@ -9,6 +9,7 @@ import com.quanghoa.costumeservice.service.UserService;
 import com.quanghoa.costumeservice.service.BillService;
 import com.quanghoa.costumeservice.service.SupplierService;
 import com.quanghoa.costumeservice.service.ImportBillService;
+import com.quanghoa.costumeservice.service.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -37,14 +39,21 @@ public class ClientController {
     private final BillService billService;
     private final SupplierService supplierService;
     private final ImportBillService importBillService;
+    private final StatisticsService statisticsService;
 
     @Autowired
-    public ClientController(UserService userService, CostumeService costumeService, BillService billService, SupplierService supplierService, ImportBillService importBillService) {
+    public ClientController(UserService userService, 
+                           CostumeService costumeService, 
+                           BillService billService, 
+                           SupplierService supplierService, 
+                           ImportBillService importBillService,
+                           @Qualifier("cachingStatisticsDecorator") StatisticsService statisticsService) {
         this.userService = userService;
         this.costumeService = costumeService;
         this.billService = billService;
         this.supplierService = supplierService;
         this.importBillService = importBillService;
+        this.statisticsService = statisticsService;
     }
 
     @GetMapping("/")
@@ -251,8 +260,8 @@ public class ClientController {
             return "redirect:/login";
         }
         
-        // Get revenue statistics by costume category
-        Map<String, Object> revenueByCategory = costumeService.getRevenueByCategory();
+        // Get revenue statistics by costume category using the decorator pattern
+        Map<String, Object> revenueByCategory = statisticsService.getRevenueByCategory();
         
         // Add data to model
         model.addAttribute("revenueByCategory", revenueByCategory);
