@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-costume-rental
+  namespace: costume-rental
+  labels:
+    app: client-costume-rental
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: client-costume-rental
+  template:
+    metadata:
+      labels:
+        app: client-costume-rental
+        version: v1
+    spec:
+      containers:
+      - name: client-costume-rental
+        image: costume-rental/client-costume-rental:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: spring-profiles-active
+        - name: USER_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: user-service-url
+        - name: COSTUME_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: costume-service-url
+        - name: BILL_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: bill-service-url
+        - name: SUPPLIER_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: supplier-service-url
+        - name: IMPORT_BILL_SERVICE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: import-bill-service-url
+        - name: LOGGING_LEVEL_ROOT
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: logging-level
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-costume-rental
+  namespace: costume-rental
+  labels:
+    app: client-costume-rental
+spec:
+  selector:
+    app: client-costume-rental
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  type: ClusterIP
