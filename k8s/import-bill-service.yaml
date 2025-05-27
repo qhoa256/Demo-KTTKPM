@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: import-bill-service
+  namespace: costume-rental
+  labels:
+    app: import-bill-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: import-bill-service
+  template:
+    metadata:
+      labels:
+        app: import-bill-service
+    spec:
+      containers:
+      - name: import-bill-service
+        image: import-bill-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8085
+        envFrom:
+        - configMapRef:
+            name: costume-rental-config
+        - secretRef:
+            name: costume-rental-secret
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8085
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8085
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: import-bill-service
+  namespace: costume-rental
+spec:
+  selector:
+    app: import-bill-service
+  ports:
+  - port: 8085
+    targetPort: 8085
+  type: ClusterIP

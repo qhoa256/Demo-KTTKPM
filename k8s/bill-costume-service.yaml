@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bill-costume-service
+  namespace: costume-rental
+  labels:
+    app: bill-costume-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bill-costume-service
+  template:
+    metadata:
+      labels:
+        app: bill-costume-service
+    spec:
+      containers:
+      - name: bill-costume-service
+        image: bill-costume-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8083
+        envFrom:
+        - configMapRef:
+            name: costume-rental-config
+        - secretRef:
+            name: costume-rental-secret
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8083
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8083
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bill-costume-service
+  namespace: costume-rental
+spec:
+  selector:
+    app: bill-costume-service
+  ports:
+  - port: 8083
+    targetPort: 8083
+  type: ClusterIP

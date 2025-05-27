@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: costume-service
+  namespace: costume-rental
+  labels:
+    app: costume-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: costume-service
+  template:
+    metadata:
+      labels:
+        app: costume-service
+    spec:
+      containers:
+      - name: costume-service
+        image: costume-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8082
+        envFrom:
+        - configMapRef:
+            name: costume-rental-config
+        - secretRef:
+            name: costume-rental-secret
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8082
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8082
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: costume-service
+  namespace: costume-rental
+spec:
+  selector:
+    app: costume-service
+  ports:
+  - port: 8082
+    targetPort: 8082
+  type: ClusterIP

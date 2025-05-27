@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: costume-rental-config
+  namespace: costume-rental
+data:
+  SPRING_PROFILES_ACTIVE: "k8s"
+  # MySQL Configuration
+  MYSQL_HOST: "mysql-service"
+  MYSQL_PORT: "3306"
+  MYSQL_DATABASE: "costume_rental_db"
+  MYSQL_USERNAME: "root"
+  # Service URLs for inter-service communication
+  USER_SERVICE_URL: "http://user-service:8081"
+  COSTUME_SERVICE_URL: "http://costume-service:8082"
+  BILL_COSTUME_SERVICE_URL: "http://bill-costume-service:8083"
+  SUPPLIER_SERVICE_URL: "http://supplier-service:8084"
+  IMPORT_BILL_SERVICE_URL: "http://import-bill-service:8085"
+  # Legacy service URL configurations (for backward compatibility)
+  user.service.url: "http://user-service:8081"
+  costume.service.url: "http://costume-service:8082"
+  supplier.service.url: "http://supplier-service:8084"
+  supplier-service.url: "http://supplier-service:8084"
+  services.user-service.url: "http://user-service:8081"
+  services.costume-service.url: "http://costume-service:8082"
+  services.bill-service.url: "http://bill-costume-service:8083"
+  services.supplier-service.url: "http://supplier-service:8084"
+  services.import-bill-service.url: "http://import-bill-service:8085"

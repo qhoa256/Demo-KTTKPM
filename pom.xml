@@ -24,6 +24,7 @@
         <module>bill-costume-service</module>
         <module>supplier-service</module>
         <module>import-bill-service</module>
+        <module>client-costume-rental</module>
     </modules>
 
     <properties>
@@ -62,4 +63,4 @@
             </plugin>
         </plugins>
     </build>
-</project> 
+</project>

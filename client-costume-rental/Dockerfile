@@ -4,12 +4,19 @@ FROM maven:3.9.6-eclipse-temurin-17 AS build
 # Set working directory
 WORKDIR /app
 
-# Copy service pom and source
-COPY client-costume-rental/pom.xml .
-COPY client-costume-rental/src ./src
+# Copy parent pom first for better caching
+COPY pom.xml ./pom.xml
+
+# Copy all service directories (needed for parent pom resolution)
+COPY user-service ./user-service
+COPY costume-service ./costume-service
+COPY bill-costume-service ./bill-costume-service
+COPY supplier-service ./supplier-service
+COPY import-bill-service ./import-bill-service
+COPY client-costume-rental ./client-costume-rental
 
 # Build the application
-RUN mvn clean package -DskipTests
+RUN mvn clean package -DskipTests -pl client-costume-rental
 
 # Runtime stage
 FROM eclipse-temurin:17-jre
@@ -24,7 +31,7 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser
 WORKDIR /app
 
 # Copy jar from build stage
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/client-costume-rental/target/*.jar app.jar
 
 # Change ownership
 RUN chown -R appuser:appuser /app

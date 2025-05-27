@@ -1,0 +1,55 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: costume-rental-ingress
+  namespace: costume-rental
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - host: costume-rental.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: client-costume-rental
+            port:
+              number: 8080
+      - path: /api/users
+        pathType: Prefix
+        backend:
+          service:
+            name: user-service
+            port:
+              number: 8081
+      - path: /api/costumes
+        pathType: Prefix
+        backend:
+          service:
+            name: costume-service
+            port:
+              number: 8082
+      - path: /api/bills
+        pathType: Prefix
+        backend:
+          service:
+            name: bill-costume-service
+            port:
+              number: 8083
+      - path: /api/suppliers
+        pathType: Prefix
+        backend:
+          service:
+            name: supplier-service
+            port:
+              number: 8084
+      - path: /api/import-bills
+        pathType: Prefix
+        backend:
+          service:
+            name: import-bill-service
+            port:
+              number: 8085

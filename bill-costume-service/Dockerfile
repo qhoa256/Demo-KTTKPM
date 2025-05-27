@@ -13,6 +13,7 @@ COPY costume-service ./costume-service
 COPY bill-costume-service ./bill-costume-service
 COPY supplier-service ./supplier-service
 COPY import-bill-service ./import-bill-service
+COPY client-costume-rental ./client-costume-rental
 
 # Build the application
 RUN mvn clean package -DskipTests -pl bill-costume-service
