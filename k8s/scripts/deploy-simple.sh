@@ -112,27 +112,34 @@ spec:
         image: costume-rental/$service:latest
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 80
+        - containerPort: $port
           name: http
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "kubernetes"
         resources:
           requests:
-            memory: "128Mi"
-            cpu: "50m"
-          limits:
             memory: "256Mi"
-            cpu: "200m"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
         livenessProbe:
           httpGet:
             path: /
-            port: 80
-          initialDelaySeconds: 30
+            port: $port
+          initialDelaySeconds: 60
           periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /
-            port: 80
-          initialDelaySeconds: 10
+            port: $port
+          initialDelaySeconds: 30
           periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
 ---
 apiVersion: v1
 kind: Service
@@ -147,7 +154,7 @@ spec:
   ports:
   - name: http
     port: $port
-    targetPort: 80
+    targetPort: $port
     protocol: TCP
   type: ClusterIP
 EOF
@@ -167,8 +174,8 @@ metadata:
   name: costume-rental-ingress
   namespace: $NAMESPACE
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
@@ -182,36 +189,36 @@ spec:
             name: client-costume-rental
             port:
               number: 8080
-      - path: /api/users
-        pathType: Prefix
+      - path: /api/users(/|$)(.*)
+        pathType: ImplementationSpecific
         backend:
           service:
             name: user-service
             port:
               number: 8081
-      - path: /api/costumes
-        pathType: Prefix
+      - path: /api/costumes(/|$)(.*)
+        pathType: ImplementationSpecific
         backend:
           service:
             name: costume-service
             port:
               number: 8082
-      - path: /api/bills
-        pathType: Prefix
+      - path: /api/bills(/|$)(.*)
+        pathType: ImplementationSpecific
         backend:
           service:
             name: bill-costume-service
             port:
               number: 8083
-      - path: /api/suppliers
-        pathType: Prefix
+      - path: /api/suppliers(/|$)(.*)
+        pathType: ImplementationSpecific
         backend:
           service:
             name: supplier-service
             port:
               number: 8084
-      - path: /api/import-bills
-        pathType: Prefix
+      - path: /api/import-bills(/|$)(.*)
+        pathType: ImplementationSpecific
         backend:
           service:
             name: import-bill-service

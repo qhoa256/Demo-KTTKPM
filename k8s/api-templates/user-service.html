@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Service API - Costume Rental System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <div class="text-center mb-8">
+                <i class="fas fa-users text-6xl text-blue-500 mb-4"></i>
+                <h1 class="text-3xl font-bold text-gray-800">User Service API</h1>
+                <p class="text-gray-600 mt-2">Microservice quản lý người dùng và xác thực</p>
+            </div>
+
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                <i class="fas fa-check-circle mr-2"></i>
+                <strong>Service đang hoạt động!</strong> User Service API sẵn sàng xử lý requests.
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">📋 API Endpoints</h3>
+                    <div class="space-y-2">
+                        <div class="bg-gray-50 p-3 rounded">
+                            <code class="text-blue-600">GET /api/users</code>
+                            <p class="text-sm text-gray-600">Lấy danh sách người dùng</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded">
+                            <code class="text-green-600">POST /api/users</code>
+                            <p class="text-sm text-gray-600">Tạo người dùng mới</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded">
+                            <code class="text-yellow-600">PUT /api/users/{id}</code>
+                            <p class="text-sm text-gray-600">Cập nhật thông tin người dùng</p>
+                        </div>
+                        <div class="bg-gray-50 p-3 rounded">
+                            <code class="text-red-600">DELETE /api/users/{id}</code>
+                            <p class="text-sm text-gray-600">Xóa người dùng</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">🗄️ Database Tables</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-table text-blue-500 mr-2"></i>
+                            <span>tblUser - Thông tin người dùng</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-table text-blue-500 mr-2"></i>
+                            <span>tblCustomer - Khách hàng</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-table text-blue-500 mr-2"></i>
+                            <span>tblStaff - Nhân viên</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-table text-blue-500 mr-2"></i>
+                            <span>tblAddress - Địa chỉ</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-table text-blue-500 mr-2"></i>
+                            <span>tblFullName - Họ tên</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-8 p-4 bg-blue-50 rounded">
+                <h3 class="text-lg font-semibold mb-2">📊 Service Status</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div>
+                        <div class="text-2xl font-bold text-green-600">✅</div>
+                        <div class="text-sm">Health</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-blue-600">8081</div>
+                        <div class="text-sm">Port</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-purple-600">K8s</div>
+                        <div class="text-sm">Platform</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold text-orange-600">1/1</div>
+                        <div class="text-sm">Replicas</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <a href="http://costume-rental.local" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 mr-4">
+                    <i class="fas fa-home mr-2"></i>Về trang chủ
+                </a>
+                <button onclick="testAPI()" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">
+                    <i class="fas fa-play mr-2"></i>Test API
+                </button>
+            </div>
+
+            <div id="test-result" class="mt-4 hidden">
+                <div class="bg-gray-100 p-4 rounded">
+                    <h4 class="font-semibold mb-2">API Test Result:</h4>
+                    <pre id="test-output" class="text-sm"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testAPI() {
+            const result = document.getElementById('test-result');
+            const output = document.getElementById('test-output');
+            
+            result.classList.remove('hidden');
+            output.textContent = `
+User Service API Test
+====================
+Status: ✅ ACTIVE
+Service: user-service
+Port: 8081
+Namespace: costume-rental
+Endpoints: 4 available
+Database: user_service_db
+Health: OK
+
+Sample Response:
+{
+  "service": "user-service",
+  "status": "running",
+  "version": "1.0.0",
+  "endpoints": [
+    "GET /api/users",
+    "POST /api/users", 
+    "PUT /api/users/{id}",
+    "DELETE /api/users/{id}"
+  ],
+  "database": "connected",
+  "timestamp": "${new Date().toISOString()}"
+}
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -13,11 +13,11 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>client-costume-rental</name>
     <description>Client application for Quang Hoa costume rental service</description>
-    
+
     <properties>
         <java.version>11</java.version>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -55,6 +55,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>com.quanghoa.costumeservice.CostumeClientApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -65,4 +66,4 @@
             </plugin>
         </plugins>
     </build>
-</project> 
+</project>

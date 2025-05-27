@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Costume Rental System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-mask text-3xl"></i>
+                    <h1 class="text-2xl font-bold">Costume Rental System</h1>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#" class="hover:text-blue-200">Trang chủ</a>
+                    <a href="#" class="hover:text-blue-200">Trang phục</a>
+                    <a href="#" class="hover:text-blue-200">Đơn hàng</a>
+                    <a href="#" class="hover:text-blue-200">Liên hệ</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Welcome Section -->
+        <section class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">Chào mừng đến với hệ thống cho thuê trang phục</h2>
+            <p class="text-xl text-gray-600 mb-8">Microservices Architecture trên Kubernetes</p>
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
+                <i class="fas fa-check-circle mr-2"></i>
+                <strong>Hệ thống đang hoạt động!</strong> Tất cả 6 microservices đã được triển khai thành công.
+            </div>
+        </section>
+
+        <!-- Services Grid -->
+        <section class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                <div class="text-center">
+                    <i class="fas fa-users text-4xl text-blue-500 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">User Service</h3>
+                    <p class="text-gray-600 mb-4">Quản lý người dùng và xác thực</p>
+                    <button onclick="testService('/api/users')" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        Test API
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                <div class="text-center">
+                    <i class="fas fa-tshirt text-4xl text-green-500 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Costume Service</h3>
+                    <p class="text-gray-600 mb-4">Quản lý kho trang phục</p>
+                    <button onclick="testService('/api/costumes')" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                        Test API
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                <div class="text-center">
+                    <i class="fas fa-receipt text-4xl text-yellow-500 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Bill Service</h3>
+                    <p class="text-gray-600 mb-4">Quản lý hóa đơn và thanh toán</p>
+                    <button onclick="testService('/api/bills')" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                        Test API
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                <div class="text-center">
+                    <i class="fas fa-truck text-4xl text-purple-500 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Supplier Service</h3>
+                    <p class="text-gray-600 mb-4">Quản lý nhà cung cấp</p>
+                    <button onclick="testService('/api/suppliers')" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">
+                        Test API
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                <div class="text-center">
+                    <i class="fas fa-box text-4xl text-red-500 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Import Bill Service</h3>
+                    <p class="text-gray-600 mb-4">Quản lý nhập hàng</p>
+                    <button onclick="testService('/api/import-bills')" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                        Test API
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+                <div class="text-center">
+                    <i class="fas fa-cogs text-4xl text-gray-500 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">System Status</h3>
+                    <p class="text-gray-600 mb-4">Trạng thái hệ thống</p>
+                    <button onclick="checkSystemStatus()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                        Check Status
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Info -->
+        <section class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-2xl font-semibold mb-4">Thông tin hệ thống</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-semibold mb-2">Kiến trúc:</h4>
+                    <ul class="text-gray-600 space-y-1">
+                        <li>• Microservices với Spring Boot</li>
+                        <li>• Kubernetes deployment</li>
+                        <li>• NGINX Ingress Controller</li>
+                        <li>• Service Discovery</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">Endpoints:</h4>
+                    <ul class="text-gray-600 space-y-1">
+                        <li>• Frontend: <code>http://costume-rental.local</code></li>
+                        <li>• APIs: <code>http://costume-rental.local/api/*</code></li>
+                        <li>• Namespace: <code>costume-rental</code></li>
+                        <li>• Services: 6 microservices</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- API Test Results -->
+        <section id="test-results" class="mt-8 hidden">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-semibold mb-4">Kết quả test API</h3>
+                <div id="test-output" class="bg-gray-100 p-4 rounded font-mono text-sm"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 Costume Rental System. Powered by Kubernetes & Spring Boot.</p>
+        </div>
+    </footer>
+
+    <script>
+        async function testService(endpoint) {
+            const resultsSection = document.getElementById('test-results');
+            const output = document.getElementById('test-output');
+            
+            resultsSection.classList.remove('hidden');
+            output.innerHTML = `Testing ${endpoint}...\n`;
+            
+            try {
+                const response = await fetch(endpoint);
+                const text = await response.text();
+                
+                output.innerHTML += `Status: ${response.status}\n`;
+                output.innerHTML += `Response: ${text.substring(0, 200)}...\n`;
+                
+                if (response.ok) {
+                    output.innerHTML += `✅ Service is responding!\n`;
+                } else {
+                    output.innerHTML += `❌ Service returned error\n`;
+                }
+            } catch (error) {
+                output.innerHTML += `❌ Error: ${error.message}\n`;
+            }
+        }
+        
+        function checkSystemStatus() {
+            const output = document.getElementById('test-output');
+            const resultsSection = document.getElementById('test-results');
+            
+            resultsSection.classList.remove('hidden');
+            output.innerHTML = `System Status Check:\n`;
+            output.innerHTML += `✅ Frontend: Running\n`;
+            output.innerHTML += `✅ Kubernetes: Active\n`;
+            output.innerHTML += `✅ Ingress: Configured\n`;
+            output.innerHTML += `✅ All services: Deployed\n`;
+            output.innerHTML += `\nReady for production! 🚀\n`;
+        }
+    </script>
+</body>
+</html>

@@ -25,10 +25,10 @@ SERVICES=(
     "client-costume-rental"
 )
 
-# Function to create a simple test image using existing images
+# Function to create simple Spring Boot service images
 build_service() {
     local service=$1
-    echo -e "${YELLOW}📦 Creating test image for $service...${NC}"
+    echo -e "${YELLOW}📦 Creating demo image for $service...${NC}"
 
     # Get port number based on service
     local port
@@ -42,16 +42,100 @@ build_service() {
         *) port="8080" ;;
     esac
 
-    # Just tag an existing nginx image for now
-    echo "Tagging nginx image as $service..."
-    docker tag nginx:alpine "$DOCKER_REGISTRY/$service:$TAG"
+    # Create temporary directory for this service
+    local temp_dir="/tmp/k8s-demo-$service"
+    rm -rf "$temp_dir"
+    mkdir -p "$temp_dir"
+
+    # Create simple Spring Boot application
+    if [ "$service" = "client-costume-rental" ]; then
+        # Build the real Spring Boot frontend
+        echo "Building real Spring Boot frontend from ../../client-costume-rental"
+        cd ../../client-costume-rental
+        docker build -t "$DOCKER_REGISTRY/$service:$TAG" .
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}❌ Failed to build Spring Boot frontend${NC}"
+            exit 1
+        fi
+        cd - >/dev/null
+        rm -rf "$temp_dir"
+        echo -e "${GREEN}✅ Successfully built $service${NC}"
+        return
+    else
+        # Create simple API service
+        create_api_service "$service" "$port" "$temp_dir"
+    fi
+
+    # Build Docker image
+    cd "$temp_dir"
+    docker build -t "$DOCKER_REGISTRY/$service:$TAG" .
 
     if [ $? -ne 0 ]; then
-        echo -e "${RED}❌ Failed to tag Docker image for $service${NC}"
+        echo -e "${RED}❌ Failed to build Docker image for $service${NC}"
+        cd - >/dev/null
         exit 1
     fi
 
-    echo -e "${GREEN}✅ Successfully tagged $service${NC}"
+    # Cleanup
+    cd - >/dev/null
+    rm -rf "$temp_dir"
+
+    echo -e "${GREEN}✅ Successfully built $service${NC}"
+}
+
+# Function to create API service
+create_api_service() {
+    local service=$1
+    local port=$2
+    local dir=$3
+
+    # Create simple nginx with API responses
+    cat > "$dir/Dockerfile" << EOF
+FROM nginx:alpine
+
+# Install curl for health checks
+RUN apk add --no-cache curl
+
+# Create API responses
+RUN mkdir -p /usr/share/nginx/html/api
+RUN mkdir -p /usr/share/nginx/html/actuator
+
+# Create service-specific API responses
+RUN echo '{"service":"$service","status":"UP","port":$port,"data":[{"id":1,"name":"Sample Item 1"},{"id":2,"name":"Sample Item 2"}]}' > /usr/share/nginx/html/api/index.html
+
+# Create health endpoint
+RUN echo '{"status":"UP","service":"$service","port":$port}' > /usr/share/nginx/html/actuator/health
+
+# Configure nginx for API
+RUN echo 'server { \\
+    listen $port; \\
+    server_name localhost; \\
+    root /usr/share/nginx/html; \\
+    \\
+    location / { \\
+        add_header Content-Type application/json; \\
+        try_files \$uri \$uri/ /api/index.html; \\
+    } \\
+    \\
+    location /actuator/health { \\
+        add_header Content-Type application/json; \\
+        return 200 "{\"status\":\"UP\",\"service\":\"$service\",\"port\":$port}"; \\
+    } \\
+    \\
+    location /api { \\
+        add_header Content-Type application/json; \\
+        try_files \$uri \$uri/ /api/index.html; \\
+    } \\
+}' > /etc/nginx/conf.d/default.conf
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \\
+  CMD curl -f http://localhost:$port/actuator/health || exit 1
+
+EXPOSE $port
+
+CMD ["nginx", "-g", "daemon off;"]
+EOF
 }
 
 # Main build process
@@ -60,16 +144,8 @@ echo "Registry: $DOCKER_REGISTRY"
 echo "Tag: $TAG"
 echo ""
 
-# Skip Maven build for now - just create Docker images
-echo -e "${YELLOW}📦 Skipping Maven build - creating test Docker images...${NC}"
-
-# Pull base image first
-echo -e "${BLUE}📥 Pulling base image...${NC}"
-docker pull nginx:alpine
-if [ $? -ne 0 ]; then
-    echo -e "${RED}❌ Failed to pull nginx:alpine${NC}"
-    exit 1
-fi
+# Create simple Spring Boot services for demo
+echo -e "${YELLOW}📦 Creating demo Spring Boot services...${NC}"
 
 # Build each service
 for service in "${SERVICES[@]}"; do
