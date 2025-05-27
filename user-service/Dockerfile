@@ -1,20 +1,4 @@
-# Multi-stage build
-FROM maven:3.8.6-openjdk-17-slim AS build
-
-# Set working directory
-WORKDIR /app
-
-# Copy parent pom first for better caching
-COPY ../pom.xml ./parent-pom.xml
-
-# Copy service pom and source
-COPY pom.xml .
-COPY src ./src
-
-# Build the application
-RUN mvn clean package -DskipTests
-
-# Runtime stage
+# Simple runtime image - assume JAR is already built
 FROM openjdk:17-jre-slim
 
 # Install curl for health checks
@@ -26,8 +10,8 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser
 # Set working directory
 WORKDIR /app
 
-# Copy jar from build stage
-COPY --from=build /app/target/*.jar app.jar
+# Copy pre-built jar (we'll build it separately)
+COPY target/*.jar app.jar
 
 # Change ownership
 RUN chown -R appuser:appuser /app

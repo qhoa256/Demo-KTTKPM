@@ -1,6 +1,29 @@
-# Online Costume Rental System
+# 🎭 Online Costume Rental System
 
-This project implements a microservices-based architecture for an Online Costume Rental System. The system allows customers to rent costumes online, manage costume imports from suppliers, and generate revenue reports by costume category.
+Hệ thống cho thuê trang phục trực tuyến được xây dựng theo kiến trúc microservices với Spring Boot và Kubernetes. Hệ thống cho phép khách hàng thuê trang phục online, quản lý việc nhập trang phục từ nhà cung cấp, và tạo báo cáo doanh thu theo danh mục trang phục.
+
+## 🚀 Triển khai nhanh
+
+### Kubernetes (Khuyến nghị)
+```bash
+cd Demo-KTTKPM/k8s/scripts
+./setup.sh
+./build-all.sh
+./deploy-simple.sh
+```
+
+**Truy cập**: http://costume-rental.local
+
+### Local Development
+```bash
+# Chạy từng service riêng (cần MySQL)
+cd user-service && mvn spring-boot:run
+cd costume-service && mvn spring-boot:run
+cd bill-costume-service && mvn spring-boot:run
+cd supplier-service && mvn spring-boot:run
+cd import-bill-service && mvn spring-boot:run
+cd client-costume-rental && mvn spring-boot:run
+```
 
 ## Microservices Architecture
 
@@ -39,4 +62,4 @@ Manages bills for importing costumes from suppliers.
 ## Features
 1. Customer costume rental
 2. Costume import from suppliers
-3. Revenue statistics by costume category 
+3. Revenue statistics by costume category

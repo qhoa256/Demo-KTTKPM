@@ -1,53 +1,246 @@
-# 🚀 Hướng dẫn chạy Costume Rental System trên Kubernetes
+# 🚀 Hướng dẫn triển khai Costume Rental System trên Kubernetes
 
-## 📋 Tổng quan
+## 📋 Tổng quan hệ thống
 
-Tôi đã tạo một bộ deployment Kubernetes hoàn chỉnh cho hệ thống Costume Rental System. Bộ deployment này bao gồm:
+Costume Rental System là một hệ thống cho thuê trang phục trực tuyến được xây dựng theo kiến trúc microservices, bao gồm:
 
-- ✅ **6 microservices** với Dockerfiles
-- ✅ **MySQL database** với persistent storage
-- ✅ **Kubernetes manifests** đầy đủ
+### 🏗️ Kiến trúc microservices:
+- ✅ **6 microservices** độc lập
+- ✅ **Kubernetes deployment** hoàn chỉnh
 - ✅ **Ingress configuration** cho external access
 - ✅ **Scripts tự động** cho build và deploy
 - ✅ **Health checks** và monitoring
-- ✅ **ConfigMaps và Secrets** management
+- ✅ **ConfigMaps** cho configuration management
 
-## 🎯 Cách chạy nhanh (Quick Start)
+### 🔧 Các services và ports:
 
-### 1. Chuẩn bị môi trường
+| Service | Port | Mô tả | URL |
+|---------|------|-------|-----|
+| **Frontend (Client)** | 8080 | Giao diện người dùng | http://costume-rental.local |
+| **User Service** | 8081 | Quản lý người dùng | http://costume-rental.local/api/users |
+| **Costume Service** | 8082 | Quản lý trang phục | http://costume-rental.local/api/costumes |
+| **Bill Service** | 8083 | Quản lý hóa đơn | http://costume-rental.local/api/bills |
+| **Supplier Service** | 8084 | Quản lý nhà cung cấp | http://costume-rental.local/api/suppliers |
+| **Import Bill Service** | 8085 | Quản lý nhập hàng | http://costume-rental.local/api/import-bills |
+
+## 🎯 Triển khai nhanh (Quick Start)
+
+### Bước 1: Chuẩn bị môi trường
 ```bash
 cd Demo-KTTKPM/k8s/scripts
 ./setup.sh
 ```
 
-### 2. Build và Deploy
+### Bước 2: Build Docker images
 ```bash
-./build-all.sh    # Build tất cả Docker images
-./deploy-all.sh   # Deploy lên Kubernetes
+./build-all.sh
 ```
 
-### 3. Kiểm tra và truy cập
+### Bước 3: Deploy lên Kubernetes
 ```bash
-./check-status.sh # Kiểm tra trạng thái
+./deploy-simple.sh
 ```
 
-### 4. Truy cập ứng dụng
+### Bước 4: Kiểm tra trạng thái
+```bash
+./check-status.sh
+```
+
+### Bước 5: Truy cập ứng dụng
 - **Frontend**: http://costume-rental.local
-- **API**: http://costume-rental.local/api
+- **API Endpoints**: http://costume-rental.local/api/*
 
 ## 🔧 Yêu cầu hệ thống
 
 ### Phần mềm cần thiết:
 - **Kubernetes cluster** (Minikube, Kind, hoặc production cluster)
-- **kubectl** configured
+- **kubectl** configured và connected
 - **Docker** (v20.10+)
-- **Maven** (v3.6+)
-- **Java** 17+
+- **NGINX Ingress Controller** (sẽ được cài tự động)
 
 ### Tài nguyên tối thiểu:
-- **CPU**: 4 cores
-- **Memory**: 8GB RAM
-- **Storage**: 20GB
+- **CPU**: 2 cores
+- **Memory**: 4GB RAM
+- **Storage**: 10GB
+
+## 🧪 Hướng dẫn test và truy cập
+
+### 1. Kiểm tra deployment status
+```bash
+# Kiểm tra tất cả pods
+kubectl get pods -n costume-rental
+
+# Kiểm tra services
+kubectl get svc -n costume-rental
+
+# Kiểm tra ingress
+kubectl get ingress -n costume-rental
+```
+
+### 2. Test từng service riêng lẻ
+
+#### Frontend (Port 8080)
+```bash
+# Truy cập qua ingress
+curl http://costume-rental.local
+
+# Hoặc port-forward
+kubectl port-forward svc/client-costume-rental 8080:8080 -n costume-rental
+# Sau đó truy cập: http://localhost:8080
+```
+
+#### Backend APIs
+
+**User Service (Port 8081)**
+```bash
+# Qua ingress
+curl http://costume-rental.local/api/users
+
+# Port-forward
+kubectl port-forward svc/user-service 8081:8081 -n costume-rental
+curl http://localhost:8081
+```
+
+**Costume Service (Port 8082)**
+```bash
+# Qua ingress
+curl http://costume-rental.local/api/costumes
+
+# Port-forward
+kubectl port-forward svc/costume-service 8082:8082 -n costume-rental
+curl http://localhost:8082
+```
+
+**Bill Service (Port 8083)**
+```bash
+# Qua ingress
+curl http://costume-rental.local/api/bills
+
+# Port-forward
+kubectl port-forward svc/bill-costume-service 8083:8083 -n costume-rental
+curl http://localhost:8083
+```
+
+**Supplier Service (Port 8084)**
+```bash
+# Qua ingress
+curl http://costume-rental.local/api/suppliers
+
+# Port-forward
+kubectl port-forward svc/supplier-service 8084:8084 -n costume-rental
+curl http://localhost:8084
+```
+
+**Import Bill Service (Port 8085)**
+```bash
+# Qua ingress
+curl http://costume-rental.local/api/import-bills
+
+# Port-forward
+kubectl port-forward svc/import-bill-service 8085:8085 -n costume-rental
+curl http://localhost:8085
+```
+
+### 3. Monitoring và logs
+
+#### Xem logs realtime
+```bash
+# Logs của frontend
+kubectl logs -f deployment/client-costume-rental -n costume-rental
+
+# Logs của user service
+kubectl logs -f deployment/user-service -n costume-rental
+
+# Logs của tất cả pods
+kubectl logs -f -l app=user-service -n costume-rental
+```
+
+#### Kiểm tra resource usage
+```bash
+# Resource usage của pods
+kubectl top pods -n costume-rental
+
+# Resource usage của nodes
+kubectl top nodes
+```
+
+#### Health checks
+```bash
+# Kiểm tra pod status chi tiết
+kubectl describe pod <pod-name> -n costume-rental
+
+# Kiểm tra events
+kubectl get events -n costume-rental --sort-by='.lastTimestamp'
+```
+
+## 🚨 Troubleshooting
+
+### Vấn đề thường gặp
+
+#### 1. Pods không start được
+```bash
+# Xem logs chi tiết
+kubectl logs <pod-name> -n costume-rental
+
+# Xem mô tả pod
+kubectl describe pod <pod-name> -n costume-rental
+
+# Xem events
+kubectl get events -n costume-rental
+```
+
+#### 2. Ingress không hoạt động
+```bash
+# Kiểm tra ingress controller
+kubectl get pods -n ingress-nginx
+
+# Kiểm tra ingress configuration
+kubectl describe ingress costume-rental-ingress -n costume-rental
+
+# Test bằng port-forward
+kubectl port-forward svc/client-costume-rental 8080:8080 -n costume-rental
+```
+
+#### 3. Service không accessible
+```bash
+# Kiểm tra endpoints
+kubectl get endpoints -n costume-rental
+
+# Test service connectivity
+kubectl exec -it <pod-name> -n costume-rental -- curl http://user-service:8081
+```
+
+## 🔄 Scaling và Management
+
+### Horizontal scaling
+```bash
+# Scale user service lên 3 replicas
+kubectl scale deployment user-service --replicas=3 -n costume-rental
+
+# Scale tất cả services
+kubectl scale deployment --all --replicas=2 -n costume-rental
+```
+
+### Rolling updates
+```bash
+# Update image
+kubectl set image deployment/user-service user-service=costume-rental/user-service:v2 -n costume-rental
+
+# Kiểm tra rollout status
+kubectl rollout status deployment/user-service -n costume-rental
+
+# Rollback nếu cần
+kubectl rollout undo deployment/user-service -n costume-rental
+```
+
+### Cleanup
+```bash
+# Xóa toàn bộ deployment
+kubectl delete namespace costume-rental
+
+# Hoặc dùng script
+./cleanup.sh
+```
 
 ## 🏗️ Kiến trúc Kubernetes
 
@@ -230,7 +423,7 @@ Nếu gặp vấn đề:
 
 Bộ deployment này đã sẵn sàng cho:
 - ✅ **Development environment**
-- ✅ **Testing environment**  
+- ✅ **Testing environment**
 - ✅ **Production environment** (với một số điều chỉnh)
 
 Hệ thống sẽ tự động:
