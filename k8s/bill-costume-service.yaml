@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: bill-costume-service
-        image: bill-costume-service:latest
+        image: costume-rental/bill-costume-service:k8s
         imagePullPolicy: Never
         ports:
         - containerPort: 8083

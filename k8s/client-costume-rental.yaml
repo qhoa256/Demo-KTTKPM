@@ -17,10 +17,10 @@ spec:
     spec:
       containers:
       - name: client-costume-rental
-        image: client-costume-rental:latest
+        image: costume-rental/client-costume-rental:k8s
         imagePullPolicy: Never
         ports:
-        - containerPort: 8080
+        - containerPort: 8086
         envFrom:
         - configMapRef:
             name: costume-rental-config
@@ -29,14 +29,14 @@ spec:
         livenessProbe:
           httpGet:
             path: /actuator/health
-            port: 8080
+            port: 8086
           initialDelaySeconds: 60
           periodSeconds: 30
           timeoutSeconds: 10
         readinessProbe:
           httpGet:
             path: /actuator/health
-            port: 8080
+            port: 8086
           initialDelaySeconds: 30
           periodSeconds: 10
           timeoutSeconds: 5
@@ -57,6 +57,6 @@ spec:
   selector:
     app: client-costume-rental
   ports:
-  - port: 8080
-    targetPort: 8080
+  - port: 8086
+    targetPort: 8086
   type: LoadBalancer

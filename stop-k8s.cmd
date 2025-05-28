@@ -37,10 +37,14 @@ kubectl scale deployment mysql-deployment --replicas=0 -n costume-rental
 
 echo.
 echo Waiting for all pods to terminate...
-timeout /t 10 /nobreak >nul
+timeout /t 15 /nobreak >nul
 
 echo.
-echo Current status:
+echo Verifying shutdown...
+kubectl get deployments -n costume-rental
+
+echo.
+echo Current pod status:
 kubectl get pods -n costume-rental
 
 echo.
@@ -49,7 +53,7 @@ echo   All Services Stopped Successfully!
 echo ========================================
 
 echo.
-echo Note: 
+echo Note:
 echo - All data is preserved in PersistentVolumes
 echo - To start services again, run: start-k8s.cmd
 echo - To completely remove everything, run: cleanup-k8s.cmd

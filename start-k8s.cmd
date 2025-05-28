@@ -46,16 +46,24 @@ echo This may take a few minutes...
 
 echo.
 echo Waiting for MySQL to be ready...
-kubectl wait --for=condition=ready pod -l app=mysql -n costume-rental --timeout=300s
+kubectl wait --for=condition=ready pod -l app=mysql-deployment -n costume-rental --timeout=300s
 if %errorlevel% neq 0 (
     echo WARNING: MySQL took longer than expected to start
 )
 
 echo.
-echo Waiting for all services to be ready...
-kubectl wait --for=condition=ready pod --all -n costume-rental --timeout=300s
+echo Waiting for core services to be ready...
+kubectl wait --for=condition=available deployment/user-service -n costume-rental --timeout=300s
+kubectl wait --for=condition=available deployment/costume-service -n costume-rental --timeout=300s
+kubectl wait --for=condition=available deployment/bill-costume-service -n costume-rental --timeout=300s
+kubectl wait --for=condition=available deployment/supplier-service -n costume-rental --timeout=300s
+kubectl wait --for=condition=available deployment/import-bill-service -n costume-rental --timeout=300s
+
+echo.
+echo Waiting for client service to be ready...
+kubectl wait --for=condition=available deployment/client-costume-rental -n costume-rental --timeout=600s
 if %errorlevel% neq 0 (
-    echo WARNING: Some services took longer than expected to start
+    echo WARNING: Client service took longer than expected to start
 )
 
 echo.
@@ -74,7 +82,8 @@ kubectl get services -n costume-rental
 echo.
 echo ========================================
 echo   Access your application at:
-echo   http://localhost:8080
+echo   Main Application: http://localhost:8086
+echo   Statistics Page: http://localhost:8086/costume-statistic
 echo ========================================
 
 :end

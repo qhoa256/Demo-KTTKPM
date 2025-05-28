@@ -21,6 +21,7 @@ data:
   costume.service.url: "http://costume-service:8082"
   supplier.service.url: "http://supplier-service:8084"
   supplier-service.url: "http://supplier-service:8084"
+  bill-service.url: "http://bill-costume-service:8083"
   services.user-service.url: "http://user-service:8081"
   services.costume-service.url: "http://costume-service:8082"
   services.bill-service.url: "http://bill-costume-service:8083"
