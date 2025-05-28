@@ -3,144 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thống kê doanh thu - Quang Hòa</title>
+    <title>Thống kê doanh thu - Hệ thống cho thuê trang phục</title>
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Custom CSS -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Quicksand', sans-serif;
-            background-color: #f8fafc;
-        }
-        
-        .admin-gradient {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-        }
-        
         .card-hover {
             transition: all 0.3s ease;
         }
-        
         .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-        
-        .sidebar {
-            transition: all 0.3s ease;
-            width: 250px;
+
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
-        
-        .content-area {
-            transition: all 0.3s ease;
-            margin-left: 250px;
-        }
-        
-        .sidebar-item {
-            transition: all 0.2s ease;
-        }
-        
-        .sidebar-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        .sidebar-item.active {
-            background-color: rgba(255, 255, 255, 0.2);
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: .5;
+            }
         }
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Admin Header -->
-    <header class="admin-gradient shadow-md">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <i class="fas fa-tshirt text-white text-2xl mr-3"></i>
-                <h1 class="text-white text-xl font-bold">Quản trị cửa hàng Quang Hòa</h1>
-            </div>
-            <div class="flex items-center space-x-4">
-                <div class="text-white flex items-center">
-                    <i class="fas fa-user-circle text-xl mr-2"></i>
-                    <span>Xin chào, <span th:text="${session.fullName}">Admin</span>!</span>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-xl font-bold text-gray-900">
+                            <i class="fas fa-chart-bar mr-2 text-indigo-600"></i>
+                            Hệ thống cho thuê trang phục
+                        </h1>
+                    </div>
                 </div>
-                <a th:href="@{/logout}" class="bg-white text-indigo-600 px-4 py-2 rounded-md font-medium hover:bg-gray-100 transition">
-                    <i class="fas fa-sign-out-alt mr-2"></i>Đăng xuất
-                </a>
+
+                <div class="flex items-center space-x-4">
+                    <a href="/dashboard" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                        <i class="fas fa-home mr-1"></i> Trang chủ
+                    </a>
+                    <a href="/costume-management" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                        <i class="fas fa-tshirt mr-1"></i> Quản lý trang phục
+                    </a>
+                    <a href="/bill-management" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                        <i class="fas fa-receipt mr-1"></i> Quản lý hóa đơn
+                    </a>
+                    <a href="/costume-statistic" class="text-indigo-600 hover:text-indigo-700 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-indigo-600">
+                        <i class="fas fa-chart-line mr-1"></i> Thống kê
+                    </a>
+                    <a href="/logout" class="text-red-500 hover:text-red-700 px-3 py-2 rounded-md text-sm font-medium">
+                        <i class="fas fa-sign-out-alt mr-1"></i> Đăng xuất
+                    </a>
+                </div>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- Admin Layout -->
-    <div class="flex">
-        <!-- Sidebar -->
-        <aside class="sidebar bg-gray-800 text-white h-screen fixed top-0 left-0 pt-20 overflow-y-auto">
-            <nav class="p-4">
-                <ul class="space-y-2">
-                    <li>
-                        <a th:href="@{/admin}" class="sidebar-item flex items-center p-3 rounded-lg">
-                            <i class="fas fa-tachometer-alt mr-3 text-lg"></i>
-                            <span class="font-medium">Bảng điều khiển</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
-                            <i class="fas fa-users mr-3 text-lg"></i>
-                            <span class="font-medium">Quản lý khách hàng</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
-                            <i class="fas fa-tshirt mr-3 text-lg"></i>
-                            <span class="font-medium">Quản lý trang phục</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
-                            <i class="fas fa-truck mr-3 text-lg"></i>
-                            <span class="font-medium">Nhà cung cấp</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
-                            <i class="fas fa-file-invoice-dollar mr-3 text-lg"></i>
-                            <span class="font-medium">Hóa đơn</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a th:href="@{/costume-statistic}" class="sidebar-item active flex items-center p-3 rounded-lg">
-                            <i class="fas fa-chart-line mr-3 text-lg"></i>
-                            <span class="font-medium">Báo cáo thống kê</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="sidebar-item flex items-center p-3 rounded-lg">
-                            <i class="fas fa-cog mr-3 text-lg"></i>
-                            <span class="font-medium">Cài đặt</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="content-area flex-1 p-8 pt-24">
-            <div class="container mx-auto">
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div class="px-4 py-6 sm:px-0">
+            <div class="min-h-screen">
                 <!-- Page Header -->
                 <div class="flex justify-between items-center mb-8">
                     <h2 class="text-2xl font-bold text-gray-800">Báo cáo thống kê doanh thu</h2>
-                    <div class="flex items-center space-x-4">
-                        <div class="relative">
-                            <select id="period-selector" class="pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-                                <option value="all">Tất cả thời gian</option>
-                                <option value="year">Năm hiện tại</option>
-                                <option value="quarter">Quý hiện tại</option>
-                                <option value="month">Tháng hiện tại</option>
-                            </select>
+                    <button id="exportBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center">
+                        <i class="fas fa-download mr-2"></i> Xuất báo cáo
+                    </button>
+                </div>
+
+                <!-- Date Filter -->
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Lọc theo thời gian</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label for="startDate" class="block text-sm font-medium text-gray-700 mb-2">Ngày bắt đầu</label>
+                            <input type="date" id="startDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
-                        <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center">
-                            <i class="fas fa-download mr-2"></i> Xuất báo cáo
-                        </button>
+                        <div>
+                            <label for="endDate" class="block text-sm font-medium text-gray-700 mb-2">Ngày kết thúc</label>
+                            <input type="date" id="endDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div class="flex items-end">
+                            <button id="filterBtn" class="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                                <i class="fas fa-filter mr-2"></i> Lọc dữ liệu
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -150,460 +108,429 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="text-gray-500">Tổng doanh thu</p>
-                                <h3 class="text-2xl font-bold mt-2">1,520,500 VND</h3>
+                                <h3 id="totalRevenue" class="text-2xl font-bold mt-2">0 VND</h3>
                             </div>
                             <div class="bg-indigo-100 p-3 rounded-full">
                                 <i class="fas fa-money-bill-wave text-indigo-600 text-xl"></i>
                             </div>
                         </div>
-                        <p class="text-green-500 text-sm mt-4">
-                            <i class="fas fa-arrow-up mr-1"></i> 15% so với kỳ trước
-                        </p>
                     </div>
-                    
+
                     <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-gray-500">Số lượng đơn hàng</p>
-                                <h3 class="text-2xl font-bold mt-2">287</h3>
+                                <p class="text-gray-500">Số loại trang phục</p>
+                                <h3 id="totalCategories" class="text-2xl font-bold mt-2">0</h3>
                             </div>
                             <div class="bg-green-100 p-3 rounded-full">
-                                <i class="fas fa-receipt text-green-600 text-xl"></i>
+                                <i class="fas fa-tags text-green-600 text-xl"></i>
                             </div>
                         </div>
-                        <p class="text-green-500 text-sm mt-4">
-                            <i class="fas fa-arrow-up mr-1"></i> 8% so với kỳ trước
-                        </p>
                     </div>
-                    
+
                     <div class="bg-white p-6 rounded-xl shadow-sm card-hover">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="text-gray-500">Doanh thu trung bình/đơn</p>
-                                <h3 class="text-2xl font-bold mt-2">531,400 VND</h3>
+                                <p class="text-gray-500">Tổng lượt thuê</p>
+                                <h3 id="totalRentals" class="text-2xl font-bold mt-2">0</h3>
                             </div>
                             <div class="bg-purple-100 p-3 rounded-full">
-                                <i class="fas fa-calculator text-purple-600 text-xl"></i>
+                                <i class="fas fa-shopping-cart text-purple-600 text-xl"></i>
                             </div>
                         </div>
-                        <p class="text-green-500 text-sm mt-4">
-                            <i class="fas fa-arrow-up mr-1"></i> 5% so với kỳ trước
-                        </p>
                     </div>
                 </div>
 
-                <!-- Revenue by Category -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <!-- Pie Chart for Revenue Distribution -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">Phân bố doanh thu theo loại trang phục</h3>
-                        <div class="h-80">
-                            <canvas id="categoryPieChart"></canvas>
+                <!-- Categories List -->
+                <div id="categoriesSection" class="bg-white p-6 rounded-xl shadow-sm mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">Danh sách loại trang phục</h3>
+                        <div class="text-sm text-gray-500">
+                            <span id="categoryInfo">Hiển thị 0 loại trang phục</span>
                         </div>
                     </div>
-                    
-                    <!-- Bar Chart for Revenue Comparison -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">So sánh doanh thu theo loại trang phục</h3>
-                        <div class="h-80">
-                            <canvas id="categoryBarChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Additional Charts -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <!-- Horizontal Bar Chart for Rental Count -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">Số lượt thuê theo loại trang phục</h3>
-                        <div class="h-80">
-                            <canvas id="rentalCountChart"></canvas>
-                        </div>
-                    </div>
-                    
-                    <!-- Doughnut Chart for Revenue Percentage -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">Tỷ lệ doanh thu (%)</h3>
-                        <div class="h-80">
-                            <canvas id="percentageChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Radar Chart and Revenue per Rental -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <!-- Radar Chart -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">Phân tích đa chiều</h3>
-                        <div class="h-80">
-                            <canvas id="radarChart"></canvas>
-                        </div>
-                    </div>
-                    
-                    <!-- Average Revenue per Rental -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">Doanh thu trung bình mỗi lượt thuê</h3>
-                        <div class="h-80">
-                            <canvas id="avgRevenueChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Categories and Bill IDs List -->
-                <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">Danh sách hóa đơn theo loại trang phục</h3>
-                    
-                    <div class="grid grid-cols-1 gap-4" id="categoriesList">
+
+                    <div id="categoriesList" class="space-y-4">
                         <!-- Categories will be populated here by JavaScript -->
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-search text-4xl mb-4"></i>
+                            <p>Chọn khoảng thời gian và nhấn "Lọc dữ liệu" để xem thống kê</p>
+                        </div>
+                    </div>
+
+                    <!-- Pagination for categories -->
+                    <div id="categoryPagination" class="mt-6 flex justify-center items-center space-x-2" style="display: none;">
+                        <button id="categoryPrevBtn" class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span id="categoryPageInfo" class="px-4 py-1 text-sm text-gray-600">Trang 1 / 1</span>
+                        <button id="categoryNextBtn" class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
                     </div>
                 </div>
-                
-                <!-- Bill Details Modal -->
-                <div id="billModal" class="fixed inset-0 z-50 hidden overflow-auto bg-black bg-opacity-50 flex items-center justify-center">
-                    <div class="bg-white rounded-xl max-w-2xl w-full mx-4">
-                        <div class="p-6 border-b border-gray-200">
-                            <div class="flex justify-between items-center">
-                                <h3 class="text-lg font-bold text-gray-800">Chi tiết hóa đơn</h3>
-                                <button id="closeBillModal" class="text-gray-500 hover:text-gray-700">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
+
+                <!-- Costumes List (Hidden by default) -->
+                <div id="costumesSection" class="bg-white p-6 rounded-xl shadow-sm mb-8" style="display: none;">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">Danh sách trang phục</h3>
+                            <p id="costumeCategoryName" class="text-sm text-gray-500"></p>
                         </div>
-                        
-                        <div class="p-6" id="billDetails">
-                            <!-- Bill details will be populated here by JavaScript -->
-                            <div class="animate-pulse">
-                                <div class="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-                                <div class="h-6 bg-gray-200 rounded w-1/2 mb-4"></div>
-                                <div class="h-6 bg-gray-200 rounded w-5/6 mb-4"></div>
-                                <div class="h-6 bg-gray-200 rounded w-2/3 mb-4"></div>
-                            </div>
+                        <button id="backToCategoriesBtn" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+                            <i class="fas fa-arrow-left mr-2"></i> Quay lại
+                        </button>
+                    </div>
+
+                    <div id="costumesList" class="space-y-4">
+                        <!-- Costumes will be populated here by JavaScript -->
+                    </div>
+
+                    <!-- Pagination for costumes -->
+                    <div id="costumePagination" class="mt-6 flex justify-center items-center space-x-2" style="display: none;">
+                        <button id="costumePrevBtn" class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span id="costumePageInfo" class="px-4 py-1 text-sm text-gray-600">Trang 1 / 1</span>
+                        <button id="costumeNextBtn" class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bills List (Hidden by default) -->
+                <div id="billsSection" class="bg-white p-6 rounded-xl shadow-sm mb-8" style="display: none;">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">Danh sách hóa đơn</h3>
+                            <p id="billCostumeName" class="text-sm text-gray-500"></p>
                         </div>
-                        
-                        <div class="p-4 bg-gray-50 border-t border-gray-200 flex justify-end rounded-b-xl">
-                            <button id="closeBillModalBtn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md font-medium hover:bg-gray-400 transition">
-                                Đóng
-                            </button>
-                        </div>
+                        <button id="backToCostumesBtn" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+                            <i class="fas fa-arrow-left mr-2"></i> Quay lại
+                        </button>
+                    </div>
+
+                    <div id="billsList" class="space-y-4">
+                        <!-- Bills will be populated here by JavaScript -->
+                    </div>
+
+                    <!-- Pagination for bills -->
+                    <div id="billPagination" class="mt-6 flex justify-center items-center space-x-2" style="display: none;">
+                        <button id="billPrevBtn" class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span id="billPageInfo" class="px-4 py-1 text-sm text-gray-600">Trang 1 / 1</span>
+                        <button id="billNextBtn" class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-gray-100 py-6 border-t border-gray-200">
-        <div class="container mx-auto px-4 text-center text-gray-600">
-            <p>© 2023 Hệ thống quản trị cửa hàng Quang Hòa. Phiên bản 1.0.0</p>
+    <!-- Bill Details Modal -->
+    <div id="billModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+        <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-900">Chi tiết hóa đơn</h3>
+                <button id="closeBillModal" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="billDetails" class="max-h-96 overflow-y-auto">
+                <!-- Bill details will be populated here -->
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button id="closeBillModalBtn" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+                    Đóng
+                </button>
+            </div>
         </div>
-    </footer>
+    </div>
 
     <script th:inline="javascript">
         document.addEventListener('DOMContentLoaded', function() {
-            // Get data from Thymeleaf model
-            const revenueData = /*[[${revenueByCategory}]]*/ {
-                categories: [
-                    { category: 'Váy dạ hội', revenue: 42.5, count: 10, billIds: ['BILL001', 'BILL002', 'BILL003'] },
-                    { category: 'Vest nam', revenue: 38.2, count: 8, billIds: ['BILL004', 'BILL005'] },
-                    { category: 'Áo dài', revenue: 25.8, count: 15, billIds: ['BILL006', 'BILL007', 'BILL008'] },
-                    { category: 'Trang phục dân tộc', revenue: 15.6, count: 5, billIds: ['BILL009'] },
-                    { category: 'Khác', revenue: 30.4, count: 12, billIds: ['BILL010', 'BILL011'] }
-                ],
-                totalRevenue: 152.5
-            };
-            
-            // Process data for charts
-            const categoryNames = revenueData.categories.map(item => item.category);
-            const categoryRevenues = revenueData.categories.map(item => item.revenue);
-            const categoryCount = revenueData.categories.map(item => item.count);
-            const totalRevenue = revenueData.totalRevenue || categoryRevenues.reduce((a, b) => a + b, 0);
-            const percentages = categoryRevenues.map(revenue => ((revenue / totalRevenue) * 100).toFixed(1));
-            const avgRevenuePerRental = revenueData.categories.map(item => 
-                item.count > 0 ? (item.revenue / item.count).toFixed(2) : 0
-            );
-            
-            // Chart colors
-            const chartColors = [
-                'rgba(79, 70, 229, 0.8)',    // Indigo
-                'rgba(16, 185, 129, 0.8)',   // Green
-                'rgba(245, 158, 11, 0.8)',   // Yellow
-                'rgba(239, 68, 68, 0.8)',    // Red
-                'rgba(107, 114, 128, 0.8)',  // Gray
-                'rgba(124, 58, 237, 0.8)',   // Purple
-                'rgba(14, 165, 233, 0.8)',   // Sky blue
-                'rgba(236, 72, 153, 0.8)'    // Pink
-            ];
-            
-            // Update total revenue display in the summary card
-            const totalRevenueElement = document.querySelector('.bg-white:nth-child(1) h3');
-            if (totalRevenueElement) {
-                totalRevenueElement.textContent = (totalRevenue * 1).toLocaleString() + ' VND';
-            }
-            
-            // 1. Pie Chart for Revenue Distribution
-            const pieChartCtx = document.getElementById('categoryPieChart').getContext('2d');
-            new Chart(pieChartCtx, {
-                type: 'pie',
-                data: {
-                    labels: categoryNames,
-                    datasets: [{
-                        data: categoryRevenues.map(rev => rev * 1),
-                        backgroundColor: chartColors,
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const categoryData = revenueData.categories[context.dataIndex];
-                                    const percentage = ((context.raw / totalRevenue) * 100).toFixed(1);
-                                    return `${context.label}: ${(context.raw * 1).toLocaleString()} VND (${percentage}%) - ${categoryData.count} lượt thuê`;
-                                }
-                            }
-                        }
-                    }
+            // Global variables
+            let currentCategoryPage = 0;
+            let currentCostumePage = 0;
+            let currentBillPage = 0;
+            let currentCategory = '';
+            let currentCostumeId = null;
+            let currentStartDate = null;
+            let currentEndDate = null;
+            const pageSize = 10;
+
+            // Initialize date inputs with default values
+            const today = new Date();
+            const oneMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+
+            document.getElementById('startDate').value = oneMonthAgo.toISOString().split('T')[0];
+            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+
+            // Event listeners
+            document.getElementById('filterBtn').addEventListener('click', loadCategories);
+            document.getElementById('exportBtn').addEventListener('click', exportReport);
+
+            // Category pagination
+            document.getElementById('categoryPrevBtn').addEventListener('click', () => {
+                if (currentCategoryPage > 0) {
+                    currentCategoryPage--;
+                    loadCategories();
                 }
             });
-            
-            // 2. Bar Chart for Revenue Comparison
-            const barChartCtx = document.getElementById('categoryBarChart').getContext('2d');
-            new Chart(barChartCtx, {
-                type: 'bar',
-                data: {
-                    labels: categoryNames,
-                    datasets: [{
-                        label: 'Doanh thu (VND)',
-                        data: categoryRevenues.map(rev => rev * 1),
-                        backgroundColor: chartColors,
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Doanh thu (VND)'
-                            }
-                        }
-                    }
+
+            document.getElementById('categoryNextBtn').addEventListener('click', () => {
+                currentCategoryPage++;
+                loadCategories();
+            });
+
+            // Costume pagination
+            document.getElementById('costumePrevBtn').addEventListener('click', () => {
+                if (currentCostumePage > 0) {
+                    currentCostumePage--;
+                    loadCostumes(currentCategory);
                 }
             });
-            
-            // 3. Horizontal Bar Chart for Rental Count
-            const rentalCountCtx = document.getElementById('rentalCountChart').getContext('2d');
-            new Chart(rentalCountCtx, {
-                type: 'bar',
-                data: {
-                    labels: categoryNames,
-                    datasets: [{
-                        label: 'Số lượt thuê',
-                        data: categoryCount,
-                        backgroundColor: chartColors,
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Số lượt thuê'
-                            }
-                        }
-                    }
+
+            document.getElementById('costumeNextBtn').addEventListener('click', () => {
+                currentCostumePage++;
+                loadCostumes(currentCategory);
+            });
+
+            // Bill pagination
+            document.getElementById('billPrevBtn').addEventListener('click', () => {
+                if (currentBillPage > 0) {
+                    currentBillPage--;
+                    loadBills(currentCostumeId);
                 }
             });
-            
-            // 4. Doughnut Chart for Revenue Percentage
-            const percentageCtx = document.getElementById('percentageChart').getContext('2d');
-            new Chart(percentageCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: categoryNames,
-                    datasets: [{
-                        data: percentages,
-                        backgroundColor: chartColors,
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `${context.label}: ${context.raw}%`;
-                                }
-                            }
-                        }
-                    }
-                }
+
+            document.getElementById('billNextBtn').addEventListener('click', () => {
+                currentBillPage++;
+                loadBills(currentCostumeId);
             });
-            
-            // 5. Radar Chart for Multi-dimensional Analysis
-            const radarCtx = document.getElementById('radarChart').getContext('2d');
-            new Chart(radarCtx, {
-                type: 'radar',
-                data: {
-                    labels: categoryNames,
-                    datasets: [
-                        {
-                            label: 'Doanh thu (VND)',
-                            data: categoryRevenues.map(rev => rev * 1),
-                            backgroundColor: 'rgba(79, 70, 229, 0.2)',
-                            borderColor: 'rgba(79, 70, 229, 0.8)',
-                            pointBackgroundColor: 'rgba(79, 70, 229, 1)',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: 'rgba(79, 70, 229, 1)'
-                        },
-                        {
-                            label: 'Số lượt thuê',
-                            data: categoryCount,
-                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                            borderColor: 'rgba(16, 185, 129, 0.8)',
-                            pointBackgroundColor: 'rgba(16, 185, 129, 1)',
-                            pointBorderColor: '#fff',
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: 'rgba(16, 185, 129, 1)'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    elements: {
-                        line: {
-                            borderWidth: 2
-                        }
-                    }
-                }
+
+            // Back buttons
+            document.getElementById('backToCategoriesBtn').addEventListener('click', () => {
+                document.getElementById('costumesSection').style.display = 'none';
+                document.getElementById('categoriesSection').style.display = 'block';
             });
-            
-            // 6. Bar Chart for Average Revenue per Rental
-            const avgRevenueCtx = document.getElementById('avgRevenueChart').getContext('2d');
-            new Chart(avgRevenueCtx, {
-                type: 'bar',
-                data: {
-                    labels: categoryNames,
-                    datasets: [{
-                        label: 'Doanh thu TB/lượt thuê (VND)',
-                        data: avgRevenuePerRental.map(rev => rev * 1),
-                        backgroundColor: chartColors,
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Doanh thu trung bình/lượt thuê (VND)'
-                            }
-                        }
-                    }
-                }
+
+            document.getElementById('backToCostumesBtn').addEventListener('click', () => {
+                document.getElementById('billsSection').style.display = 'none';
+                document.getElementById('costumesSection').style.display = 'block';
             });
-            
-            // Generate categories and bill IDs list
-            const categoriesList = document.getElementById('categoriesList');
-            
-            revenueData.categories.forEach((categoryData, index) => {
-                const categoryContainer = document.createElement('div');
-                categoryContainer.className = 'border border-gray-200 rounded-lg p-4 mb-4';
-                
-                // Category header with toggle functionality
-                const categoryHeader = document.createElement('div');
-                categoryHeader.className = 'flex justify-between items-center cursor-pointer';
-                categoryHeader.innerHTML = `
-                    <div class="flex items-center">
-                        <div class="w-4 h-4 rounded-full mr-3" style="background-color: ${chartColors[index % chartColors.length]}"></div>
-                        <h4 class="font-medium text-gray-800">${categoryData.category}</h4>
-                    </div>
-                    <div class="flex items-center">
-                        <span class="mr-6 text-gray-600">${(categoryData.revenue * 1).toLocaleString()} VND (${percentages[index]}%)</span>
-                        <i class="fas fa-chevron-down text-gray-500 category-toggle"></i>
-                    </div>
-                `;
-                categoryContainer.appendChild(categoryHeader);
-                
-                // Bill IDs list (hidden by default)
-                const billIdsList = document.createElement('div');
-                billIdsList.className = 'mt-3 pl-7 hidden bill-ids-list';
-                
-                if (categoryData.billIds && categoryData.billIds.length > 0) {
-                    const billIdsWrapper = document.createElement('div');
-                    billIdsWrapper.className = 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2';
-                    
-                    categoryData.billIds.forEach(billId => {
-                        const billIdBtn = document.createElement('button');
-                        billIdBtn.className = 'px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm rounded-md transition';
-                        billIdBtn.textContent = billId;
-                        billIdBtn.addEventListener('click', () => openBillDetails(billId, categoryData.category));
-                        billIdsWrapper.appendChild(billIdBtn);
-                    });
-                    
-                    billIdsList.appendChild(billIdsWrapper);
-                } else {
-                    billIdsList.innerHTML = '<p class="text-gray-500 text-sm italic">Không có hóa đơn nào cho loại trang phục này.</p>';
-                }
-                
-                categoryContainer.appendChild(billIdsList);
-                
-                // Toggle bill IDs list when clicking on category header
-                categoryHeader.addEventListener('click', () => {
-                    billIdsList.classList.toggle('hidden');
-                    categoryHeader.querySelector('.category-toggle').classList.toggle('fa-chevron-down');
-                    categoryHeader.querySelector('.category-toggle').classList.toggle('fa-chevron-up');
-                });
-                
-                categoriesList.appendChild(categoryContainer);
-            });
-            
-            // Bill details modal functionality
+
+            // Modal functionality
             const modal = document.getElementById('billModal');
             const closeModal = document.getElementById('closeBillModal');
             const closeModalBtn = document.getElementById('closeBillModalBtn');
-            const billDetails = document.getElementById('billDetails');
-            
-            function openBillDetails(billId, category) {
+
+            closeModal.addEventListener('click', () => modal.classList.add('hidden'));
+            closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.add('hidden');
+            });
+
+            // Functions
+            function loadCategories() {
+                currentStartDate = document.getElementById('startDate').value;
+                currentEndDate = document.getElementById('endDate').value;
+
+                if (!currentStartDate || !currentEndDate) {
+                    alert('Vui lòng chọn ngày bắt đầu và ngày kết thúc');
+                    return;
+                }
+
+                showLoading('categoriesList');
+
+                const url = `/api/statistics/revenue-by-category?startDate=${currentStartDate}&endDate=${currentEndDate}&page=${currentCategoryPage}&size=${pageSize}`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            throw new Error(data.message);
+                        }
+
+                        displayCategories(data);
+                        updateSummary(data);
+                        updateCategoryPagination(data);
+                    })
+                    .catch(error => {
+                        console.error('Error loading categories:', error);
+                        showError('categoriesList', 'Không thể tải dữ liệu thống kê: ' + error.message);
+                    });
+            }
+
+            function loadCostumes(category) {
+                showLoading('costumesList');
+
+                const url = `/api/statistics/costumes-by-category?category=${encodeURIComponent(category)}&startDate=${currentStartDate}&endDate=${currentEndDate}&page=${currentCostumePage}&size=${pageSize}`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            throw new Error(data.message);
+                        }
+
+                        displayCostumes(data, category);
+                        updateCostumePagination(data);
+                    })
+                    .catch(error => {
+                        console.error('Error loading costumes:', error);
+                        showError('costumesList', 'Không thể tải dữ liệu trang phục: ' + error.message);
+                    });
+            }
+
+            function loadBills(costumeId) {
+                showLoading('billsList');
+
+                const url = `/api/statistics/bills-by-costume/${costumeId}?startDate=${currentStartDate}&endDate=${currentEndDate}&page=${currentBillPage}&size=${pageSize}`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            throw new Error(data.message);
+                        }
+
+                        displayBills(data);
+                        updateBillPagination(data);
+                    })
+                    .catch(error => {
+                        console.error('Error loading bills:', error);
+                        showError('billsList', 'Không thể tải dữ liệu hóa đơn: ' + error.message);
+                    });
+            }
+
+            function displayCategories(data) {
+                const categoriesList = document.getElementById('categoriesList');
+                const categories = data.content || [];
+
+                if (categories.length === 0) {
+                    categoriesList.innerHTML = `
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-inbox text-4xl mb-4"></i>
+                            <p>Không có dữ liệu trong khoảng thời gian đã chọn</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                categoriesList.innerHTML = categories.map(category => `
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition cursor-pointer"
+                         onclick="viewCostumes('${category.category}')">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">${category.category}</h4>
+                                <p class="text-sm text-gray-500">Số lượt thuê: ${category.count}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-indigo-600">${Number(category.revenue).toLocaleString()} VND</p>
+                                <i class="fas fa-chevron-right text-gray-400 mt-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            function displayCostumes(data, category) {
+                const costumesList = document.getElementById('costumesList');
+                const costumes = data.content || [];
+
+                document.getElementById('costumeCategoryName').textContent = `Loại: ${category}`;
+
+                if (costumes.length === 0) {
+                    costumesList.innerHTML = `
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-tshirt text-4xl mb-4"></i>
+                            <p>Không có trang phục nào trong loại này</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                costumesList.innerHTML = costumes.map(costume => `
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition cursor-pointer"
+                         onclick="viewBills(${costume.id}, '${costume.name}')">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">${costume.name}</h4>
+                                <p class="text-sm text-gray-500">${costume.description || 'Không có mô tả'}</p>
+                                <p class="text-sm text-gray-500">Số lượt thuê: ${costume.rentCount}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-indigo-600">${Number(costume.revenue).toLocaleString()} VND</p>
+                                <p class="text-sm text-gray-500">Giá: ${Number(costume.price).toLocaleString()} VND</p>
+                                <i class="fas fa-chevron-right text-gray-400 mt-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            function displayBills(data) {
+                const billsList = document.getElementById('billsList');
+                const bills = data.content || [];
+
+                if (bills.length === 0) {
+                    billsList.innerHTML = `
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-receipt text-4xl mb-4"></i>
+                            <p>Không có hóa đơn nào cho trang phục này</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                billsList.innerHTML = bills.map(bill => `
+                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition cursor-pointer"
+                         onclick="viewBillDetails(${bill.id})">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Hóa đơn #${bill.id}</h4>
+                                <p class="text-sm text-gray-500">Ngày thuê: ${bill.rentDate}</p>
+                                <p class="text-sm text-gray-500">Ngày trả: ${bill.returnDate}</p>
+                                <p class="text-sm text-gray-500">Khách hàng: ${bill.customerId}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-indigo-600">${Number(bill.totalAmount || 0).toLocaleString()} VND</p>
+                                <i class="fas fa-eye text-gray-400 mt-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Navigation functions
+            function viewCostumes(category) {
+                currentCategory = category;
+                currentCostumePage = 0;
+
+                document.getElementById('categoriesSection').style.display = 'none';
+                document.getElementById('costumesSection').style.display = 'block';
+
+                loadCostumes(category);
+            }
+
+            function viewBills(costumeId, costumeName) {
+                currentCostumeId = costumeId;
+                currentBillPage = 0;
+
+                document.getElementById('billCostumeName').textContent = `Trang phục: ${costumeName}`;
+                document.getElementById('costumesSection').style.display = 'none';
+                document.getElementById('billsSection').style.display = 'block';
+
+                loadBills(costumeId);
+            }
+
+            function viewBillDetails(billId) {
+                const modal = document.getElementById('billModal');
+                const billDetails = document.getElementById('billDetails');
+
                 // Show loading state
                 billDetails.innerHTML = `
                     <div class="animate-pulse">
@@ -613,43 +540,20 @@
                         <div class="h-6 bg-gray-200 rounded w-2/3 mb-4"></div>
                     </div>
                 `;
-                
-                // Show modal
+
                 modal.classList.remove('hidden');
-                
-                // Fetch bill details with category filter
-                fetch(`/get-bill-by-category?billId=${billId}&category=${category}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
+
+                // Fetch bill details
+                fetch(`/get-bill-by-category?billId=${billId}`)
+                    .then(response => response.json())
                     .then(data => {
-                        // Check for error response
                         if (data.error) {
-                            throw new Error(data.message || 'Failed to fetch bill details');
+                            throw new Error(data.message);
                         }
 
-                        console.log("API Response:", data);
-                        
-                        // Extract data from the response
                         const billData = data.billDetails || {};
-                        const costumeData = data.costumeDetails || {};
-                        
-                        // Check if we have a message about no costumes in this category
-                        if (data.message && Object.keys(costumeData).length === 0) {
-                            billDetails.innerHTML = `
-                                <div class="text-center p-6">
-                                    <div class="text-amber-500 mb-2"><i class="fas fa-info-circle text-xl"></i></div>
-                                    <p class="font-medium text-gray-800">Không tìm thấy trang phục phù hợp</p>
-                                    <p class="text-gray-500 mt-1">${data.message}</p>
-                                </div>
-                            `;
-                            return;
-                        }
+                        const costumeData = data.costumeDetails || [];
 
-                        // Update modal content with bill details
                         let content = `
                             <div class="mb-6">
                                 <h4 class="text-lg font-medium text-gray-800 mb-2">Thông tin chung</h4>
@@ -666,148 +570,196 @@
                                         <p class="text-sm text-gray-500">Ngày trả</p>
                                         <p class="font-medium">${billData.returnDate || 'N/A'}</p>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="mb-6">
-                                <h4 class="text-lg font-medium text-gray-800 mb-2">Thông tin khách hàng</h4>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <p class="text-sm text-gray-500">Tên đăng nhập</p>
-                                        <p class="font-medium">${billData.customer?.username || 'N/A'}</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Họ tên</p>
-                                        <p class="font-medium">${billData.customer?.fullName ? 
-                                            `${billData.customer.fullName.firstName} ${billData.customer.fullName.lastName}` : 'N/A'}</p>
-                                    </div>
                                     <div>
                                         <p class="text-sm text-gray-500">Địa chỉ</p>
-                                        <p class="font-medium">${billData.customer?.address ? 
-                                            `${billData.customer.address.street}, ${billData.customer.address.city}` : 'N/A'}</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Điểm thành viên</p>
-                                        <p class="font-medium">${billData.customer?.loyaltyPoints || '0'}</p>
+                                        <p class="font-medium">${billData.address || 'N/A'}</p>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="mb-6">
-                                <h4 class="text-lg font-medium text-gray-800 mb-2">Thông tin thanh toán</h4>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <p class="text-sm text-gray-500">Phương thức thanh toán</p>
-                                        <p class="font-medium">${billData.payment?.paymentMethod || 'N/A'}</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Ghi chú thanh toán</p>
-                                        <p class="font-medium">${billData.payment?.paymentNote || 'N/A'}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            ${billData.note ? `
-                            <div class="mb-6">
-                                <h4 class="text-lg font-medium text-gray-800 mb-2">Ghi chú</h4>
-                                <p class="p-3 bg-gray-50 rounded border border-gray-200">${billData.note}</p>
-                            </div>
-                            ` : ''}
                         `;
-                         
-                        // Add costume details section
-                        if (costumeData && Array.isArray(costumeData) && costumeData.length > 0) {
-                            // Start building the costumes table
-                            let costumesTable = `
+
+                        if (costumeData && costumeData.length > 0) {
+                            content += `
                                 <div>
                                     <h4 class="text-lg font-medium text-gray-800 mb-2">Chi tiết trang phục</h4>
                                     <div class="overflow-x-auto">
                                         <table class="min-w-full divide-y divide-gray-200">
                                             <thead class="bg-gray-50">
                                                 <tr>
-                                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tên trang phục</th>
+                                                    <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Tên</th>
                                                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Loại</th>
                                                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Số lượng</th>
                                                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Đơn giá</th>
                                                     <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Thành tiền</th>
                                                 </tr>
                                             </thead>
-                                            <tbody class="bg-white divide-y divide-gray-200">`;
-                            
-                            // Add a row for each costume
+                                            <tbody class="bg-white divide-y divide-gray-200">
+                            `;
+
                             costumeData.forEach(costume => {
-                                costumesTable += `
-                                <tr>
-                                    <td class="px-3 py-2 text-sm">
-                                        <div>
-                                            <p class="font-medium">${costume.name || 'N/A'}</p>
-                                            <p class="text-xs text-gray-500 mt-1">${costume.description || 'Không có mô tả'}</p>
-                                            <p class="text-xs text-gray-500 mt-1">Mã trang phục: ${costume.id || 'N/A'}</p>
-                                        </div>
-                                    </td>
-                                    <td class="px-3 py-2 text-sm">${costume.category || 'N/A'}</td>
-                                    <td class="px-3 py-2 text-sm text-center">${costume.quantity || '0'}</td>
-                                    <td class="px-3 py-2 text-sm">${costume.rentPrice ? Number(costume.rentPrice).toLocaleString() + ' đ' : '0 đ'}</td>
-                                    <td class="px-3 py-2 text-sm font-medium">${costume.totalAmount ? Number(costume.totalAmount).toLocaleString() + ' đ' : '0 đ'}</td>
-                                </tr>`;
+                                content += `
+                                    <tr>
+                                        <td class="px-3 py-2 text-sm">${costume.name || 'N/A'}</td>
+                                        <td class="px-3 py-2 text-sm">${costume.category || 'N/A'}</td>
+                                        <td class="px-3 py-2 text-sm text-center">${costume.quantity || '0'}</td>
+                                        <td class="px-3 py-2 text-sm">${Number(costume.rentPrice || 0).toLocaleString()} VND</td>
+                                        <td class="px-3 py-2 text-sm font-medium">${Number(costume.totalAmount || 0).toLocaleString()} VND</td>
+                                    </tr>
+                                `;
                             });
-                            
-                            // Close the tbody and add the footer with total sum
-                            costumesTable += `
+
+                            content += `
                                             </tbody>
                                             <tfoot>
                                                 <tr class="bg-gray-50">
                                                     <td colspan="4" class="px-3 py-2 text-right font-medium">Tổng cộng:</td>
-                                                    <td class="px-3 py-2 whitespace-nowrap text-sm font-bold text-indigo-600">${data.billTotalAmount ? Number(data.billTotalAmount).toLocaleString() + ' đ' : '0 đ'}</td>
+                                                    <td class="px-3 py-2 text-sm font-bold text-indigo-600">${Number(data.billTotalAmount || 0).toLocaleString()} VND</td>
                                                 </tr>
                                             </tfoot>
                                         </table>
                                     </div>
                                 </div>
                             `;
-                            
-                            content += costumesTable;
-                        } else {
-                            content += `
-                                <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                    <p class="text-gray-500">Không có thông tin chi tiết về trang phục</p>
-                                </div>
-                            `;
                         }
-                        
+
                         billDetails.innerHTML = content;
                     })
                     .catch(error => {
+                        console.error('Error loading bill details:', error);
                         billDetails.innerHTML = `
-                            <div class="text-center p-6">
-                                <div class="text-red-500 mb-2"><i class="fas fa-exclamation-circle text-xl"></i></div>
-                                <p class="font-medium text-gray-800">Không thể tải thông tin hóa đơn</p>
-                                <p class="text-gray-500 mt-1">${error.message}</p>
+                            <div class="text-center p-6 text-red-500">
+                                <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                                <p>Không thể tải chi tiết hóa đơn</p>
+                                <p class="text-sm">${error.message}</p>
                             </div>
                         `;
-                        console.error("Error fetching bill details:", error);
                     });
             }
-            
-            closeModal.addEventListener('click', () => {
-                modal.classList.add('hidden');
-            });
-            
-            closeModalBtn.addEventListener('click', () => {
-                modal.classList.add('hidden');
-            });
-            
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.add('hidden');
+
+            // Utility functions
+            function showLoading(elementId) {
+                document.getElementById(elementId).innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+                        <p class="mt-4 text-gray-500">Đang tải dữ liệu...</p>
+                    </div>
+                `;
+            }
+
+            function showError(elementId, message) {
+                document.getElementById(elementId).innerHTML = `
+                    <div class="text-center py-8 text-red-500">
+                        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                        <p>${message}</p>
+                    </div>
+                `;
+            }
+
+            function updateSummary(data) {
+                const totalRevenue = data.totalRevenue || 0;
+                const totalCategories = data.totalElements || 0;
+                const totalRentals = (data.content || []).reduce((sum, cat) => sum + (cat.count || 0), 0);
+
+                document.getElementById('totalRevenue').textContent = Number(totalRevenue).toLocaleString() + ' VND';
+                document.getElementById('totalCategories').textContent = totalCategories;
+                document.getElementById('totalRentals').textContent = totalRentals;
+
+                document.getElementById('categoryInfo').textContent = `Hiển thị ${data.content?.length || 0} / ${totalCategories} loại trang phục`;
+            }
+
+            function updateCategoryPagination(data) {
+                const pagination = document.getElementById('categoryPagination');
+                const prevBtn = document.getElementById('categoryPrevBtn');
+                const nextBtn = document.getElementById('categoryNextBtn');
+                const pageInfo = document.getElementById('categoryPageInfo');
+
+                if (data.totalPages > 1) {
+                    pagination.style.display = 'flex';
+                    prevBtn.disabled = currentCategoryPage === 0;
+                    nextBtn.disabled = currentCategoryPage >= data.totalPages - 1;
+                    pageInfo.textContent = `Trang ${currentCategoryPage + 1} / ${data.totalPages}`;
+                } else {
+                    pagination.style.display = 'none';
                 }
-            });
-            
-            // Period selector functionality
-            document.getElementById('period-selector').addEventListener('change', function() {
-                // In a real application, this would trigger an API call to get data for the selected period
-                alert('Đang tải dữ liệu cho: ' + this.options[this.selectedIndex].text);
-            });
+            }
+
+            function updateCostumePagination(data) {
+                const pagination = document.getElementById('costumePagination');
+                const prevBtn = document.getElementById('costumePrevBtn');
+                const nextBtn = document.getElementById('costumeNextBtn');
+                const pageInfo = document.getElementById('costumePageInfo');
+
+                if (data.totalPages > 1) {
+                    pagination.style.display = 'flex';
+                    prevBtn.disabled = currentCostumePage === 0;
+                    nextBtn.disabled = currentCostumePage >= data.totalPages - 1;
+                    pageInfo.textContent = `Trang ${currentCostumePage + 1} / ${data.totalPages}`;
+                } else {
+                    pagination.style.display = 'none';
+                }
+            }
+
+            function updateBillPagination(data) {
+                const pagination = document.getElementById('billPagination');
+                const prevBtn = document.getElementById('billPrevBtn');
+                const nextBtn = document.getElementById('billNextBtn');
+                const pageInfo = document.getElementById('billPageInfo');
+
+                if (data.totalPages > 1) {
+                    pagination.style.display = 'flex';
+                    prevBtn.disabled = currentBillPage === 0;
+                    nextBtn.disabled = currentBillPage >= data.totalPages - 1;
+                    pageInfo.textContent = `Trang ${currentBillPage + 1} / ${data.totalPages}`;
+                } else {
+                    pagination.style.display = 'none';
+                }
+            }
+
+            function exportReport() {
+                if (!currentStartDate || !currentEndDate) {
+                    alert('Vui lòng chọn khoảng thời gian và lọc dữ liệu trước khi xuất báo cáo');
+                    return;
+                }
+
+                // Simple CSV export
+                const url = `/api/statistics/revenue-by-category?startDate=${currentStartDate}&endDate=${currentEndDate}&page=0&size=1000`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            throw new Error(data.message);
+                        }
+
+                        const categories = data.content || [];
+                        let csvContent = "Loại trang phục,Doanh thu (VND),Số lượt thuê\n";
+
+                        categories.forEach(category => {
+                            csvContent += `"${category.category}",${category.revenue},${category.count}\n`;
+                        });
+
+                        csvContent += `\nTổng doanh thu,${data.totalRevenue || 0},${categories.reduce((sum, cat) => sum + (cat.count || 0), 0)}`;
+
+                        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                        const link = document.createElement('a');
+                        const url = URL.createObjectURL(blob);
+                        link.setAttribute('href', url);
+                        link.setAttribute('download', `thong-ke-doanh-thu-${currentStartDate}-${currentEndDate}.csv`);
+                        link.style.visibility = 'hidden';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    })
+                    .catch(error => {
+                        console.error('Error exporting report:', error);
+                        alert('Không thể xuất báo cáo: ' + error.message);
+                    });
+            }
+
+            // Make functions global for onclick handlers
+            window.viewCostumes = viewCostumes;
+            window.viewBills = viewBills;
+            window.viewBillDetails = viewBillDetails;
         });
     </script>
 </body>

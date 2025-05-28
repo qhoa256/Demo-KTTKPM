@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
 public class BillController {
     private final BillService billService;
     private final StatisticsService statisticsService;
-    
+
     @Autowired
-    public BillController(BillService billService, 
+    public BillController(BillService billService,
                          @Qualifier("cachingStatisticsDecorator") StatisticsService statisticsService) {
         this.billService = billService;
         this.statisticsService = statisticsService;
@@ -38,10 +38,10 @@ public class BillController {
     public ResponseEntity<Bill> getBillById(@PathVariable Long id) {
         return ResponseEntity.ok(billService.getBillById(id));
     }
-    
+
     /**
      * Endpoint để lấy danh sách các trang phục đang được thuê trong khoảng thời gian
-     * 
+     *
      * @param rentDate Ngày khách hàng muốn thuê (định dạng yyyy-MM-dd)
      * @param returnDate Ngày khách hàng sẽ trả (định dạng yyyy-MM-dd)
      * @return Danh sách ID của các trang phục không khả dụng trong khoảng thời gian này
@@ -50,12 +50,12 @@ public class BillController {
     public ResponseEntity<List<Map<String, Object>>> getRentedCostumes(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate rentDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate returnDate) {
-        
+
         // Xác thực đầu vào
         if (rentDate.isAfter(returnDate)) {
             throw new IllegalArgumentException("Ngày thuê phải trước ngày trả.");
         }
-        
+
         // Lấy danh sách các hóa đơn có ngày thuê và ngày trả giao với khoảng thời gian đã cho
         List<Bill> overlappingBills = billService.getAllBills().stream()
             .filter(bill -> {
@@ -63,31 +63,31 @@ public class BillController {
                 if (bill.getRentDate() == null || bill.getReturnDate() == null) {
                     return false;
                 }
-                
+
                 LocalDate billRentDate = bill.getRentDate();
                 LocalDate billReturnDate = bill.getReturnDate();
-                
+
                 // Nếu trang phục đã được trả trước khi người dùng muốn thuê (billReturnDate < rentDate) => Khả dụng
                 if (billReturnDate.isBefore(rentDate)) {
                     return false;
                 }
-                
+
                 // Nếu trang phục chỉ được thuê sau khi người dùng đã trả (billRentDate > returnDate) => Khả dụng
                 if (billRentDate.isAfter(returnDate)) {
                     return false;
                 }
-                
+
                 // Trong mọi trường hợp khác, trang phục không khả dụng trong khoảng thời gian
                 return true;
             })
             .collect(Collectors.toList());
-        
+
 
         List<Map<String, Object>> rentedCostumes = new java.util.ArrayList<>();
-        
+
         for (Bill bill : overlappingBills) {
-            List<Long> costumeIds = getCostumeIdsFromBill(bill); 
-            
+            List<Long> costumeIds = getCostumeIdsFromBill(bill);
+
             for (Long costumeId : costumeIds) {
                 Map<String, Object> rentedItem = new HashMap<>();
                 rentedItem.put("billId", bill.getId());
@@ -97,10 +97,10 @@ public class BillController {
                 rentedCostumes.add(rentedItem);
             }
         }
-        
+
         return ResponseEntity.ok(rentedCostumes);
     }
-    
+
 
     private List<Long> getCostumeIdsFromBill(Bill bill) {
         return List.of(1L, 2L, 3L);
@@ -126,4 +126,33 @@ public class BillController {
     public ResponseEntity<Map<String, Object>> getRevenueByCategory() {
         return ResponseEntity.ok(statisticsService.getRevenueByCategory());
     }
-} 
+
+    @GetMapping("/statistics/revenue-by-category-with-date")
+    public ResponseEntity<Map<String, Object>> getRevenueByCategoryWithDateRange(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(statisticsService.getRevenueByCategoryWithDateRange(startDate, endDate, page, size));
+    }
+
+    @GetMapping("/statistics/costumes-by-category")
+    public ResponseEntity<Map<String, Object>> getCostumesByCategory(
+            @RequestParam String category,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(statisticsService.getCostumesByCategory(category, startDate, endDate, page, size));
+    }
+
+    @GetMapping("/statistics/bills-by-costume/{costumeId}")
+    public ResponseEntity<Map<String, Object>> getBillsByCostume(
+            @PathVariable Long costumeId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(statisticsService.getBillsByCostume(costumeId, startDate, endDate, page, size));
+    }
+}
