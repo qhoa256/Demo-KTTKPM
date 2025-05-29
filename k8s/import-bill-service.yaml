@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: import-bill-service
-        image: import-bill-service:latest
+        image: costume-rental/import-bill-service:k8s
         imagePullPolicy: Never
         ports:
         - containerPort: 8085

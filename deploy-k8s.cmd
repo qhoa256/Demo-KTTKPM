@@ -7,45 +7,10 @@ echo.
 echo Step 1: Building Docker images...
 echo ========================================
 
-echo Building user-service...
-docker build -t user-service:latest -f user-service/Dockerfile .
+echo Calling build-docker.cmd to build all images...
+call build-docker.cmd no-pause
 if %errorlevel% neq 0 (
-    echo ERROR: Failed to build user-service
-    exit /b 1
-)
-
-echo Building costume-service...
-docker build -t costume-service:latest -f costume-service/Dockerfile .
-if %errorlevel% neq 0 (
-    echo ERROR: Failed to build costume-service
-    exit /b 1
-)
-
-echo Building bill-costume-service...
-docker build -t bill-costume-service:latest -f bill-costume-service/Dockerfile .
-if %errorlevel% neq 0 (
-    echo ERROR: Failed to build bill-costume-service
-    exit /b 1
-)
-
-echo Building supplier-service...
-docker build -t supplier-service:latest -f supplier-service/Dockerfile .
-if %errorlevel% neq 0 (
-    echo ERROR: Failed to build supplier-service
-    exit /b 1
-)
-
-echo Building import-bill-service...
-docker build -t import-bill-service:latest -f import-bill-service/Dockerfile .
-if %errorlevel% neq 0 (
-    echo ERROR: Failed to build import-bill-service
-    exit /b 1
-)
-
-echo Building client-costume-rental...
-docker build -t client-costume-rental:latest -f client-costume-rental/Dockerfile .
-if %errorlevel% neq 0 (
-    echo ERROR: Failed to build client-costume-rental
+    echo ERROR: Failed to build Docker images
     exit /b 1
 )
 
