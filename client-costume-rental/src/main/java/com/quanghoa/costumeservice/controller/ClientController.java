@@ -98,18 +98,37 @@ public class ClientController {
 
             // Redirect based on username
             if ("customer".equalsIgnoreCase(userResponse.getUsername())) {
-                return "customer_home";
+                return "redirect:/customer-home";
             } else if ("admin".equalsIgnoreCase(userResponse.getUsername())) {
-                return "admin";
+                return "redirect:/admin";
             } else {
                 // Default to customer view for other users
-                return "customer_home";
+                return "redirect:/customer-home";
             }
         }
 
         // Login failed
         redirectAttributes.addFlashAttribute("error", "Invalid username or password");
         return "redirect:/login";
+    }
+
+    @GetMapping("/admin")
+    public String adminPage(HttpSession session) {
+        // Check if user is logged in and is admin
+        if (session.getAttribute("username") == null ||
+            !"admin".equalsIgnoreCase((String) session.getAttribute("username"))) {
+            return "redirect:/login";
+        }
+        return "admin";
+    }
+
+    @GetMapping("/customer-home")
+    public String customerHomePage(HttpSession session) {
+        // Check if user is logged in
+        if (session.getAttribute("username") == null) {
+            return "redirect:/login";
+        }
+        return "customer_home";
     }
 
     @GetMapping("/logout")
