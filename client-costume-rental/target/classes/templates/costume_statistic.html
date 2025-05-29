@@ -50,19 +50,13 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <a href="/dashboard" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                    <a href="/" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium transition">
                         <i class="fas fa-home mr-1"></i> Trang chủ
-                    </a>
-                    <a href="/costume-management" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                        <i class="fas fa-tshirt mr-1"></i> Quản lý trang phục
-                    </a>
-                    <a href="/bill-management" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">
-                        <i class="fas fa-receipt mr-1"></i> Quản lý hóa đơn
                     </a>
                     <a href="/costume-statistic" class="text-indigo-600 hover:text-indigo-700 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-indigo-600">
                         <i class="fas fa-chart-line mr-1"></i> Thống kê
                     </a>
-                    <a href="/logout" class="text-red-500 hover:text-red-700 px-3 py-2 rounded-md text-sm font-medium">
+                    <a href="/logout" class="text-red-500 hover:text-red-700 px-3 py-2 rounded-md text-sm font-medium transition">
                         <i class="fas fa-sign-out-alt mr-1"></i> Đăng xuất
                     </a>
                 </div>
@@ -159,14 +153,19 @@
                     </div>
 
                     <!-- Pagination for categories -->
-                    <div id="categoryPagination" class="mt-6 flex justify-center items-center space-x-2" style="display: none;">
-                        <button id="categoryPrevBtn" class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <span id="categoryPageInfo" class="px-4 py-1 text-sm text-gray-600">Trang 1 / 1</span>
-                        <button id="categoryNextBtn" class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
+                    <div id="categoryPagination" class="mt-6 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0" style="display: none;">
+                        <div class="text-sm text-gray-600">
+                            <span id="categoryItemInfo">Hiển thị 0 - 0 của 0 loại trang phục</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button id="categoryPrevBtn" class="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center">
+                                <i class="fas fa-chevron-left mr-1"></i>Trước
+                            </button>
+                            <span id="categoryPageInfo" class="px-4 py-2 text-sm text-gray-600 bg-white border rounded-lg">Trang 1 / 1</span>
+                            <button id="categoryNextBtn" class="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center">
+                                Sau<i class="fas fa-chevron-right ml-1"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -187,14 +186,19 @@
                     </div>
 
                     <!-- Pagination for costumes -->
-                    <div id="costumePagination" class="mt-6 flex justify-center items-center space-x-2" style="display: none;">
-                        <button id="costumePrevBtn" class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <span id="costumePageInfo" class="px-4 py-1 text-sm text-gray-600">Trang 1 / 1</span>
-                        <button id="costumeNextBtn" class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
+                    <div id="costumePagination" class="mt-6 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0" style="display: none;">
+                        <div class="text-sm text-gray-600">
+                            <span id="costumeItemInfo">Hiển thị 0 - 0 của 0 trang phục</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button id="costumePrevBtn" class="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center">
+                                <i class="fas fa-chevron-left mr-1"></i>Trước
+                            </button>
+                            <span id="costumePageInfo" class="px-4 py-2 text-sm text-gray-600 bg-white border rounded-lg">Trang 1 / 1</span>
+                            <button id="costumeNextBtn" class="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center">
+                                Sau<i class="fas fa-chevron-right ml-1"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -215,14 +219,19 @@
                     </div>
 
                     <!-- Pagination for bills -->
-                    <div id="billPagination" class="mt-6 flex justify-center items-center space-x-2" style="display: none;">
-                        <button id="billPrevBtn" class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50">
-                            <i class="fas fa-chevron-left"></i>
-                        </button>
-                        <span id="billPageInfo" class="px-4 py-1 text-sm text-gray-600">Trang 1 / 1</span>
-                        <button id="billNextBtn" class="px-3 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300 disabled:opacity-50">
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
+                    <div id="billPagination" class="mt-6 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0" style="display: none;">
+                        <div class="text-sm text-gray-600">
+                            <span id="billItemInfo">Hiển thị 0 - 0 của 0 hóa đơn</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button id="billPrevBtn" class="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center">
+                                <i class="fas fa-chevron-left mr-1"></i>Trước
+                            </button>
+                            <span id="billPageInfo" class="px-4 py-2 text-sm text-gray-600 bg-white border rounded-lg">Trang 1 / 1</span>
+                            <button id="billNextBtn" class="px-4 py-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center">
+                                Sau<i class="fas fa-chevron-right ml-1"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -486,23 +495,66 @@
                     return;
                 }
 
-                billsList.innerHTML = bills.map(bill => `
-                    <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition cursor-pointer"
-                         onclick="viewBillDetails(${bill.id})">
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <h4 class="font-semibold text-gray-800">Hóa đơn #${bill.id}</h4>
-                                <p class="text-sm text-gray-500">Ngày thuê: ${bill.rentDate}</p>
-                                <p class="text-sm text-gray-500">Ngày trả: ${bill.returnDate}</p>
-                                <p class="text-sm text-gray-500">Khách hàng: ${bill.customerId}</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-bold text-indigo-600">${Number(bill.totalAmount || 0).toLocaleString()} VND</p>
-                                <i class="fas fa-eye text-gray-400 mt-2"></i>
+                // Hiển thị loading state trước
+                billsList.innerHTML = bills.map(bill => {
+                    const customer = bill.customer || {};
+                    const customerName = customer.fullName ?
+                        `${customer.fullName.firstName || ''} ${customer.fullName.lastName || ''}`.trim() :
+                        customer.username || 'N/A';
+                    const customerAddress = customer.address ?
+                        `${customer.address.street || ''}, ${customer.address.city || ''}`.trim() :
+                        bill.address || 'N/A';
+
+                    return `
+                        <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition cursor-pointer"
+                             onclick="viewBillDetails(${bill.id})">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h4 class="font-semibold text-gray-800 mb-2">Hóa đơn #${bill.id}</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600">
+                                        <div>
+                                            <p><i class="fas fa-calendar-alt mr-1 text-indigo-500"></i>Ngày thuê: ${bill.rentDate || 'N/A'}</p>
+                                            <p><i class="fas fa-calendar-check mr-1 text-green-500"></i>Ngày trả: ${bill.returnDate || 'N/A'}</p>
+                                        </div>
+                                        <div>
+                                            <p><i class="fas fa-user mr-1 text-blue-500"></i>Khách hàng: ${customerName}</p>
+                                            <p><i class="fas fa-map-marker-alt mr-1 text-red-500"></i>Địa chỉ: ${customerAddress}</p>
+                                        </div>
+                                    </div>
+                                    ${bill.note ? `<p class="text-sm text-gray-500 mt-2 italic"><i class="fas fa-sticky-note mr-1"></i>${bill.note}</p>` : ''}
+                                </div>
+                                <div class="text-right ml-4">
+                                    <p class="font-bold text-gray-600 text-lg" id="bill-total-${bill.id}">Đang tải...</p>
+                                    <button class="mt-2 text-indigo-500 hover:text-indigo-700 transition">
+                                        <i class="fas fa-eye mr-1"></i>Xem chi tiết
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
+
+                // Sau đó tải tổng tiền cho mỗi bill
+                bills.forEach(bill => {
+                    fetch(`/get-bill-by-category?billId=${bill.id}`)
+                        .then(response => response.json())
+                        .then(billData => {
+                            const totalElement = document.getElementById(`bill-total-${bill.id}`);
+                            if (totalElement) {
+                                const total = billData.billTotalAmount || 0;
+                                totalElement.textContent = `${Number(total).toLocaleString()} VND`;
+                                totalElement.className = 'font-bold text-indigo-600 text-lg';
+                            }
+                        })
+                        .catch(error => {
+                            console.error(`Error fetching total for bill ${bill.id}:`, error);
+                            const totalElement = document.getElementById(`bill-total-${bill.id}`);
+                            if (totalElement) {
+                                totalElement.textContent = 'Lỗi tải';
+                                totalElement.className = 'font-bold text-red-500 text-lg';
+                            }
+                        });
+                });
             }
 
             // Navigation functions
@@ -672,12 +724,19 @@
                 const prevBtn = document.getElementById('categoryPrevBtn');
                 const nextBtn = document.getElementById('categoryNextBtn');
                 const pageInfo = document.getElementById('categoryPageInfo');
+                const itemInfo = document.getElementById('categoryItemInfo');
 
-                if (data.totalPages > 1) {
+                const totalElements = data.totalElements || 0;
+                const currentPageSize = data.content ? data.content.length : 0;
+                const startItem = currentCategoryPage * pageSize + 1;
+                const endItem = currentCategoryPage * pageSize + currentPageSize;
+
+                if (data.totalPages > 1 || totalElements > 0) {
                     pagination.style.display = 'flex';
                     prevBtn.disabled = currentCategoryPage === 0;
                     nextBtn.disabled = currentCategoryPage >= data.totalPages - 1;
-                    pageInfo.textContent = `Trang ${currentCategoryPage + 1} / ${data.totalPages}`;
+                    pageInfo.textContent = `Trang ${currentCategoryPage + 1} / ${data.totalPages || 1}`;
+                    itemInfo.textContent = `Hiển thị ${startItem} - ${endItem} của ${totalElements} loại trang phục`;
                 } else {
                     pagination.style.display = 'none';
                 }
@@ -688,12 +747,19 @@
                 const prevBtn = document.getElementById('costumePrevBtn');
                 const nextBtn = document.getElementById('costumeNextBtn');
                 const pageInfo = document.getElementById('costumePageInfo');
+                const itemInfo = document.getElementById('costumeItemInfo');
 
-                if (data.totalPages > 1) {
+                const totalElements = data.totalElements || 0;
+                const currentPageSize = data.content ? data.content.length : 0;
+                const startItem = currentCostumePage * pageSize + 1;
+                const endItem = currentCostumePage * pageSize + currentPageSize;
+
+                if (data.totalPages > 1 || totalElements > 0) {
                     pagination.style.display = 'flex';
                     prevBtn.disabled = currentCostumePage === 0;
                     nextBtn.disabled = currentCostumePage >= data.totalPages - 1;
-                    pageInfo.textContent = `Trang ${currentCostumePage + 1} / ${data.totalPages}`;
+                    pageInfo.textContent = `Trang ${currentCostumePage + 1} / ${data.totalPages || 1}`;
+                    itemInfo.textContent = `Hiển thị ${startItem} - ${endItem} của ${totalElements} trang phục`;
                 } else {
                     pagination.style.display = 'none';
                 }
@@ -704,12 +770,19 @@
                 const prevBtn = document.getElementById('billPrevBtn');
                 const nextBtn = document.getElementById('billNextBtn');
                 const pageInfo = document.getElementById('billPageInfo');
+                const itemInfo = document.getElementById('billItemInfo');
 
-                if (data.totalPages > 1) {
+                const totalElements = data.totalElements || 0;
+                const currentPageSize = data.content ? data.content.length : 0;
+                const startItem = currentBillPage * pageSize + 1;
+                const endItem = currentBillPage * pageSize + currentPageSize;
+
+                if (data.totalPages > 1 || totalElements > 0) {
                     pagination.style.display = 'flex';
                     prevBtn.disabled = currentBillPage === 0;
                     nextBtn.disabled = currentBillPage >= data.totalPages - 1;
-                    pageInfo.textContent = `Trang ${currentBillPage + 1} / ${data.totalPages}`;
+                    pageInfo.textContent = `Trang ${currentBillPage + 1} / ${data.totalPages || 1}`;
+                    itemInfo.textContent = `Hiển thị ${startItem} - ${endItem} của ${totalElements} hóa đơn`;
                 } else {
                     pagination.style.display = 'none';
                 }
