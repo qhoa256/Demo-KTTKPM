@@ -1,0 +1,36 @@
+[2025-05-30 01:20:19.031] [main] [] [] [INFO] c.c.c.CostumeServiceApplication - Starting CostumeServiceApplication using Java 18.0.2 on MSI with PID 3780 (D:\Demo_KTTKPM\costume-service\target\classes started by qhoa2 in D:\Demo_KTTKPM)
+[2025-05-30 01:20:19.034] [main] [] [] [DEBUG] c.c.c.CostumeServiceApplication - Running with Spring Boot v2.7.9, Spring v5.3.25
+[2025-05-30 01:20:19.034] [main] [] [] [INFO] c.c.c.CostumeServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[2025-05-30 01:20:20.470] [main] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8082 (http)
+[2025-05-30 01:20:20.478] [main] [] [] [INFO] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[2025-05-30 01:20:20.479] [main] [] [] [INFO] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.71]
+[2025-05-30 01:20:20.572] [main] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[2025-05-30 01:20:20.572] [main] [] [] [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1487 ms
+[2025-05-30 01:20:22.407] [main] [] [] [INFO] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+[2025-05-30 01:20:22.460] [main] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8082 (http) with context path ''
+[2025-05-30 01:20:22.473] [main] [] [] [INFO] c.c.c.CostumeServiceApplication - Started CostumeServiceApplication in 3.856 seconds (JVM running for 4.579)
+[2025-05-30 01:20:22.814] [RMI TCP Connection(4)-192.168.1.102] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2025-05-30 01:20:22.814] [RMI TCP Connection(4)-192.168.1.102] [] [] [INFO] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[2025-05-30 01:20:22.814] [RMI TCP Connection(4)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+[2025-05-30 01:20:22.814] [RMI TCP Connection(4)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+[2025-05-30 01:20:22.814] [RMI TCP Connection(4)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+[2025-05-30 01:20:22.817] [RMI TCP Connection(4)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@20a0b193
+[2025-05-30 01:20:22.817] [RMI TCP Connection(4)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@7c39dd3
+[2025-05-30 01:20:22.817] [RMI TCP Connection(4)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+[2025-05-30 01:20:22.817] [RMI TCP Connection(4)-192.168.1.102] [] [] [INFO] o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+[2025-05-30 01:22:36.175] [http-nio-8082-exec-1] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - GET "/api/costume-bills/statistics/revenue-by-category-with-date?page=0&size=10&timePeriod=all&startDate=2020-01-01&endDate=2025-05-29", parameters={masked}
+[2025-05-30 01:22:36.181] [http-nio-8082-exec-1] [dd40e46e] [costume-service] [INFO] c.c.c.config.LoggingInterceptor - [REQUEST:dd40e46e] [costume-service:8082] [DETAILS] Method: GET, Path: /api/costume-bills/statistics/revenue-by-category-with-date, Query params: page=0&size=10&timePeriod=all&startDate=2020-01-01&endDate=2025-05-29
+[2025-05-30 01:22:36.207] [http-nio-8082-exec-1] [dd40e46e] [costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8083/api/bills
+[2025-05-30 01:22:36.207] [http-nio-8082-exec-1] [dd40e46e] [costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.821] [http-nio-8082-exec-1] [dd40e46e] [costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.822] [http-nio-8082-exec-1] [dd40e46e] [costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [java.util.List<?>]
+[2025-05-30 01:22:37.186] [http-nio-8082-exec-1] [dd40e46e] [costume-service] [INFO] c.c.c.config.LoggingInterceptor - [RESPONSE:dd40e46e] [costume-service:8082] [PROXY] Response from Costume Service: 200 /api/costume-bills/statistics/revenue-by-category-with-date 1005 ms
+[2025-05-30 01:22:37.186] [http-nio-8082-exec-1] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 200 OK
+[2025-05-30 01:23:09.755] [http-nio-8082-exec-2] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - GET "/api/costume-bills/statistics/revenue-by-category-with-date?page=0&size=10&timePeriod=all&startDate=2020-01-01&endDate=2025-05-29&minRevenue=50000.0&maxRevenue=500000.0", parameters={masked}
+[2025-05-30 01:23:09.756] [http-nio-8082-exec-2] [fcb5a63e] [costume-service] [INFO] c.c.c.config.LoggingInterceptor - [REQUEST:fcb5a63e] [costume-service:8082] [DETAILS] Method: GET, Path: /api/costume-bills/statistics/revenue-by-category-with-date, Query params: page=0&size=10&timePeriod=all&startDate=2020-01-01&endDate=2025-05-29&minRevenue=50000.0&maxRevenue=500000.0
+[2025-05-30 01:23:09.757] [http-nio-8082-exec-2] [fcb5a63e] [costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8083/api/bills
+[2025-05-30 01:23:09.757] [http-nio-8082-exec-2] [fcb5a63e] [costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:10.096] [http-nio-8082-exec-2] [fcb5a63e] [costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:10.097] [http-nio-8082-exec-2] [fcb5a63e] [costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [java.util.List<?>]
+[2025-05-30 01:23:10.333] [http-nio-8082-exec-2] [fcb5a63e] [costume-service] [INFO] c.c.c.config.LoggingInterceptor - [RESPONSE:fcb5a63e] [costume-service:8082] [PROXY] Response from Costume Service: 200 /api/costume-bills/statistics/revenue-by-category-with-date 577 ms
+[2025-05-30 01:23:10.333] [http-nio-8082-exec-2] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 200 OK

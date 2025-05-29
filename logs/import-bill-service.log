@@ -1,0 +1,30 @@
+[2025-05-30 01:20:24.243] [main] [] [] [INFO] c.c.i.ImportBillServiceApplication - Starting ImportBillServiceApplication using Java 18.0.2 on MSI with PID 23796 (D:\Demo_KTTKPM\import-bill-service\target\classes started by qhoa2 in D:\Demo_KTTKPM)
+[2025-05-30 01:20:24.244] [main] [] [] [DEBUG] c.c.i.ImportBillServiceApplication - Running with Spring Boot v2.7.9, Spring v5.3.25
+[2025-05-30 01:20:24.244] [main] [] [] [INFO] c.c.i.ImportBillServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[2025-05-30 01:20:25.249] [main] [] [] [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+[2025-05-30 01:20:25.265] [main] [] [] [INFO] o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 7 ms. Found 0 JPA repository interfaces.
+[2025-05-30 01:20:25.938] [main] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8085 (http)
+[2025-05-30 01:20:25.945] [main] [] [] [INFO] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[2025-05-30 01:20:25.945] [main] [] [] [INFO] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.71]
+[2025-05-30 01:20:26.043] [main] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[2025-05-30 01:20:26.043] [main] [] [] [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1742 ms
+[2025-05-30 01:20:26.851] [main] [] [] [INFO] o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+[2025-05-30 01:20:26.950] [main] [] [] [INFO] org.hibernate.Version - HHH000412: Hibernate ORM core version 5.6.15.Final
+[2025-05-30 01:20:27.240] [main] [] [] [INFO] o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+[2025-05-30 01:20:27.524] [main] [] [] [INFO] org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+[2025-05-30 01:20:27.808] [main] [] [] [INFO] o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+[2025-05-30 01:20:27.826] [main] [] [] [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+[2025-05-30 01:20:27.968] [main] [] [] [WARN] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+[2025-05-30 01:20:28.647] [main] [] [] [INFO] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+[2025-05-30 01:20:28.752] [main] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8085 (http) with context path ''
+[2025-05-30 01:20:28.772] [main] [] [] [INFO] c.c.i.ImportBillServiceApplication - Started ImportBillServiceApplication in 4.973 seconds (JVM running for 5.732)
+[2025-05-30 01:20:28.925] [RMI TCP Connection(1)-192.168.1.102] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2025-05-30 01:20:28.925] [RMI TCP Connection(1)-192.168.1.102] [] [] [INFO] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[2025-05-30 01:20:28.927] [RMI TCP Connection(1)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+[2025-05-30 01:20:28.927] [RMI TCP Connection(1)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+[2025-05-30 01:20:28.927] [RMI TCP Connection(1)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+[2025-05-30 01:20:28.928] [RMI TCP Connection(1)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@2bd2430f
+[2025-05-30 01:20:28.929] [RMI TCP Connection(1)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@bb6869a
+[2025-05-30 01:20:28.929] [RMI TCP Connection(1)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+[2025-05-30 01:20:28.929] [RMI TCP Connection(1)-192.168.1.102] [] [] [INFO] o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+[2025-05-30 01:24:13.347] [SpringApplicationShutdownHook] [] [] [INFO] o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'

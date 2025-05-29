@@ -1,0 +1,152 @@
+[2025-05-30 01:20:31.909] [main] [] [] [INFO] c.c.b.BillCostumeServiceApplication - Starting BillCostumeServiceApplication using Java 18.0.2 on MSI with PID 22552 (D:\Demo_KTTKPM\bill-costume-service\target\classes started by qhoa2 in D:\Demo_KTTKPM)
+[2025-05-30 01:20:31.912] [main] [] [] [DEBUG] c.c.b.BillCostumeServiceApplication - Running with Spring Boot v2.7.9, Spring v5.3.25
+[2025-05-30 01:20:31.913] [main] [] [] [INFO] c.c.b.BillCostumeServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[2025-05-30 01:20:33.162] [main] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8083 (http)
+[2025-05-30 01:20:33.171] [main] [] [] [INFO] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[2025-05-30 01:20:33.171] [main] [] [] [INFO] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.71]
+[2025-05-30 01:20:33.262] [main] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[2025-05-30 01:20:33.262] [main] [] [] [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1288 ms
+[2025-05-30 01:20:33.456] [main] [] [] [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+[2025-05-30 01:20:33.714] [main] [] [] [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+[2025-05-30 01:20:34.476] [main] [] [] [INFO] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+[2025-05-30 01:20:34.519] [main] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8083 (http) with context path ''
+[2025-05-30 01:20:34.532] [main] [] [] [INFO] c.c.b.BillCostumeServiceApplication - Started BillCostumeServiceApplication in 3.104 seconds (JVM running for 3.84)
+[2025-05-30 01:20:35.007] [RMI TCP Connection(4)-192.168.1.102] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2025-05-30 01:20:35.008] [RMI TCP Connection(4)-192.168.1.102] [] [] [INFO] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[2025-05-30 01:20:35.008] [RMI TCP Connection(4)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+[2025-05-30 01:20:35.008] [RMI TCP Connection(4)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+[2025-05-30 01:20:35.008] [RMI TCP Connection(4)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+[2025-05-30 01:20:35.009] [RMI TCP Connection(4)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@15f006c
+[2025-05-30 01:20:35.010] [RMI TCP Connection(4)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@38692c40
+[2025-05-30 01:20:35.010] [RMI TCP Connection(4)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+[2025-05-30 01:20:35.010] [RMI TCP Connection(4)-192.168.1.102] [] [] [INFO] o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+[2025-05-30 01:22:36.284] [http-nio-8083-exec-1] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - GET "/api/bills", parameters={}
+[2025-05-30 01:22:36.293] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [INFO] c.c.b.config.LoggingInterceptor - [REQUEST:883e6dbd] [bill-costume-service:8083] [DETAILS] Method: GET, Path: /api/bills, Query params: {}
+[2025-05-30 01:22:36.346] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/2
+[2025-05-30 01:22:36.366] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.405] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.405] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.442] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/4
+[2025-05-30 01:22:36.442] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.454] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.454] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.454] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/5
+[2025-05-30 01:22:36.454] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.488] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.488] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.488] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/7
+[2025-05-30 01:22:36.488] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.519] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.520] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.524] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/9
+[2025-05-30 01:22:36.524] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.540] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.540] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.553] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/6
+[2025-05-30 01:22:36.555] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.574] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.574] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.574] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/8
+[2025-05-30 01:22:36.574] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.604] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.604] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.607] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/10
+[2025-05-30 01:22:36.607] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.621] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.621] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.621] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/4
+[2025-05-30 01:22:36.621] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.648] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.648] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.650] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/5
+[2025-05-30 01:22:36.650] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.671] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.671] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.673] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/2
+[2025-05-30 01:22:36.673] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.690] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.690] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.690] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/7
+[2025-05-30 01:22:36.690] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.704] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.704] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.704] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/9
+[2025-05-30 01:22:36.720] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.743] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.743] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.745] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/6
+[2025-05-30 01:22:36.746] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.765] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.766] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.766] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/10
+[2025-05-30 01:22:36.768] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:36.790] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:36.790] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:22:36.820] [http-nio-8083-exec-1] [883e6dbd] [bill-costume-service] [INFO] c.c.b.config.LoggingInterceptor - [RESPONSE:883e6dbd] [bill-costume-service:8083] [PROXY] Response from Bill Costume Service: 200 /api/bills 527 ms
+[2025-05-30 01:22:36.820] [http-nio-8083-exec-1] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 200 OK
+[2025-05-30 01:23:09.759] [http-nio-8083-exec-6] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - GET "/api/bills", parameters={}
+[2025-05-30 01:23:09.759] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [INFO] c.c.b.config.LoggingInterceptor - [REQUEST:f1c44c2c] [bill-costume-service:8083] [DETAILS] Method: GET, Path: /api/bills, Query params: {}
+[2025-05-30 01:23:09.761] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/2
+[2025-05-30 01:23:09.762] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:09.779] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:09.780] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:09.782] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/4
+[2025-05-30 01:23:09.782] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:09.803] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:09.803] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:09.805] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/5
+[2025-05-30 01:23:09.806] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:09.824] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:09.824] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:09.826] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/7
+[2025-05-30 01:23:09.827] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:09.844] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:09.844] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:09.847] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/9
+[2025-05-30 01:23:09.847] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:09.863] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:09.863] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:09.865] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/6
+[2025-05-30 01:23:09.866] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:09.886] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:09.886] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:09.889] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/8
+[2025-05-30 01:23:09.889] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:09.909] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:09.909] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:09.911] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/10
+[2025-05-30 01:23:09.911] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:09.930] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:09.930] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:09.933] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/4
+[2025-05-30 01:23:09.934] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:09.952] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:09.953] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:09.956] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/5
+[2025-05-30 01:23:09.956] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:09.981] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:09.981] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:09.984] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/2
+[2025-05-30 01:23:09.985] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:10.003] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:10.003] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:10.006] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/7
+[2025-05-30 01:23:10.006] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:10.027] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:10.027] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:10.029] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/9
+[2025-05-30 01:23:10.029] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:10.049] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:10.050] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:10.052] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/6
+[2025-05-30 01:23:10.052] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:10.070] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:10.070] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:10.074] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8081/api/customers/10
+[2025-05-30 01:23:10.074] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:10.092] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:10.092] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.costumeRental.billcostumeservice.model.Customer]
+[2025-05-30 01:23:10.096] [http-nio-8083-exec-6] [f1c44c2c] [bill-costume-service] [INFO] c.c.b.config.LoggingInterceptor - [RESPONSE:f1c44c2c] [bill-costume-service:8083] [PROXY] Response from Bill Costume Service: 200 /api/bills 337 ms
+[2025-05-30 01:23:10.097] [http-nio-8083-exec-6] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 200 OK
+[2025-05-30 01:24:13.345] [SpringApplicationShutdownHook] [] [] [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+[2025-05-30 01:24:13.356] [SpringApplicationShutdownHook] [] [] [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

@@ -1,0 +1,126 @@
+[2025-05-30 00:56:33.352] [restartedMain] [] [] [INFO] c.q.c.CostumeClientApplication - Starting CostumeClientApplication using Java 18.0.2 on MSI with PID 22436 (D:\Demo_KTTKPM\client-costume-rental\target\classes started by qhoa2 in D:\Demo_KTTKPM)
+[2025-05-30 00:56:33.352] [restartedMain] [] [] [DEBUG] c.q.c.CostumeClientApplication - Running with Spring Boot v2.7.12, Spring v5.3.27
+[2025-05-30 00:56:33.352] [restartedMain] [] [] [INFO] c.q.c.CostumeClientApplication - No active profile set, falling back to 1 default profile: "default"
+[2025-05-30 00:56:33.737] [restartedMain] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8086 (http)
+[2025-05-30 00:56:33.738] [restartedMain] [] [] [INFO] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[2025-05-30 00:56:33.740] [restartedMain] [] [] [INFO] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+[2025-05-30 00:56:33.761] [restartedMain] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[2025-05-30 00:56:33.761] [restartedMain] [] [] [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 406 ms
+[2025-05-30 00:56:34.047] [restartedMain] [] [] [INFO] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+[2025-05-30 00:56:34.050] [restartedMain] [] [] [INFO] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+[2025-05-30 00:56:34.068] [restartedMain] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8086 (http) with context path ''
+[2025-05-30 00:56:34.076] [restartedMain] [] [] [INFO] c.q.c.CostumeClientApplication - Started CostumeClientApplication in 0.774 seconds (JVM running for 277.653)
+[2025-05-30 00:56:34.082] [restartedMain] [] [] [INFO] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+   LogFileWebEndpointAutoConfiguration#logFileWebEndpoint matched:
+      - Log File found logging.file.name logs/client-costume-rental.log (LogFileWebEndpointAutoConfiguration.LogFileCondition)
+      - @ConditionalOnMissingBean (types: org.springframework.boot.actuate.logging.LogFileWebEndpoint; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+
+Negative matches:
+-----------------
+
+    None
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+[2025-05-30 00:56:35.466] [File Watcher] [] [] [INFO] o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 2 class path changes (2 additions, 0 deletions, 0 modifications)
+[2025-05-30 00:56:35.479] [Thread-7] [] [] [INFO] o.a.catalina.core.StandardService - Stopping service [Tomcat]
+[2025-05-30 00:56:35.561] [restartedMain] [] [] [INFO] c.q.c.CostumeClientApplication - Starting CostumeClientApplication using Java 18.0.2 on MSI with PID 22436 (D:\Demo_KTTKPM\client-costume-rental\target\classes started by qhoa2 in D:\Demo_KTTKPM)
+[2025-05-30 00:56:35.561] [restartedMain] [] [] [DEBUG] c.q.c.CostumeClientApplication - Running with Spring Boot v2.7.12, Spring v5.3.27
+[2025-05-30 00:56:35.561] [restartedMain] [] [] [INFO] c.q.c.CostumeClientApplication - No active profile set, falling back to 1 default profile: "default"
+[2025-05-30 00:56:35.886] [restartedMain] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8086 (http)
+[2025-05-30 00:56:35.886] [restartedMain] [] [] [INFO] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[2025-05-30 00:56:35.886] [restartedMain] [] [] [INFO] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+[2025-05-30 00:56:35.898] [restartedMain] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[2025-05-30 00:56:35.898] [restartedMain] [] [] [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 335 ms
+[2025-05-30 00:56:36.046] [restartedMain] [] [] [INFO] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+[2025-05-30 00:56:36.048] [restartedMain] [] [] [INFO] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+[2025-05-30 00:56:36.059] [restartedMain] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8086 (http) with context path ''
+[2025-05-30 00:56:36.065] [restartedMain] [] [] [INFO] c.q.c.CostumeClientApplication - Started CostumeClientApplication in 0.527 seconds (JVM running for 279.642)
+[2025-05-30 00:56:36.067] [restartedMain] [] [] [INFO] o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+[2025-05-30 01:20:09.445] [restartedMain] [] [] [INFO] c.q.c.CostumeClientApplication - Starting CostumeClientApplication using Java 18.0.2 on MSI with PID 2984 (D:\Demo_KTTKPM\client-costume-rental\target\classes started by qhoa2 in D:\Demo_KTTKPM)
+[2025-05-30 01:20:09.446] [restartedMain] [] [] [DEBUG] c.q.c.CostumeClientApplication - Running with Spring Boot v2.7.12, Spring v5.3.27
+[2025-05-30 01:20:09.446] [restartedMain] [] [] [INFO] c.q.c.CostumeClientApplication - No active profile set, falling back to 1 default profile: "default"
+[2025-05-30 01:20:09.504] [restartedMain] [] [] [INFO] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[2025-05-30 01:20:09.505] [restartedMain] [] [] [INFO] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[2025-05-30 01:20:10.827] [restartedMain] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8086 (http)
+[2025-05-30 01:20:10.831] [restartedMain] [] [] [INFO] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[2025-05-30 01:20:10.831] [restartedMain] [] [] [INFO] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+[2025-05-30 01:20:10.885] [restartedMain] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[2025-05-30 01:20:10.885] [restartedMain] [] [] [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1378 ms
+[2025-05-30 01:20:11.607] [restartedMain] [] [] [INFO] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+[2025-05-30 01:20:11.616] [restartedMain] [] [] [INFO] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+[2025-05-30 01:20:11.671] [restartedMain] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8086 (http) with context path ''
+[2025-05-30 01:20:11.686] [restartedMain] [] [] [INFO] c.q.c.CostumeClientApplication - Started CostumeClientApplication in 2.782 seconds (JVM running for 3.649)
+[2025-05-30 01:20:11.824] [RMI TCP Connection(2)-192.168.1.102] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2025-05-30 01:20:11.825] [RMI TCP Connection(2)-192.168.1.102] [] [] [INFO] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[2025-05-30 01:20:11.825] [RMI TCP Connection(2)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+[2025-05-30 01:20:11.826] [RMI TCP Connection(2)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+[2025-05-30 01:20:11.826] [RMI TCP Connection(2)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+[2025-05-30 01:20:11.829] [RMI TCP Connection(2)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@7a9ad1a9
+[2025-05-30 01:20:11.831] [RMI TCP Connection(2)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@59d7d067
+[2025-05-30 01:20:11.831] [RMI TCP Connection(2)-192.168.1.102] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+[2025-05-30 01:20:11.831] [RMI TCP Connection(2)-192.168.1.102] [] [] [INFO] o.s.web.servlet.DispatcherServlet - Completed initialization in 6 ms
+[2025-05-30 01:22:27.290] [http-nio-8086-exec-1] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - GET "/", parameters={}
+[2025-05-30 01:22:27.298] [http-nio-8086-exec-1] [f443da01] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [REQUEST:f443da01] [client-costume-rental:8086] [DETAILS] Method: GET, Path: /, Query: , User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+[2025-05-30 01:22:27.314] [http-nio-8086-exec-1] [f443da01] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [RESPONSE:f443da01] [client-costume-rental:8086] [PROXY] Response from Client Service: GET / 16 ms
+[2025-05-30 01:22:27.314] [http-nio-8086-exec-1] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 302 FOUND
+[2025-05-30 01:22:27.324] [http-nio-8086-exec-5] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - GET "/login", parameters={}
+[2025-05-30 01:22:27.326] [http-nio-8086-exec-5] [6c8516c4] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [REQUEST:6c8516c4] [client-costume-rental:8086] [DETAILS] Method: GET, Path: /login, Query: , User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+[2025-05-30 01:22:27.535] [http-nio-8086-exec-5] [6c8516c4] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [RESPONSE:6c8516c4] [client-costume-rental:8086] [PROXY] Response from Client Service: GET /login 209 ms
+[2025-05-30 01:22:27.536] [http-nio-8086-exec-5] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 200 OK
+[2025-05-30 01:22:31.738] [http-nio-8086-exec-7] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - POST "/login", parameters={masked}
+[2025-05-30 01:22:31.741] [http-nio-8086-exec-7] [094bac0f] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [REQUEST:094bac0f] [client-costume-rental:8086] [DETAILS] Method: POST, Path: /login, Query: , User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+[2025-05-30 01:22:31.764] [http-nio-8086-exec-7] [094bac0f] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - HTTP POST http://localhost:8081/api/users/login
+[2025-05-30 01:22:31.780] [http-nio-8086-exec-7] [094bac0f] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:31.783] [http-nio-8086-exec-7] [094bac0f] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - Writing [LoginRequest(username=admin, password=1)] as "application/json"
+[2025-05-30 01:22:31.947] [http-nio-8086-exec-7] [094bac0f] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:31.947] [http-nio-8086-exec-7] [094bac0f] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - Reading to [com.quanghoa.costumeservice.model.UserResponse]
+[2025-05-30 01:22:31.966] [http-nio-8086-exec-7] [094bac0f] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [RESPONSE:094bac0f] [client-costume-rental:8086] [PROXY] Response from Client Service: POST /login 225 ms
+[2025-05-30 01:22:31.966] [http-nio-8086-exec-7] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 302 FOUND
+[2025-05-30 01:22:31.973] [http-nio-8086-exec-4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - GET "/admin", parameters={}
+[2025-05-30 01:22:31.973] [http-nio-8086-exec-4] [34d3f527] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [REQUEST:34d3f527] [client-costume-rental:8086] [DETAILS] Method: GET, Path: /admin, Query: , User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+[2025-05-30 01:22:31.987] [http-nio-8086-exec-4] [34d3f527] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [RESPONSE:34d3f527] [client-costume-rental:8086] [PROXY] Response from Client Service: GET /admin 14 ms
+[2025-05-30 01:22:31.987] [http-nio-8086-exec-4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 200 OK
+[2025-05-30 01:22:34.042] [http-nio-8086-exec-6] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - GET "/costume-statistic", parameters={}
+[2025-05-30 01:22:34.045] [http-nio-8086-exec-6] [d5514316] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [REQUEST:d5514316] [client-costume-rental:8086] [DETAILS] Method: GET, Path: /costume-statistic, Query: , User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+[2025-05-30 01:22:34.080] [http-nio-8086-exec-6] [d5514316] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [RESPONSE:d5514316] [client-costume-rental:8086] [PROXY] Response from Client Service: GET /costume-statistic 35 ms
+[2025-05-30 01:22:34.080] [http-nio-8086-exec-6] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 200 OK
+[2025-05-30 01:22:36.109] [http-nio-8086-exec-2] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - GET "/api/statistics/revenue-by-category?startDate=2020-01-01&endDate=2025-05-29&page=0&size=10&timePeriod=all", parameters={masked}
+[2025-05-30 01:22:36.109] [http-nio-8086-exec-2] [0d5031d7] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [REQUEST:0d5031d7] [client-costume-rental:8086] [DETAILS] Method: GET, Path: /api/statistics/revenue-by-category, Query: startDate=2020-01-01&endDate=2025-05-29&page=0&size=10&timePeriod=all, User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+[2025-05-30 01:22:36.121] [http-nio-8086-exec-2] [0d5031d7] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8082/api/costume-bills/statistics/revenue-by-category-with-date?page=0&size=10&timePeriod=all&startDate=2020-01-01&endDate=2025-05-29
+[2025-05-30 01:22:36.122] [http-nio-8086-exec-2] [0d5031d7] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:22:37.172] [http-nio-8086-exec-2] [0d5031d7] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:22:37.186] [http-nio-8086-exec-2] [0d5031d7] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - Reading to [java.util.Map<?, ?>]
+[2025-05-30 01:22:37.187] [http-nio-8086-exec-2] [0d5031d7] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [RESPONSE:0d5031d7] [client-costume-rental:8086] [PROXY] Response from Client Service: GET /api/statistics/revenue-by-category 1078 ms
+[2025-05-30 01:22:37.187] [http-nio-8086-exec-2] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 200 OK
+[2025-05-30 01:23:09.749] [http-nio-8086-exec-3] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - GET "/api/statistics/revenue-by-category?startDate=2020-01-01&endDate=2025-05-29&page=0&size=10&timePeriod=all&minRevenue=50000&maxRevenue=500000", parameters={masked}
+[2025-05-30 01:23:09.750] [http-nio-8086-exec-3] [911367b6] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [REQUEST:911367b6] [client-costume-rental:8086] [DETAILS] Method: GET, Path: /api/statistics/revenue-by-category, Query: startDate=2020-01-01&endDate=2025-05-29&page=0&size=10&timePeriod=all&minRevenue=50000&maxRevenue=500000, User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+[2025-05-30 01:23:09.753] [http-nio-8086-exec-3] [911367b6] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - HTTP GET http://localhost:8082/api/costume-bills/statistics/revenue-by-category-with-date?page=0&size=10&timePeriod=all&startDate=2020-01-01&endDate=2025-05-29&minRevenue=50000.0&maxRevenue=500000.0
+[2025-05-30 01:23:09.753] [http-nio-8086-exec-3] [911367b6] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - Accept=[application/json, application/*+json]
+[2025-05-30 01:23:10.333] [http-nio-8086-exec-3] [911367b6] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - Response 200 OK
+[2025-05-30 01:23:10.333] [http-nio-8086-exec-3] [911367b6] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - Reading to [java.util.Map<?, ?>]
+[2025-05-30 01:23:10.335] [http-nio-8086-exec-3] [911367b6] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [RESPONSE:911367b6] [client-costume-rental:8086] [PROXY] Response from Client Service: GET /api/statistics/revenue-by-category 585 ms
+[2025-05-30 01:23:10.335] [http-nio-8086-exec-3] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 200 OK
