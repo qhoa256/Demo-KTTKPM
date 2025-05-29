@@ -73,8 +73,11 @@ public class CostumeBillController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(statisticsService.getRevenueByCategoryWithDateRange(startDate, endDate, page, size));
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "custom") String timePeriod,
+            @RequestParam(required = false) Double minRevenue,
+            @RequestParam(required = false) Double maxRevenue) {
+        return ResponseEntity.ok(statisticsService.getRevenueByCategoryWithDateRange(startDate, endDate, page, size, timePeriod, minRevenue, maxRevenue));
     }
 
     @GetMapping("/statistics/costumes-by-category")
@@ -83,8 +86,11 @@ public class CostumeBillController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(statisticsService.getCostumesByCategory(category, startDate, endDate, page, size));
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "custom") String timePeriod,
+            @RequestParam(required = false) Double minRevenue,
+            @RequestParam(required = false) Double maxRevenue) {
+        return ResponseEntity.ok(statisticsService.getCostumesByCategory(category, startDate, endDate, page, size, timePeriod, minRevenue, maxRevenue));
     }
 
     @GetMapping("/statistics/bills-by-costume/{costumeId}")
@@ -93,8 +99,11 @@ public class CostumeBillController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(statisticsService.getBillsByCostume(costumeId, startDate, endDate, page, size));
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "custom") String timePeriod,
+            @RequestParam(required = false) Double minRevenue,
+            @RequestParam(required = false) Double maxRevenue) {
+        return ResponseEntity.ok(statisticsService.getBillsByCostume(costumeId, startDate, endDate, page, size, timePeriod, minRevenue, maxRevenue));
     }
 
     @GetMapping("/by-costume/{costumeId}")

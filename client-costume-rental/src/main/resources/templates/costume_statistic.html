@@ -11,6 +11,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- Custom CSS -->
     <style>
         .card-hover {
@@ -76,23 +79,69 @@
                     </button>
                 </div>
 
-                <!-- Date Filter -->
+                <!-- Advanced Filter -->
                 <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4">Lọc theo thời gian</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label for="startDate" class="block text-sm font-medium text-gray-700 mb-2">Ngày bắt đầu</label>
-                            <input type="date" id="startDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Bộ lọc thống kê</h3>
+
+                    <!-- Time Period Filter -->
+                    <div class="mb-6">
+                        <h4 class="text-md font-semibold text-gray-700 mb-3">Khoảng thời gian</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label for="timePeriod" class="block text-sm font-medium text-gray-700 mb-2">Loại thống kê</label>
+                                <select id="timePeriod" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                    <option value="all">Tất cả</option>
+                                    <option value="monthly">Theo tháng</option>
+                                    <option value="yearly">Theo năm</option>
+                                    <option value="custom">Tùy chỉnh</option>
+                                </select>
+                            </div>
+                            <div id="customDateFields" class="md:col-span-2 grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="startDate" class="block text-sm font-medium text-gray-700 mb-2">Ngày bắt đầu</label>
+                                    <input type="date" id="startDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                                <div>
+                                    <label for="endDate" class="block text-sm font-medium text-gray-700 mb-2">Ngày kết thúc</label>
+                                    <input type="date" id="endDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                            </div>
+                            <div id="monthYearFields" class="hidden">
+                                <div id="monthField" class="hidden">
+                                    <label for="selectedMonth" class="block text-sm font-medium text-gray-700 mb-2">Chọn tháng</label>
+                                    <input type="month" id="selectedMonth" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                                <div id="yearField" class="hidden">
+                                    <label for="selectedYear" class="block text-sm font-medium text-gray-700 mb-2">Chọn năm</label>
+                                    <input type="number" id="selectedYear" min="2020" max="2030" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <label for="endDate" class="block text-sm font-medium text-gray-700 mb-2">Ngày kết thúc</label>
-                            <input type="date" id="endDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+
+                    <!-- Revenue Filter -->
+                    <div class="mb-6">
+                        <h4 class="text-md font-semibold text-gray-700 mb-3">Lọc theo doanh thu</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Doanh thu tối thiểu (VND)</label>
+                                <input type="number" id="minRevenue" placeholder="Nhập số tiền tối thiểu" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Doanh thu tối đa (VND)</label>
+                                <input type="number" id="maxRevenue" placeholder="Nhập số tiền tối đa" min="0" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
                         </div>
-                        <div class="flex items-end">
-                            <button id="filterBtn" class="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
-                                <i class="fas fa-filter mr-2"></i> Lọc dữ liệu
-                            </button>
-                        </div>
+                    </div>
+
+                    <!-- Filter Actions -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button id="filterBtn" class="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                            <i class="fas fa-filter mr-2"></i> Áp dụng bộ lọc
+                        </button>
+                        <button id="resetFilterBtn" class="flex-1 bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition">
+                            <i class="fas fa-undo mr-2"></i> Đặt lại bộ lọc
+                        </button>
                     </div>
                 </div>
 
@@ -132,6 +181,27 @@
                                 <i class="fas fa-shopping-cart text-purple-600 text-xl"></i>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Chart Section -->
+                <div id="chartSection" class="bg-white p-6 rounded-xl shadow-sm mb-8" style="display: none;">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">Biểu đồ thống kê doanh thu</h3>
+                        <div class="flex gap-2">
+                            <button id="chartTypeBar" class="px-3 py-1 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                                <i class="fas fa-chart-bar mr-1"></i>Cột
+                            </button>
+                            <button id="chartTypeLine" class="px-3 py-1 text-sm bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition">
+                                <i class="fas fa-chart-line mr-1"></i>Đường
+                            </button>
+                            <button id="chartTypePie" class="px-3 py-1 text-sm bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition">
+                                <i class="fas fa-chart-pie mr-1"></i>Tròn
+                            </button>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <canvas id="revenueChart" width="400" height="200"></canvas>
                     </div>
                 </div>
 
@@ -268,6 +338,11 @@
             let currentCostumeId = null;
             let currentStartDate = null;
             let currentEndDate = null;
+            let currentTimePeriod = 'custom';
+            let currentMinRevenue = null;
+            let currentMaxRevenue = null;
+            let currentChart = null;
+            let currentChartType = 'bar';
             const pageSize = 10;
 
             // Initialize date inputs with default values
@@ -276,10 +351,22 @@
 
             document.getElementById('startDate').value = oneMonthAgo.toISOString().split('T')[0];
             document.getElementById('endDate').value = today.toISOString().split('T')[0];
+            document.getElementById('selectedMonth').value = today.toISOString().slice(0, 7);
+            document.getElementById('selectedYear').value = today.getFullYear();
 
             // Event listeners
             document.getElementById('filterBtn').addEventListener('click', loadCategories);
+            document.getElementById('resetFilterBtn').addEventListener('click', resetFilters);
             document.getElementById('exportBtn').addEventListener('click', exportReport);
+            document.getElementById('timePeriod').addEventListener('change', handleTimePeriodChange);
+
+            // Chart type buttons
+            document.getElementById('chartTypeBar').addEventListener('click', () => changeChartType('bar'));
+            document.getElementById('chartTypeLine').addEventListener('click', () => changeChartType('line'));
+            document.getElementById('chartTypePie').addEventListener('click', () => changeChartType('pie'));
+
+            // Initialize time period display
+            handleTimePeriodChange();
 
             // Category pagination
             document.getElementById('categoryPrevBtn').addEventListener('click', () => {
@@ -343,18 +430,119 @@
             });
 
             // Functions
-            function loadCategories() {
-                currentStartDate = document.getElementById('startDate').value;
-                currentEndDate = document.getElementById('endDate').value;
+            function handleTimePeriodChange() {
+                const timePeriod = document.getElementById('timePeriod').value;
+                const customDateFields = document.getElementById('customDateFields');
+                const monthYearFields = document.getElementById('monthYearFields');
+                const monthField = document.getElementById('monthField');
+                const yearField = document.getElementById('yearField');
 
-                if (!currentStartDate || !currentEndDate) {
-                    alert('Vui lòng chọn ngày bắt đầu và ngày kết thúc');
-                    return;
+                // Hide all fields first
+                customDateFields.classList.add('hidden');
+                monthYearFields.classList.add('hidden');
+                monthField.classList.add('hidden');
+                yearField.classList.add('hidden');
+
+                if (timePeriod === 'custom') {
+                    customDateFields.classList.remove('hidden');
+                } else if (timePeriod === 'monthly') {
+                    monthYearFields.classList.remove('hidden');
+                    monthField.classList.remove('hidden');
+                } else if (timePeriod === 'yearly') {
+                    monthYearFields.classList.remove('hidden');
+                    yearField.classList.remove('hidden');
                 }
+            }
+
+            function resetFilters() {
+                // Reset time period
+                document.getElementById('timePeriod').value = 'custom';
+
+                // Reset dates
+                const today = new Date();
+                const oneMonthAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+                document.getElementById('startDate').value = oneMonthAgo.toISOString().split('T')[0];
+                document.getElementById('endDate').value = today.toISOString().split('T')[0];
+                document.getElementById('selectedMonth').value = today.toISOString().slice(0, 7);
+                document.getElementById('selectedYear').value = today.getFullYear();
+
+                // Reset revenue filters
+                document.getElementById('minRevenue').value = '';
+                document.getElementById('maxRevenue').value = '';
+
+                // Reset global variables
+                currentMinRevenue = null;
+                currentMaxRevenue = null;
+
+                // Handle time period change
+                handleTimePeriodChange();
+
+                // Clear current data
+                document.getElementById('categoriesList').innerHTML = `
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-search text-4xl mb-4"></i>
+                        <p>Chọn khoảng thời gian và nhấn "Áp dụng bộ lọc" để xem thống kê</p>
+                    </div>
+                `;
+            }
+
+            function getDateRange() {
+                const timePeriod = document.getElementById('timePeriod').value;
+                let startDate, endDate;
+
+                if (timePeriod === 'all') {
+                    // Get all data - use a very early start date
+                    startDate = '2020-01-01';
+                    endDate = new Date().toISOString().split('T')[0];
+                } else if (timePeriod === 'monthly') {
+                    const selectedMonth = document.getElementById('selectedMonth').value;
+                    if (!selectedMonth) {
+                        alert('Vui lòng chọn tháng');
+                        return null;
+                    }
+                    const [year, month] = selectedMonth.split('-');
+                    startDate = `${year}-${month}-01`;
+                    const lastDay = new Date(year, month, 0).getDate();
+                    endDate = `${year}-${month}-${lastDay.toString().padStart(2, '0')}`;
+                } else if (timePeriod === 'yearly') {
+                    const selectedYear = document.getElementById('selectedYear').value;
+                    if (!selectedYear) {
+                        alert('Vui lòng chọn năm');
+                        return null;
+                    }
+                    startDate = `${selectedYear}-01-01`;
+                    endDate = `${selectedYear}-12-31`;
+                } else { // custom
+                    startDate = document.getElementById('startDate').value;
+                    endDate = document.getElementById('endDate').value;
+                    if (!startDate || !endDate) {
+                        alert('Vui lòng chọn ngày bắt đầu và ngày kết thúc');
+                        return null;
+                    }
+                }
+
+                return { startDate, endDate };
+            }
+
+            function loadCategories() {
+                const dateRange = getDateRange();
+                if (!dateRange) return;
+
+                currentStartDate = dateRange.startDate;
+                currentEndDate = dateRange.endDate;
+                currentTimePeriod = document.getElementById('timePeriod').value;
+
+                // Get filter values
+                currentMinRevenue = document.getElementById('minRevenue').value || null;
+                currentMaxRevenue = document.getElementById('maxRevenue').value || null;
 
                 showLoading('categoriesList');
 
-                const url = `/api/statistics/revenue-by-category?startDate=${currentStartDate}&endDate=${currentEndDate}&page=${currentCategoryPage}&size=${pageSize}`;
+                let url = `/api/statistics/revenue-by-category?startDate=${currentStartDate}&endDate=${currentEndDate}&page=${currentCategoryPage}&size=${pageSize}&timePeriod=${currentTimePeriod}`;
+
+                // Add filter parameters
+                if (currentMinRevenue) url += `&minRevenue=${currentMinRevenue}`;
+                if (currentMaxRevenue) url += `&maxRevenue=${currentMaxRevenue}`;
 
                 fetch(url)
                     .then(response => response.json())
@@ -366,6 +554,10 @@
                         displayCategories(data);
                         updateSummary(data);
                         updateCategoryPagination(data);
+
+                        // Show and update chart
+                        showChart();
+                        updateChart(data);
                     })
                     .catch(error => {
                         console.error('Error loading categories:', error);
@@ -376,7 +568,11 @@
             function loadCostumes(category) {
                 showLoading('costumesList');
 
-                const url = `/api/statistics/costumes-by-category?category=${encodeURIComponent(category)}&startDate=${currentStartDate}&endDate=${currentEndDate}&page=${currentCostumePage}&size=${pageSize}`;
+                let url = `/api/statistics/costumes-by-category?category=${encodeURIComponent(category)}&startDate=${currentStartDate}&endDate=${currentEndDate}&page=${currentCostumePage}&size=${pageSize}&timePeriod=${currentTimePeriod}`;
+
+                // Add filter parameters
+                if (currentMinRevenue) url += `&minRevenue=${currentMinRevenue}`;
+                if (currentMaxRevenue) url += `&maxRevenue=${currentMaxRevenue}`;
 
                 fetch(url)
                     .then(response => response.json())
@@ -397,7 +593,11 @@
             function loadBills(costumeId) {
                 showLoading('billsList');
 
-                const url = `/api/statistics/bills-by-costume/${costumeId}?startDate=${currentStartDate}&endDate=${currentEndDate}&page=${currentBillPage}&size=${pageSize}`;
+                let url = `/api/statistics/bills-by-costume/${costumeId}?startDate=${currentStartDate}&endDate=${currentEndDate}&page=${currentBillPage}&size=${pageSize}&timePeriod=${currentTimePeriod}`;
+
+                // Add filter parameters
+                if (currentMinRevenue) url += `&minRevenue=${currentMinRevenue}`;
+                if (currentMaxRevenue) url += `&maxRevenue=${currentMaxRevenue}`;
 
                 fetch(url)
                     .then(response => response.json())
@@ -895,6 +1095,144 @@
                         console.error('Error exporting report:', error);
                         alert('Không thể xuất báo cáo: ' + error.message);
                     });
+            }
+
+            // Chart functions
+            function showChart() {
+                document.getElementById('chartSection').style.display = 'block';
+            }
+
+            function hideChart() {
+                document.getElementById('chartSection').style.display = 'none';
+                if (currentChart) {
+                    currentChart.destroy();
+                    currentChart = null;
+                }
+            }
+
+            function changeChartType(type) {
+                currentChartType = type;
+
+                // Update button styles
+                document.getElementById('chartTypeBar').className = type === 'bar' ?
+                    'px-3 py-1 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition' :
+                    'px-3 py-1 text-sm bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition';
+
+                document.getElementById('chartTypeLine').className = type === 'line' ?
+                    'px-3 py-1 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition' :
+                    'px-3 py-1 text-sm bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition';
+
+                document.getElementById('chartTypePie').className = type === 'pie' ?
+                    'px-3 py-1 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition' :
+                    'px-3 py-1 text-sm bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition';
+
+                // Recreate chart with new type
+                if (currentChart && currentChart.data) {
+                    const data = currentChart.data;
+                    currentChart.destroy();
+                    createChart(data, type);
+                }
+            }
+
+            function updateChart(data) {
+                const categories = data.content || [];
+
+                if (categories.length === 0) {
+                    hideChart();
+                    return;
+                }
+
+                // Define a comprehensive color palette for different costume categories
+                const colorPalette = [
+                    '#3B82F6', // Blue
+                    '#EF4444', // Red
+                    '#10B981', // Green
+                    '#F59E0B', // Amber
+                    '#8B5CF6', // Purple
+                    '#EC4899', // Pink
+                    '#06B6D4', // Cyan
+                    '#84CC16', // Lime
+                    '#F97316', // Orange
+                    '#6366F1', // Indigo
+                    '#14B8A6', // Teal
+                    '#F43F5E', // Rose
+                    '#8B5A2B', // Brown
+                    '#6B7280', // Gray
+                    '#DC2626', // Red-600
+                    '#059669', // Emerald-600
+                    '#7C3AED', // Violet-600
+                    '#DB2777', // Pink-600
+                    '#0891B2', // Sky-600
+                    '#65A30D'  // Lime-600
+                ];
+
+                // For "Tất cả" (All) time period, use different colors for each category
+                // For other time periods, use single color scheme
+                const useMultipleColors = currentTimePeriod === 'all' || currentChartType === 'pie';
+
+                const chartData = {
+                    labels: categories.map(cat => cat.category),
+                    datasets: [{
+                        label: 'Doanh thu (VND)',
+                        data: categories.map(cat => Number(cat.revenue)),
+                        backgroundColor: useMultipleColors ?
+                            categories.map((_, index) => colorPalette[index % colorPalette.length]) :
+                            (currentChartType === 'pie' ?
+                                categories.map((_, index) => colorPalette[index % colorPalette.length]) :
+                                '#3B82F6'),
+                        borderColor: useMultipleColors ?
+                            (currentChartType === 'pie' ? '#FFFFFF' :
+                                categories.map((_, index) => colorPalette[index % colorPalette.length])) :
+                            (currentChartType === 'pie' ? '#FFFFFF' : '#1E40AF'),
+                        borderWidth: currentChartType === 'pie' ? 2 : 1,
+                        tension: currentChartType === 'line' ? 0.4 : 0
+                    }]
+                };
+
+                createChart(chartData, currentChartType);
+            }
+
+            function createChart(data, type) {
+                if (currentChart) {
+                    currentChart.destroy();
+                }
+
+                const ctx = document.getElementById('revenueChart').getContext('2d');
+
+                const config = {
+                    type: type,
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Thống kê doanh thu theo loại trang phục',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                }
+                            },
+                            legend: {
+                                display: type === 'pie',
+                                position: 'right'
+                            }
+                        },
+                        scales: type === 'pie' ? {} : {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return Number(value).toLocaleString() + ' VND';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+
+                currentChart = new Chart(ctx, config);
             }
 
             // Make functions global for onclick handlers

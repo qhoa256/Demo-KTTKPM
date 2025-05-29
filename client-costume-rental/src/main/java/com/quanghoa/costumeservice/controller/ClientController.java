@@ -301,17 +301,26 @@ public class ClientController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "custom") String timePeriod,
+            @RequestParam(required = false) Double minRevenue,
+            @RequestParam(required = false) Double maxRevenue) {
         try {
             // Call costume service to get statistics
-            String url = String.format("%s/api/costume-bills/statistics/revenue-by-category-with-date?page=%d&size=%d",
-                    costumeServiceUrl, page, size);
+            String url = String.format("%s/api/costume-bills/statistics/revenue-by-category-with-date?page=%d&size=%d&timePeriod=%s",
+                    costumeServiceUrl, page, size, timePeriod);
 
             if (startDate != null) {
                 url += "&startDate=" + startDate;
             }
             if (endDate != null) {
                 url += "&endDate=" + endDate;
+            }
+            if (minRevenue != null) {
+                url += "&minRevenue=" + minRevenue;
+            }
+            if (maxRevenue != null) {
+                url += "&maxRevenue=" + maxRevenue;
             }
 
             RestTemplate restTemplate = new RestTemplate();
@@ -337,17 +346,26 @@ public class ClientController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "custom") String timePeriod,
+            @RequestParam(required = false) Double minRevenue,
+            @RequestParam(required = false) Double maxRevenue) {
         try {
             // Call costume service to get costumes by category
-            String url = String.format("%s/api/costume-bills/statistics/costumes-by-category?category=%s&page=%d&size=%d",
-                    costumeServiceUrl, category, page, size);
+            String url = String.format("%s/api/costume-bills/statistics/costumes-by-category?category=%s&page=%d&size=%d&timePeriod=%s",
+                    costumeServiceUrl, category, page, size, timePeriod);
 
             if (startDate != null) {
                 url += "&startDate=" + startDate;
             }
             if (endDate != null) {
                 url += "&endDate=" + endDate;
+            }
+            if (minRevenue != null) {
+                url += "&minRevenue=" + minRevenue;
+            }
+            if (maxRevenue != null) {
+                url += "&maxRevenue=" + maxRevenue;
             }
 
             RestTemplate restTemplate = new RestTemplate();
@@ -373,17 +391,26 @@ public class ClientController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "custom") String timePeriod,
+            @RequestParam(required = false) Double minRevenue,
+            @RequestParam(required = false) Double maxRevenue) {
         try {
             // Call costume service to get bills by costume
-            String url = String.format("%s/api/costume-bills/statistics/bills-by-costume/%d?page=%d&size=%d",
-                    costumeServiceUrl, costumeId, page, size);
+            String url = String.format("%s/api/costume-bills/statistics/bills-by-costume/%d?page=%d&size=%d&timePeriod=%s",
+                    costumeServiceUrl, costumeId, page, size, timePeriod);
 
             if (startDate != null) {
                 url += "&startDate=" + startDate;
             }
             if (endDate != null) {
                 url += "&endDate=" + endDate;
+            }
+            if (minRevenue != null) {
+                url += "&minRevenue=" + minRevenue;
+            }
+            if (maxRevenue != null) {
+                url += "&maxRevenue=" + maxRevenue;
             }
 
             RestTemplate restTemplate = new RestTemplate();

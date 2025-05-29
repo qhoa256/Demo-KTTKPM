@@ -90,13 +90,21 @@ public class BaseStatisticsService implements StatisticsService {
 
     @Override
     public Map<String, Object> getRevenueByCategoryWithDateRange(LocalDate startDate, LocalDate endDate, int page, int size) {
+        return getRevenueByCategoryWithDateRange(startDate, endDate, page, size, "custom", null, null);
+    }
+
+    @Override
+    public Map<String, Object> getRevenueByCategoryWithDateRange(LocalDate startDate, LocalDate endDate, int page, int size,
+                                                               String timePeriod, Double minRevenue, Double maxRevenue) {
         // Get bills from bill service with date range
         List<Map<String, Object>> bills = getBillsFromBillService(startDate, endDate);
 
         // Debug logging
-        System.out.println("=== DEBUG: getRevenueByCategoryWithDateRange ===");
+        System.out.println("=== DEBUG: getRevenueByCategoryWithDateRange (Advanced) ===");
         System.out.println("Start Date: " + startDate);
         System.out.println("End Date: " + endDate);
+        System.out.println("Time Period: " + timePeriod);
+        System.out.println("Revenue Filter: " + minRevenue + " - " + maxRevenue);
         System.out.println("Bills found: " + bills.size());
         if (!bills.isEmpty()) {
             System.out.println("First bill: " + bills.get(0));
@@ -125,13 +133,25 @@ public class BaseStatisticsService implements StatisticsService {
             }
         }
 
-        // Convert to list for pagination
+        // Convert to list and apply filters
         List<Map<String, Object>> categories = new ArrayList<>();
         for (String category : categoryRevenue.keySet()) {
             Map<String, Object> categoryData = new HashMap<>();
             categoryData.put("category", category);
             categoryData.put("revenue", categoryRevenue.get(category));
             categoryData.put("count", categoryCount.get(category));
+
+            // Apply revenue filters
+            BigDecimal revenue = categoryRevenue.get(category);
+            if (minRevenue != null && revenue.doubleValue() < minRevenue) {
+                continue;
+            }
+            if (maxRevenue != null && revenue.doubleValue() > maxRevenue) {
+                continue;
+            }
+
+
+
             categories.add(categoryData);
         }
 
@@ -148,13 +168,21 @@ public class BaseStatisticsService implements StatisticsService {
         result.put("totalPages", (int) Math.ceil((double) totalElements / size));
         result.put("currentPage", page);
         result.put("size", size);
-        result.put("totalRevenue", categoryRevenue.values().stream().reduce(BigDecimal.ZERO, BigDecimal::add));
+        result.put("totalRevenue", categories.stream()
+                .map(cat -> (BigDecimal) cat.get("revenue"))
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
 
         return result;
     }
 
     @Override
     public Map<String, Object> getCostumesByCategory(String category, LocalDate startDate, LocalDate endDate, int page, int size) {
+        return getCostumesByCategory(category, startDate, endDate, page, size, "custom", null, null);
+    }
+
+    @Override
+    public Map<String, Object> getCostumesByCategory(String category, LocalDate startDate, LocalDate endDate, int page, int size,
+                                                    String timePeriod, Double minRevenue, Double maxRevenue) {
         // Get bills from bill service with date range
         List<Map<String, Object>> bills = getBillsFromBillService(startDate, endDate);
 
@@ -194,8 +222,24 @@ public class BaseStatisticsService implements StatisticsService {
             data.put("rentCount", currentCount + cb.getQuantity());
         }
 
-        // Convert to list and apply pagination
-        List<Map<String, Object>> costumes = new ArrayList<>(costumeData.values());
+        // Convert to list and apply filters
+        List<Map<String, Object>> costumes = new ArrayList<>();
+        for (Map<String, Object> costumeInfo : costumeData.values()) {
+            // Apply revenue filters
+            BigDecimal revenue = (BigDecimal) costumeInfo.get("revenue");
+            if (minRevenue != null && revenue.doubleValue() < minRevenue) {
+                continue;
+            }
+            if (maxRevenue != null && revenue.doubleValue() > maxRevenue) {
+                continue;
+            }
+
+
+
+            costumes.add(costumeInfo);
+        }
+
+        // Apply pagination
         int totalElements = costumes.size();
         int startIndex = page * size;
         int endIndex = Math.min(startIndex + size, totalElements);
@@ -214,6 +258,12 @@ public class BaseStatisticsService implements StatisticsService {
 
     @Override
     public Map<String, Object> getBillsByCostume(Long costumeId, LocalDate startDate, LocalDate endDate, int page, int size) {
+        return getBillsByCostume(costumeId, startDate, endDate, page, size, "custom", null, null);
+    }
+
+    @Override
+    public Map<String, Object> getBillsByCostume(Long costumeId, LocalDate startDate, LocalDate endDate, int page, int size,
+                                                String timePeriod, Double minRevenue, Double maxRevenue) {
         // Get bills from bill service with date range
         List<Map<String, Object>> bills = getBillsFromBillService(startDate, endDate);
 
@@ -222,10 +272,40 @@ public class BaseStatisticsService implements StatisticsService {
                 .filter(cb -> cb.getCostume() != null && costumeId.equals(cb.getCostume().getId()))
                 .collect(Collectors.toList());
 
-        // Filter bills that contain this costume
+        // Filter bills that contain this costume and apply filters
         List<Map<String, Object>> relevantBills = bills.stream()
-                .filter(bill -> costumeBills.stream()
-                        .anyMatch(cb -> bill.get("id") != null && bill.get("id").toString().equals(cb.getBillId())))
+                .filter(bill -> {
+                    // Check if bill contains this costume
+                    boolean containsCostume = costumeBills.stream()
+                            .anyMatch(cb -> bill.get("id") != null && bill.get("id").toString().equals(cb.getBillId()));
+
+                    if (!containsCostume) {
+                        return false;
+                    }
+
+                    // Calculate bill revenue and order count for this costume
+                    BigDecimal billRevenue = BigDecimal.ZERO;
+                    int billOrderCount = 0;
+
+                    for (CostumeBill cb : costumeBills) {
+                        if (bill.get("id") != null && bill.get("id").toString().equals(cb.getBillId())) {
+                            billRevenue = billRevenue.add(cb.getRentPrice().multiply(BigDecimal.valueOf(cb.getQuantity())));
+                            billOrderCount += cb.getQuantity();
+                        }
+                    }
+
+                    // Apply revenue filters
+                    if (minRevenue != null && billRevenue.doubleValue() < minRevenue) {
+                        return false;
+                    }
+                    if (maxRevenue != null && billRevenue.doubleValue() > maxRevenue) {
+                        return false;
+                    }
+
+
+
+                    return true;
+                })
                 .collect(Collectors.toList());
 
         // Apply pagination
