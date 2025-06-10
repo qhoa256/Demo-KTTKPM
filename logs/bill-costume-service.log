@@ -150,3 +150,19 @@
 [2025-05-30 01:23:10.097] [http-nio-8083-exec-6] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 200 OK
 [2025-05-30 01:24:13.345] [SpringApplicationShutdownHook] [] [] [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 [2025-05-30 01:24:13.356] [SpringApplicationShutdownHook] [] [] [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+[2025-05-30 16:56:30.391] [main] [] [] [INFO] c.c.b.BillCostumeServiceApplication - Starting BillCostumeServiceApplication using Java 18.0.2 on MSI with PID 25604 (D:\Demo_KTTKPM\bill-costume-service\target\classes started by qhoa2 in D:\Demo_KTTKPM)
+[2025-05-30 16:56:30.394] [main] [] [] [DEBUG] c.c.b.BillCostumeServiceApplication - Running with Spring Boot v2.7.9, Spring v5.3.25
+[2025-05-30 16:56:30.396] [main] [] [] [INFO] c.c.b.BillCostumeServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[2025-05-30 16:56:32.892] [main] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8083 (http)
+[2025-05-30 16:56:32.909] [main] [] [] [INFO] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[2025-05-30 16:56:32.910] [main] [] [] [INFO] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.71]
+[2025-05-30 16:56:33.130] [main] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[2025-05-30 16:56:33.130] [main] [] [] [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2651 ms
+[2025-05-30 16:56:33.582] [main] [] [] [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+[2025-05-30 16:56:34.394] [main] [] [] [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+[2025-05-30 16:56:36.068] [main] [] [] [INFO] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+[2025-05-30 16:56:36.155] [main] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8083 (http) with context path ''
+[2025-05-30 16:56:36.180] [main] [] [] [INFO] c.c.b.BillCostumeServiceApplication - Started BillCostumeServiceApplication in 6.394 seconds (JVM running for 10.576)
+[2025-05-30 19:42:46.845] [HikariPool-1 housekeeper] [] [] [WARN] com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=1h24m29s545ms264µs800ns).
+[2025-05-30 23:59:27.526] [SpringApplicationShutdownHook] [] [] [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+[2025-05-30 23:59:27.551] [SpringApplicationShutdownHook] [] [] [INFO] com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

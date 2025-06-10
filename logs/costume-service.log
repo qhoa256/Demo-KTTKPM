@@ -34,3 +34,23 @@
 [2025-05-30 01:23:10.097] [http-nio-8082-exec-2] [fcb5a63e] [costume-service] [DEBUG] o.s.web.client.RestTemplate - Reading to [java.util.List<?>]
 [2025-05-30 01:23:10.333] [http-nio-8082-exec-2] [fcb5a63e] [costume-service] [INFO] c.c.c.config.LoggingInterceptor - [RESPONSE:fcb5a63e] [costume-service:8082] [PROXY] Response from Costume Service: 200 /api/costume-bills/statistics/revenue-by-category-with-date 577 ms
 [2025-05-30 01:23:10.333] [http-nio-8082-exec-2] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 200 OK
+[2025-05-30 16:56:46.861] [main] [] [] [INFO] c.c.c.CostumeServiceApplication - Starting CostumeServiceApplication using Java 18.0.2 on MSI with PID 27256 (D:\Demo_KTTKPM\costume-service\target\classes started by qhoa2 in D:\Demo_KTTKPM)
+[2025-05-30 16:56:46.902] [main] [] [] [DEBUG] c.c.c.CostumeServiceApplication - Running with Spring Boot v2.7.9, Spring v5.3.25
+[2025-05-30 16:56:46.904] [main] [] [] [INFO] c.c.c.CostumeServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[2025-05-30 16:56:48.365] [main] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8082 (http)
+[2025-05-30 16:56:48.375] [main] [] [] [INFO] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[2025-05-30 16:56:48.375] [main] [] [] [INFO] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.71]
+[2025-05-30 16:56:48.461] [main] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[2025-05-30 16:56:48.462] [main] [] [] [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1503 ms
+[2025-05-30 16:56:50.350] [main] [] [] [INFO] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+[2025-05-30 16:56:50.396] [main] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8082 (http) with context path ''
+[2025-05-30 16:56:50.411] [main] [] [] [INFO] c.c.c.CostumeServiceApplication - Started CostumeServiceApplication in 4.025 seconds (JVM running for 4.699)
+[2025-05-30 16:56:50.756] [RMI TCP Connection(3)-172.20.10.4] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2025-05-30 16:56:50.757] [RMI TCP Connection(3)-172.20.10.4] [] [] [INFO] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[2025-05-30 16:56:50.758] [RMI TCP Connection(3)-172.20.10.4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+[2025-05-30 16:56:50.759] [RMI TCP Connection(3)-172.20.10.4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+[2025-05-30 16:56:50.759] [RMI TCP Connection(3)-172.20.10.4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+[2025-05-30 16:56:50.762] [RMI TCP Connection(3)-172.20.10.4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@7d9bf58e
+[2025-05-30 16:56:50.764] [RMI TCP Connection(3)-172.20.10.4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@3f83d7e
+[2025-05-30 16:56:50.764] [RMI TCP Connection(3)-172.20.10.4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+[2025-05-30 16:56:50.764] [RMI TCP Connection(3)-172.20.10.4] [] [] [INFO] o.s.web.servlet.DispatcherServlet - Completed initialization in 6 ms

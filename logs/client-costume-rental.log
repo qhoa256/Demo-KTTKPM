@@ -124,3 +124,34 @@ Unconditional classes:
 [2025-05-30 01:23:10.333] [http-nio-8086-exec-3] [911367b6] [client-costume-rental] [DEBUG] o.s.web.client.RestTemplate - Reading to [java.util.Map<?, ?>]
 [2025-05-30 01:23:10.335] [http-nio-8086-exec-3] [911367b6] [client-costume-rental] [INFO] c.q.c.config.LoggingInterceptor - [RESPONSE:911367b6] [client-costume-rental:8086] [PROXY] Response from Client Service: GET /api/statistics/revenue-by-category 585 ms
 [2025-05-30 01:23:10.335] [http-nio-8086-exec-3] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 200 OK
+[2025-05-30 16:56:35.947] [restartedMain] [] [] [INFO] c.q.c.CostumeClientApplication - Starting CostumeClientApplication using Java 18.0.2 on MSI with PID 27372 (D:\Demo_KTTKPM\client-costume-rental\target\classes started by qhoa2 in D:\Demo_KTTKPM)
+[2025-05-30 16:56:35.948] [restartedMain] [] [] [DEBUG] c.q.c.CostumeClientApplication - Running with Spring Boot v2.7.12, Spring v5.3.27
+[2025-05-30 16:56:35.949] [restartedMain] [] [] [INFO] c.q.c.CostumeClientApplication - No active profile set, falling back to 1 default profile: "default"
+[2025-05-30 16:56:36.033] [restartedMain] [] [] [INFO] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[2025-05-30 16:56:36.033] [restartedMain] [] [] [INFO] o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[2025-05-30 16:56:38.511] [restartedMain] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8086 (http)
+[2025-05-30 16:56:38.527] [restartedMain] [] [] [INFO] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[2025-05-30 16:56:38.528] [restartedMain] [] [] [INFO] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+[2025-05-30 16:56:38.641] [restartedMain] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[2025-05-30 16:56:38.642] [restartedMain] [] [] [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2608 ms
+[2025-05-30 16:56:40.025] [restartedMain] [] [] [INFO] o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+[2025-05-30 16:56:40.035] [restartedMain] [] [] [INFO] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+[2025-05-30 16:56:40.074] [restartedMain] [] [] [WARN] o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'; nested exception is org.springframework.boot.web.server.PortInUseException: Port 8086 is already in use
+[2025-05-30 16:56:40.085] [restartedMain] [] [] [INFO] o.a.catalina.core.StandardService - Stopping service [Tomcat]
+[2025-05-30 16:56:40.113] [restartedMain] [] [] [INFO] o.s.b.a.l.ConditionEvaluationReportLoggingListener - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+[2025-05-30 16:56:40.164] [restartedMain] [] [] [ERROR] o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8086 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8086 or configure this application to listen on another port.
+

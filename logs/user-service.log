@@ -204,3 +204,23 @@
 [2025-05-30 01:23:10.076] [http-nio-8081-exec-1] [bd3b6982] [user-service] [DEBUG] o.s.jdbc.core.JdbcTemplate - Executing prepared SQL statement [SELECT u.*, c.loyaltyPoints, a.id as address_id, a.street, a.city, fn.id as fullname_id, fn.firstName, fn.lastName FROM tblUser u INNER JOIN Customer c ON u.id = c.id LEFT JOIN Address a ON u.AddressId = a.id LEFT JOIN FullName fn ON u.FullNameId = fn.id WHERE u.id = ?]
 [2025-05-30 01:23:10.092] [http-nio-8081-exec-1] [bd3b6982] [user-service] [INFO] c.c.u.config.LoggingInterceptor - [RESPONSE:bd3b6982] [user-service:8081] [PROXY] Response from User Service: 200 /api/customers/10 16 ms
 [2025-05-30 01:23:10.092] [http-nio-8081-exec-1] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Completed 200 OK
+[2025-05-30 16:56:36.375] [main] [] [] [INFO] c.c.u.UserServiceApplication - Starting UserServiceApplication using Java 18.0.2 on MSI with PID 2860 (D:\Demo_KTTKPM\user-service\target\classes started by qhoa2 in D:\Demo_KTTKPM)
+[2025-05-30 16:56:36.379] [main] [] [] [DEBUG] c.c.u.UserServiceApplication - Running with Spring Boot v2.7.9, Spring v5.3.25
+[2025-05-30 16:56:36.381] [main] [] [] [INFO] c.c.u.UserServiceApplication - No active profile set, falling back to 1 default profile: "default"
+[2025-05-30 16:56:38.498] [main] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8081 (http)
+[2025-05-30 16:56:38.511] [main] [] [] [INFO] o.a.catalina.core.StandardService - Starting service [Tomcat]
+[2025-05-30 16:56:38.511] [main] [] [] [INFO] o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.71]
+[2025-05-30 16:56:38.644] [main] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+[2025-05-30 16:56:38.644] [main] [] [] [INFO] o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2187 ms
+[2025-05-30 16:56:40.902] [main] [] [] [INFO] o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint(s) beneath base path '/actuator'
+[2025-05-30 16:56:40.951] [main] [] [] [INFO] o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8081 (http) with context path ''
+[2025-05-30 16:56:40.965] [main] [] [] [INFO] c.c.u.UserServiceApplication - Started UserServiceApplication in 5.213 seconds (JVM running for 6.216)
+[2025-05-30 16:56:41.108] [RMI TCP Connection(1)-172.20.10.4] [] [] [INFO] o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[2025-05-30 16:56:41.109] [RMI TCP Connection(1)-172.20.10.4] [] [] [INFO] o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+[2025-05-30 16:56:41.110] [RMI TCP Connection(1)-172.20.10.4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected StandardServletMultipartResolver
+[2025-05-30 16:56:41.111] [RMI TCP Connection(1)-172.20.10.4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected AcceptHeaderLocaleResolver
+[2025-05-30 16:56:41.111] [RMI TCP Connection(1)-172.20.10.4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected FixedThemeResolver
+[2025-05-30 16:56:41.113] [RMI TCP Connection(1)-172.20.10.4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@31c20d1c
+[2025-05-30 16:56:41.114] [RMI TCP Connection(1)-172.20.10.4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - Detected org.springframework.web.servlet.support.SessionFlashMapManager@19b1a211
+[2025-05-30 16:56:41.116] [RMI TCP Connection(1)-172.20.10.4] [] [] [DEBUG] o.s.web.servlet.DispatcherServlet - enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+[2025-05-30 16:56:41.117] [RMI TCP Connection(1)-172.20.10.4] [] [] [INFO] o.s.web.servlet.DispatcherServlet - Completed initialization in 6 ms
